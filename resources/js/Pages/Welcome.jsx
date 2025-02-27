@@ -30,6 +30,7 @@ export default function Welcome({ auth }) {
             <Head title="Welcome" />
 
             <header>
+
                 <div className="header-container">
                     <div className="header-left">
                         <img src="imagens/logo-seudocepedido.png" alt="Logo Seu Doce Pedido" className="header-logo" />
