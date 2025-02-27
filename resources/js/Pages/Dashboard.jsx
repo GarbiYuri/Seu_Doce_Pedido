@@ -16,11 +16,7 @@ export default function Dashboard() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-<<<<<<< HEAD
-                            You're logged in!
-=======
-                        
->>>>>>> 7d93cbb334ee1312005b6e89ac64d137490c0bbb
+
                         </div>
                     </div>
                 </div>
