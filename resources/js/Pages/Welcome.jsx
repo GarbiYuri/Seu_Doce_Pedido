@@ -27,7 +27,7 @@ export default function Welcome({ auth }) {
 
     return (
         <>
-            <Head title="Welcome" />
+            <Head title="Seu Doce Pedido" />
 
             <header>
 
