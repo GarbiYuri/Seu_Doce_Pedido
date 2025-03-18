@@ -34,8 +34,8 @@ export default function AuthenticatedLayout({ header, children }) {
                 };
             }, []);
         
-
         if (user){
+            // Usúario Registrado/Logado (Com Login)
             return (
                         <>
                         <div
@@ -55,6 +55,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </div>
         
                                 <div className="mt-3 space-y-1">
+                                    
                                     <ResponsiveNavLink href={route('profile.edit')}>
                                         Profile
                                     </ResponsiveNavLink>
@@ -65,6 +66,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     >
                                         Log Out
                                     </ResponsiveNavLink>
+                                    
                                 </div>
                             </div>
                         </div>
@@ -73,20 +75,32 @@ export default function AuthenticatedLayout({ header, children }) {
 
                 <div className="header-container">
                     <div className="header-left">
+                        <Link href='/'>
                         <img src="imagens/logo-seudocepedido.png" alt="Logo Seu Doce Pedido" className="header-logo" />
+                        </Link>
+                        
                         <span className="company-name">Seu Doce Pedido!</span>
                     </div>
 
                     <div className="header-right">
-                        <a href="index.html" className="header-link">
+                        <a href="/" className="header-link">
                             <img src="imagens/icone-menu.png" alt="Ícone Menu" className="header-icon" />
                             Menu
                         </a>
-                        <a href="cart.html" className="header-link">
+                        <a href="/" className="header-link">
                             <img src="imagens/icone-carrinho.png" alt="Ícone Carrinho" className="header-icon" />
                             Carrinho
                         </a>
-
+                         
+                         {/* Aparição de Opção para Administrador */ }
+                         <p>
+                        {user.admin ? (
+                        <Link href="Administracao" className="header-link">
+                        <img src="imagens/engrenagem.png" alt="Engrenagem" className="header-icon" />
+                         Administração
+                         </Link>
+                        ) : ""}
+                        </p>
                        
                         <div className="">
                            
@@ -146,6 +160,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
             );
         }else{
+            // Usúario sem Registro/Login (Sem Login)
             return (
                 <>
                 <div
@@ -176,7 +191,10 @@ export default function AuthenticatedLayout({ header, children }) {
 
         <div className="header-container">
             <div className="header-left">
+                <Link href='/'>
                 <img src="imagens/logo-seudocepedido.png" alt="Logo Seu Doce Pedido" className="header-logo" />
+                </Link>
+                
                 <span className="company-name">Seu Doce Pedido!</span>
             </div>
 
