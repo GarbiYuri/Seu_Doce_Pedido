@@ -28,10 +28,6 @@ class CategoryController extends Controller
     /**
      * Display the create category form.
      */
-    public function create(): Response
-    {
-        
-    }
 
     /**
      * Store a newly created category in the database.
@@ -63,10 +59,6 @@ class CategoryController extends Controller
     /**
      * Show the form for editing the specified category.
      */
-    public function edit($id): Response
-    {
-    
-    }
 
     /**
      * Update the specified category in the database.
