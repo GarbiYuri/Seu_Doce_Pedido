@@ -1,7 +1,4 @@
-import ApplicationLogo from '@/Components/ApplicationLogo';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import Dropdown from '@/Components/Dropdown';
-import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 
@@ -10,6 +7,7 @@ import React, { useState, useEffect, useRef } from "react";
 
 export default function AdminLayout({ header, children }) {
     const user = usePage().props.auth.user;
+    
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
@@ -36,8 +34,6 @@ export default function AdminLayout({ header, children }) {
             document.removeEventListener("mousedown", handleClickOutside);
         };
     }, []);
-
-
 
     if (user.admin) {
         // Usúario Registrado/Logado (Com Login Administrativo)
@@ -80,7 +76,7 @@ export default function AdminLayout({ header, children }) {
 
                     <div className="header-container">
                         <div className="header-left">
-                            <Link href='/'>
+                            <Link href='Administracao'>
                                 <img src="imagens/logo-seudocepedido.png" alt="Logo Seu Doce Pedido" className="header-logo" />
                             </Link>
 
@@ -88,6 +84,9 @@ export default function AdminLayout({ header, children }) {
                         </div>
 
                         <div className="header-right">
+                        <a href="dashboard" className="header-link">
+                                <img src="imagens/House.png" alt="Home" height="30" width="30"/>Home
+                            </a>
                             <a href="/" className="header-link">
                                 Vendas
                             </a>

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('cart', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('id_user');
-            $table->decimal('subtotal');
+            $table->decimal('subtotal')->nullable();
             $table->timestamps();
 
 
