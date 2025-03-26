@@ -8,6 +8,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartProductController;
+use App\Http\Controllers\CartWLController;
 
 
 
@@ -18,6 +19,10 @@ Route::get('/', function () {
         'canRegister' => Route::has('register'),
     ]);
 });
+
+Route::post('/cartwl/add', [CartWLController::class, 'store']);
+Route::get('/cart', [CartWLController::class, 'getCart']);
+Route::post('/cart/remove', [CartWLController::class, 'removeFromCart']);
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 Route::middleware('auth')->group(function () {

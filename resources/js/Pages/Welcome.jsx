@@ -1,7 +1,25 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head} from "@inertiajs/react";
+import { Head, router } from "@inertiajs/react";
 
 export default function Welcome({ products }) {
+         // Adicionar produto ao carrinho
+         const addToCart = (productId) => {
+            router.post("/cartwl/add", { product_id: productId, quantity: 1 }, {  // Sempre adiciona +1
+                onSuccess: () => {
+                    alert("Produto adicionado ao carrinho!");
+                  },
+                  onError: (errors) => {
+                    console.error(errors);
+                    alert("Erro ao adicionar o produto ao carrinho.");
+                  },
+                
+
+            });
+        };
+            
+
+               
+            
    
     return (
         <AuthenticatedLayout
@@ -16,8 +34,8 @@ export default function Welcome({ products }) {
         >
         <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
         <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
-        <button className="mt-4 bg-pink-500 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition duration-300">
-            Comprar Agora
+        <button className="mt-4 bg-pink-500 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition duration-300" onClick={() => addToCart(product.id)}>
+            Adicionar ao Carrinho
         </button>
         </div>
     ))}
