@@ -21,8 +21,10 @@ Route::get('/', function () {
 });
 
 Route::post('/cartwl/add', [CartWLController::class, 'store']);
-Route::get('/cart', [CartWLController::class, 'getCart']);
-Route::post('/cart/remove', [CartWLController::class, 'removeFromCart']);
+Route::get('CarrinhoWL', [CartWLController::class, 'index']);
+Route::post('/update', [CartWLController::class, 'update']);
+Route::post('/remove', [CartWLController::class, 'destroy']);
+
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 Route::middleware('auth')->group(function () {
