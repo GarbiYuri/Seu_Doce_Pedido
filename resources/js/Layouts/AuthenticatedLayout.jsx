@@ -88,7 +88,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 Menu
                             </a>
                             <Link href="/CarrinhoDeCompra" className="header-link">
-                                Ir para o Carrinho de Compras
+                                Carrinho
                             </Link>
 
                             {/* Aparição de Opção para Administrador */}
@@ -202,7 +202,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <img src="imagens/icone-menu.png" alt="Ícone Menu" className="header-icon" />
                                 Menu
                             </a>
-                            <a href="/" className="header-link">
+                            <a href="/CarrinhoWL" className="header-link">
                                 <img src="imagens/icone-carrinho.png" alt="Ícone Carrinho" className="header-icon" />
                                 Carrinho
                             </a>
