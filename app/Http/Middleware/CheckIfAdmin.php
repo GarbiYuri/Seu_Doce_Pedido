@@ -17,7 +17,6 @@ class CheckIfAdmin
     {
         // Verifica se o usuário está autenticado e se é um administrador
         if (!$request->user() || !$request->user()->admin) {
-            
             // Redireciona para a página inicial ou uma página de erro caso não seja admin
             return abort(403, 'Acesso negado.');
         }

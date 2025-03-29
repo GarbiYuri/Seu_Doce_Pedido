@@ -55,4 +55,87 @@ class CartProductController extends Controller
 
     return Redirect::back()->with('success', 'Produto Adicionado Ao Carrinho!');
 }
+public function update(Request $request)
+{
+    $productId = $request->input('product_id');
+    $quantity = $request->input('quantity');
+
+    $userId = auth()->user()->id; // Obtém o ID do usuário logado
+
+    // Obtém o carrinho do usuário
+    $cart = DB::table('cart')
+        ->where('Id_User', $userId)
+        ->first();
+
+    if (!$cart) {
+        return Redirect::back()->with('error', 'Carrinho não encontrado.');
+    }
+
+    // Verifica se o produto existe no carrinho
+    $cartProduct = DB::table('cart_product')
+        ->where('Id_Cart', $cart->id)
+        ->where('Id_Product', $productId)
+        ->first();
+
+    if ($cartProduct) {
+        if ($quantity > 0) {
+            // Atualiza a quantidade no banco de dados
+            DB::table('cart_product')
+            ->where('Id_Product', $productId)
+            ->where('Id_Cart', $cart->id)
+            ->limit(1)
+            ->delete();
+        } else {
+            // Remove o produto do carrinho se a quantidade for 0
+            DB::table('cart_product')
+                ->where('Id_Cart', $cart->id)
+                ->where('Id_Product', $productId)
+                ->delete();
+        }
+
+        return Redirect::back()->with('success', 'Carrinho atualizado!');
+    }
+
+    return Redirect::back()->with('error', 'Produto não encontrado no carrinho.');
 }
+
+
+/**
+ * Remove the specified resource from storage.
+ */
+public function destroy(Request $request)
+{
+    $productId = $request->input('product_id');
+
+    $userId = auth()->user()->id; // Obtém o ID do usuário logado
+
+    // Obtém o carrinho do usuário
+    $cart = DB::table('cart')
+        ->where('Id_User', $userId)
+        ->first();
+
+    if (!$cart) {
+        return Redirect::back()->with('error', 'Carrinho não encontrado.');
+    }
+
+     // Verifica se o produto existe no carrinho
+     $cartProduct = DB::table('cart_product')
+     ->where('Id_Cart', $cart->id)
+     ->where('Id_Product', $productId)
+     ->first();
+
+     if ($cartProduct) {
+            // Exclui o PRoduto do Carrinho
+            DB::table('cart_product')
+            ->where('Id_Product', $productId)
+            ->where('Id_Cart', $cart->id)
+            ->delete();
+            return Redirect::back()->with('success', 'Carrinho atualizado!');
+        } 
+        return Redirect::back()->with('error', 'Produto não encontrado no carrinho.');
+        
+    }
+
+   
+}
+

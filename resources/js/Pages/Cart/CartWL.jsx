@@ -16,27 +16,24 @@ export default function CartWL() {
     const [updatedCart, setUpdatedCart] = useState(cart);
 
     const updateQuantity = (productId, quantity) => {
-        router.post('/update', {
+        router.post("/update", {
             product_id: productId,
             quantity: quantity,
-        })
-        .then(response => {
-            if (response.data.success) {
+        }, {
+            onSuccess: () => {
                 // Atualiza o estado do carrinho sem recarregar a página
                 setUpdatedCart(prevCart => ({
                     ...prevCart,
                     [productId]: quantity,
                 }));
-            } else {
+            },
+            onError: (errors) => {
                 alert('Erro ao atualizar o carrinho.');
             }
-        })
-        .catch(error => {
-            console.error('Erro ao atualizar carrinho', error);
-            alert('Ocorreu um erro.');
         });
+
     };
-    
+
 
     // Função para diminuir a quantidade
     const decreaseQuantity = (productId) => {
@@ -48,66 +45,62 @@ export default function CartWL() {
     const removeProduct = (productId) => {
         router.post('/remove', {
             product_id: productId,
-        })
-        .then(response => {
-            if (response.data.success) {
+        }, {
+            onSuccess: () => {
                 // Atualiza o estado do carrinho após remover o produto
                 window.location.reload(); // Recarrega a página para pegar os dados atualizados do backend
-            } else {
+            },
+            onError: () => {
                 alert('Erro ao remover o produto.');
-            }
-        })
-        .catch(error => {
-            console.error('Erro ao remover produto', error);
-            alert('Ocorreu um erro.');
+            },
         });
     };
     return (
         <AuthenticatedLayout>
             <Head title="Carrinho de Compras" />
-            
+
             <div className="p-6">
-    <h2 className="text-2xl font-bold text-pink-700 mb-4">Meu Carrinho</h2>
+                <h2 className="text-2xl font-bold text-pink-700 mb-4">Meu Carrinho</h2>
 
-    {cartProducts.length > 0 ? (
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {cartProducts.map((product) => (
-                <div 
-                    key={product.id} 
-                    className="bg-white border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center relative"
-                >
-                    {/* Botão de remoção do produto (X) */}
-                    <button 
-                        className="absolute top-2 right-2 px-3 py-1 bg-red-600 text-white rounded-full"
-                        onClick={() => removeProduct(product.id)}
-                    >
-                        X
-                    </button>
+                {cartProducts.length > 0 ? (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                        {cartProducts.map((product) => (
+                            <div
+                                key={product.id}
+                                className="bg-white border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center relative"
+                            >
+                                {/* Botão de remoção do produto (X) */}
+                                <button
+                                    className="absolute top-2 right-2 px-3 py-1 bg-red-600 text-white rounded-full"
+                                    onClick={() => removeProduct(product.id)}
+                                >
+                                    X
+                                </button>
 
-                    <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
-                    <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
-                    <p className="text-md text-gray-600">Quantidade: {cart[product.id]}</p>
-                    <p className="text-md font-bold text-pink-700">Subtotal: R$ {(product.price * cart[product.id]).toFixed(2)}</p>
+                                <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
+                                <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
+                                <p className="text-md text-gray-600">Quantidade: {cart[product.id]}</p>
+                                <p className="text-md font-bold text-pink-700">Subtotal: R$ {(product.price * cart[product.id]).toFixed(2)}</p>
 
-                    {/* Botão de diminuição de quantidade */}
-                    <button 
-                        className="mt-2 px-4 py-2 bg-pink-600 text-white rounded-lg"
-                        onClick={() => decreaseQuantity(product.id)}
-                    >
-                        -
-                    </button>
+                                {/* Botão de diminuição de quantidade */}
+                                <button
+                                    className="mt-2 px-4 py-2 bg-pink-600 text-white rounded-lg"
+                                    onClick={() => decreaseQuantity(product.id)}
+                                >
+                                    -
+                                </button>
+                            </div>
+                        ))}
+                    </div>
+                ) : (
+                    <p className="text-lg text-gray-600">Seu carrinho está vazio.</p>
+                )}
+
+                {/* Total do Carrinho */}
+                <div className="mt-6 text-center">
+                    <h2 className="text-xl font-bold text-pink-800">Total: R$ {total}</h2>
                 </div>
-            ))}
-        </div>
-    ) : (
-        <p className="text-lg text-gray-600">Seu carrinho está vazio.</p>
-    )}
-
-    {/* Total do Carrinho */}
-    <div className="mt-6 text-center">
-        <h2 className="text-xl font-bold text-pink-800">Total: R$ {total}</h2>
-    </div>
-</div>
+            </div>
 
         </AuthenticatedLayout>
     );
