@@ -88,6 +88,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 Menu
                             </a>
                             <Link href="/CarrinhoDeCompra" className="header-link">
+                                <img src="imagens/icone-carrinho.png" alt="Ícone Carrinho" className="header-icon" />
                                 Carrinho
                             </Link>
 

@@ -9,10 +9,10 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CartWLController;
+// Area de Testes 
 
 
-
-
+// Area de Testes 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
         'canLogin' => Route::has('login'),
@@ -76,6 +76,8 @@ Route::middleware('auth')->group(function () {
 
     Route::get('/CarrinhoDeCompra', [CartProductController::class, 'index']);
     Route::post('/cart/add', [CartProductController::class, 'store']);
+    Route::post('/updateC', [CartProductController::class, 'update']);
+    Route::post('/deleteC', [CartProductController::class, 'destroy']);
     
 
     // Rotas de perfil
