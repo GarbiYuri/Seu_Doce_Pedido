@@ -9,17 +9,18 @@ export default function Dashboard({ products }) {
         router.post("/cart/add", { Id_Product: Id_Product }, {
           onSuccess: () => {
             setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionado!" }));
+             // Volta ao texto original após 1 segundo
+          setTimeout(() => {
+            setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
+        }, 800);
           },
           onError: (errors) => {
             console.error(errors);
             alert("Erro ao adicionar o produto ao carrinho.");
-            setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
+            setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho"}));
           },
         });
-          // Volta ao texto original após 1 segundo
-          setTimeout(() => {
-            setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
-        }, 800);
+         
       };
       
     return (
@@ -36,6 +37,8 @@ export default function Dashboard({ products }) {
                         className="bg-pink-100 border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center"
                     >
                         <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
+                        <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
+
                         <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
                         <button
                             className="mt-4 bg-pink-500 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition duration-300"
