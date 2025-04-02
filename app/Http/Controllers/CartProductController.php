@@ -24,8 +24,8 @@ class CartProductController extends Controller
     ->join('product', 'cart_product.Id_Product', '=', 'product.id')
     ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id') // JOIN com a tabela de carrinho
     ->where('cart.Id_User', $userId)
-    ->select('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price', DB::raw('count(cart_product.Id_Product) as quantity'))
-    ->groupBy('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price')
+    ->select('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price','product.imagem' ,DB::raw('count(cart_product.Id_Product) as quantity'))
+    ->groupBy('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price', 'product.imagem')
     ->get();
 
     

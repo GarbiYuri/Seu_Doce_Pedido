@@ -35,17 +35,27 @@ class ProductController extends Controller
      */
     public function store(Request $request): RedirectResponse
     {
-        //
+        //Requisição e validação das informações
         $request->validate([
             'name' => 'required|string|max:255',
             'price' => 'required|numeric|min:0',
             'id_categoria' => 'required|Integer',
+            'descricao' =>  'required|string|max:255',
+            'imagem' => 'image|mimes:jpeg,png,jpg|max:2024'
         ]);
+
+        // Upload da logo
+        if ($request->hasFile('imagem')) {
+        $ImagemName = time() . '.' . $request->imagem->extension();
+        $request->imagem->move(public_path('imagem'), $ImagemName);
+        }
 
         Product::create([
             'name' => $request->name,
             'price' => $request->price,
             'id_categoria' => $request->id_categoria,
+            'descricao' =>  $request->descricao,
+            'imagem' => $ImagemName,
 
         ]);
 

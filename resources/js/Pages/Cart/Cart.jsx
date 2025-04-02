@@ -60,8 +60,8 @@ export default function Cart({ cartProducts }) {
                                 >
                                     X
                                 </button>
-                                <img src={cartproduct.imageUrl} alt={cartproduct.name} className="h-32 w-32 object-cover mx-auto mb-4" />
                                 <h2 className="text-xl font-bold text-pink-800">{cartproduct.name}</h2>
+                                <img src={`/imagem/${cartproduct.imagem}`} alt="Imagem do Produto" />
                                 <p className="text-lg font-semibold text-gray-700 mt-2">R$ {cartproduct.price}</p>
                                 <p className="text-lg font-semibold text-gray-700 mt-2">Quantidade: {cartproduct.quantity}</p>
                                 <p className="text-lg font-semibold text-gray-700 mt-2">Subtotal: R$ {(cartproduct.price * cartproduct.quantity).toFixed(2)}</p>
