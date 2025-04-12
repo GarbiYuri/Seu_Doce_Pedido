@@ -34,7 +34,7 @@ export default function Welcome({ products }) {
                         key={product.id}
                         
                     >
-
+<p>a</p>
                         <h2 >{product.name}</h2>
                         <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
                         <p >R$ {product.price}</p>
