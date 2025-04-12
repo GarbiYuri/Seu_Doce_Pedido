@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Models;
+use App\Notifications\CustomVerifyEmail;  // Importe a notificação personalizada
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -46,4 +47,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function sendEmailVerificationNotification()
+{
+    $this->notify(new CustomVerifyEmail());  // Use a sua notificação personalizada
+}
 }

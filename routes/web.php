@@ -1,7 +1,7 @@
 <?php
 use App\Http\Middleware\CheckIfAdmin;
+use App\Http\Middleware\EmailVerifiedAt;
 use App\Http\Controllers\ProfileController;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\AdminController;
@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CartWLController;
+
 // Area de Testes 
 
 
@@ -26,8 +27,14 @@ Route::post('/update', [CartWLController::class, 'update']);
 Route::post('/remove', [CartWLController::class, 'destroy']);
 
 
-// As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 Route::middleware('auth')->group(function () {
+ // Rota para a verificação do email
+ Route::get('/VerifyEmail', function () {
+    return Inertia::render('Auth/VerifyEmail');
+})->name('VerifyEmail'); 
+
+// As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
+Route::middleware(EmailVerifiedAt::class)->group(function () {
     //Middleware para Somente Admins
     Route::middleware([CheckIfAdmin::class])->group(function () {
         // Rota para a administração do painel
@@ -56,18 +63,16 @@ Route::middleware('auth')->group(function () {
         // Rota para os produtos, com as funcionalidades do CRUD
         Route::resource('products', ProductController::class);
 
+
+        // Finaliza CheckifAdmin
     });
+
+
 
     // Rota para o dashboard do usuário
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');    
-
-    // Rota para a verificação do email
-    Route::get('/VerifyEmail', function () {
-        return Inertia::render('Auth/VerifyEmail');
-    })->name('VerifyEmail'); 
-
 
       // Rota Carts
       Route::get('/Carrinho', function () {
@@ -85,6 +90,9 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
+    //Finaliza Auth
+});
+// Finaliza EmailVerifiedAt
 });
 
 require __DIR__.'/auth.php';
