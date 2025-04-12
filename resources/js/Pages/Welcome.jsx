@@ -34,6 +34,11 @@ export default function Welcome({ products }) {
                         key={product.id}
                         
                     >
+
+                        <h2 >{product.name}</h2>
+                        <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
+                        <p >R$ {product.price}</p>
+
                         <h2 >{product.name}</h2>
                         <p >R$ {product.price}</p>
 

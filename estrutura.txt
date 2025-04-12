@@ -1,0 +1,148 @@
+.
+├── app
+│   ├── Http
+│   │   ├── Controllers
+│   │   ├── Middleware
+│   │   └── Requests
+│   ├── Models
+│   │   ├── Cart.php
+│   │   ├── cart_product.php
+│   │   ├── Category.php
+│   │   ├── Product.php
+│   │   └── User.php
+│   └── Providers
+│       └── AppServiceProvider.php
+├── artisan
+├── bootstrap
+│   ├── app.php
+│   ├── cache
+│   │   ├── packages.php
+│   │   └── services.php
+│   └── providers.php
+├── composer.json
+├── composer.lock
+├── config
+│   ├── app.php
+│   ├── auth.php
+│   ├── cache.php
+│   ├── database.php
+│   ├── filesystems.php
+│   ├── logging.php
+│   ├── mail.php
+│   ├── queue.php
+│   ├── services.php
+│   └── session.php
+├── database
+│   ├── factories
+│   │   └── UserFactory.php
+│   ├── migrations
+│   │   ├── 0001_01_01_000000_create_users_table.php
+│   │   ├── 0001_01_01_000001_create_cache_table.php
+│   │   ├── 0001_01_01_000002_create_jobs_table.php
+│   │   ├── 2025_03_11_144305_create_category_table.php
+│   │   ├── 2025_03_12_142046_create_product_table.php
+│   │   ├── 2025_03_12_152640_create_cart.php
+│   │   └── 2025_03_17_204405_create_cart_product_table.php
+│   └── seeders
+│       └── DatabaseSeeder.php
+├── estrutura.txt
+├── jsconfig.json
+├── package.json
+├── package-lock.json
+├── phpunit.xml
+├── postcss.config.js
+├── public
+│   ├── build
+│   │   ├── assets
+│   │   └── manifest.json
+│   ├── css
+│   │   └── style.css
+│   ├── favicon.ico
+│   ├── hot
+│   ├── imagem
+│   │   ├── 1743606615.jpg
+│   │   ├── 1743606944.jpg
+│   │   └── 1743623552.jpg
+│   ├── imagens
+│   │   ├── bebida-agua.jpg
+│   │   ├── bebida-cocacola.jpg
+│   │   ├── bebida-fanta.jpg
+│   │   ├── bebida-sprite.jpg
+│   │   ├── bebida-suco.jpg
+│   │   ├── brownie-caixakinder.jpeg
+│   │   ├── brownie-cestinhakinder.jpeg
+│   │   ├── brownie-cestinhamorango.jpeg
+│   │   ├── cart-icon.svg
+│   │   ├── cascone-estikadinho.jpeg
+│   │   ├── cascone-lakaoreo.jpeg
+│   │   ├── cascone-morango.jpeg
+│   │   ├── cascone-pistache.jpeg
+│   │   ├── cascone-prestigio.jpeg
+│   │   ├── cascone-uva.jpeg
+│   │   ├── cone-brigadeiro.jpeg
+│   │   ├── cone-estikadinho.jpeg
+│   │   ├── cone-ferrero.jpeg
+│   │   ├── cone-galak.jpeg
+│   │   ├── cone-kinder.jpeg
+│   │   ├── cone-M&M.jpeg
+│   │   ├── cone-ninhonutella.jpeg
+│   │   ├── cone-ourobranco.jpeg
+│   │   ├── cone-pacoca.jpeg
+│   │   ├── cone-pistache.jpeg
+│   │   ├── cone-sonhodevalsa.jpeg
+│   │   ├── cone-trento.jpeg
+│   │   ├── contact-icon.svg
+│   │   ├── copo-kinder.jpeg
+│   │   ├── copo-morango.jpeg
+│   │   ├── docinhos-brigadeiro.jpeg
+│   │   ├── docinhos-caixinha1.jpeg
+│   │   ├── docinhos-caixinha2.png
+│   │   ├── docinhos-caixinha.jpeg
+│   │   ├── docinhos-ferrero.jpeg
+│   │   ├── docinhos-ninho.jpeg
+│   │   ├── docinhos-ninhonutella.jpeg
+│   │   ├── engrenagem.png
+│   │   ├── House.png
+│   │   ├── icone-carrinho.png
+│   │   ├── icone-cart.png
+│   │   ├── icone-menu.png
+│   │   ├── icone-sobre.png
+│   │   ├── icon.svg
+│   │   ├── logo-guslafer-doces.ico
+│   │   ├── logo-seudocepedido.png
+│   │   ├── logo-seudocepedido-semfundo.png
+│   │   ├── supresa-morangobranco.jpeg
+│   │   ├── surpresa-morangoamargo.jpeg
+│   │   ├── surpresa-morango.jpeg
+│   │   └── surpresa-uva.jpeg
+│   ├── index.php
+│   └── robots.txt
+├── README.md
+├── resources
+│   ├── css
+│   │   └── app.css
+│   ├── js
+│   │   ├── app.jsx
+│   │   ├── bootstrap.js
+│   │   ├── Components
+│   │   ├── Layouts
+│   │   └── Pages
+│   └── views
+│       └── app.blade.php
+├── routes
+│   ├── auth.php
+│   ├── console.php
+│   └── web.php
+├── Seu_Doce_Pedido_TCC - Atalho.lnk
+├── tailwind.config.js
+├── tests
+│   ├── Feature
+│   │   ├── Auth
+│   │   ├── ExampleTest.php
+│   │   └── ProfileTest.php
+│   ├── TestCase.php
+│   └── Unit
+│       └── ExampleTest.php
+└── vite.config.js
+
+33 directories, 113 files

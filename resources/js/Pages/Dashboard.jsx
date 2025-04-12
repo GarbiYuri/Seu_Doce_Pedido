@@ -38,7 +38,6 @@ export default function Dashboard({ products }) {
                     >
                         <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
                         <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
-
                         <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
                         <button
                             className="mt-4 bg-pink-500 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition duration-300"
