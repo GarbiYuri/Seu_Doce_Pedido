@@ -35,6 +35,7 @@ export default function Welcome({ products }) {
                         className="bg-pink-100 border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center"
                     >
                         <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
+                        <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
                         <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
 
                         {/* Botão de adicionar ao carrinho */}
