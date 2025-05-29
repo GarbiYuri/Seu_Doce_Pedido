@@ -22,17 +22,42 @@ export default function Login({ status, canResetPassword }) {
 
     return (
         <GuestLayout>
-            <Head title="Log in" />
+            <Head title="Log in">
+                <link
+                    href="https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;600&display=swap"
+                    rel="stylesheet"
+                />
+            </Head>
 
-            {/* Importando fonte Poppins */}
-            <link
-                href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap"
-                rel="stylesheet"
-            />
+            {/* Botão voltar no canto superior esquerdo da área branca */}
+          
 
-            <div className="w-full max-w-md font-poppins mx-auto px-4">
-                <h2 className="text-3xl font-bold text-[#EF3167] text-center mb-6 tracking-widest animate-fadeIn">
-                    LOGIN
+            {/* Container geral */}
+            <div className="w-full max-w-md font-poppins mx-auto px-4 relative">
+                  
+            <div className="relative w-full max-w-md font-poppins">
+                <Link
+                    href={route('login')}
+                    className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span>Voltar</span>
+                </Link>
+                </div>
+                
+               
+                {/* Título LOGIN com fonte Lobster */}
+                <h2 className="login-title text-[#EF3167] text-center mb-6 tracking-widest animate-fadeIn">
+                    Login
                 </h2>
 
                 {status && (
@@ -95,7 +120,6 @@ export default function Login({ status, canResetPassword }) {
                         )}
                     </div>
 
-                    {/* Centralizando o link e colocando botão maior embaixo */}
                     <div className="flex flex-col items-center space-y-4 pt-6">
                         <Link
                             href={route('register')}
@@ -114,7 +138,6 @@ export default function Login({ status, canResetPassword }) {
                     </div>
                 </form>
 
-                {/* Animações simples com Tailwind extendido */}
                 <style>{`
                     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
@@ -122,7 +145,6 @@ export default function Login({ status, canResetPassword }) {
                         font-family: 'Poppins', sans-serif;
                     }
 
-                    /* Fade In */
                     @keyframes fadeIn {
                         from { opacity: 0; }
                         to { opacity: 1; }
@@ -131,7 +153,6 @@ export default function Login({ status, canResetPassword }) {
                         animation: fadeIn 0.7s ease forwards;
                     }
 
-                    /* Fade In + Up */
                     @keyframes fadeInUp {
                         from {
                             opacity: 0;
@@ -144,6 +165,11 @@ export default function Login({ status, canResetPassword }) {
                     }
                     .animate-fadeInUp {
                         animation: fadeInUp 0.8s ease forwards;
+                    }
+
+                    .login-title {
+                        font-family: 'Lobster', cursive !important;
+                        font-size: 3rem;
                     }
                 `}</style>
             </div>

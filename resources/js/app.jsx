@@ -10,6 +10,7 @@ import '@fontsource/poppins';
 
 const appName = import.meta.env.VITE_APP_NAME || 'Seu Doce Pedido';
 
+
 createInertiaApp({
     title: (title) => `${title} - ${appName}`,
     resolve: (name) =>
@@ -25,4 +26,5 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+    
 });

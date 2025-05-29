@@ -36,76 +36,106 @@ export default function AuthenticatedLayout({ header, children }) {
     if (user) {
         return (
             <>
-               
+
 
                 <div className="min-h-screen bg-gray-50">
                     {/* Faixa superior */}
                     <div
-                      className="text-white text-center text-xs py-1"
-                      style={{ backgroundColor: pinkColor }}
+                        className="bg-pink-600 text-white text-center text-xs py-1 font-bold"
+                        style={{ letterSpacing: '0.05em' }}
                     >
-                      <strong style={{ fontWeight: '700', color: 'white' }}>
-                        Sua felicidade começa com um doce &{' '}
-                      </strong>
-                      cuidamos de cada detalhe pra ela durar muito mais!
+                        <strong className="font-bold">
+                            Sua felicidade começa com um doce &;
+                        </strong>
+                        cuidamos de cada detalhe pra ela durar muito mais!
                     </div>
 
                     {/* Header */}
-                    <header className="bg-white shadow">
-                        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between py-4">
+                    <header className="bg-white shadow-md">
+                        <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-5">
                             {/* Logo e nome */}
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center gap-4">
                                 <Link href="/">
-                                    <img src="/imagens/Logo_Gaby.png" alt="Logo"  width="100" heigth="100" />
+                                    <img
+                                        src="/imagens/Logo_Gaby.png"
+                                        alt="Logo"
+                                        width="80"
+                                        height="80"
+                                        className="object-contain"
+                                    />
                                 </Link>
-                                <span className="text-2xl font-extrabold text-pink-600" style={{ fontFamily: 'cursive' }}>
+
+                                {/* Google Fonts */}
+                                <link
+                                    href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+                                    rel="stylesheet"
+                                />
+                                <h1
+                                    style={{ fontFamily: "'Lobster', cursive" }}
+                                    className="text-3xl text-pink-600 select-none"
+                                >
                                     Gaby Guslafer
-                                </span>
+                                </h1>
                             </div>
 
                             {/* Navegação */}
-                            <nav className="flex items-center gap-6 text-sm font-medium relative">
-            <Link href="/dashboard" className="hover:text-pink-600">
-                CATÁLOGO
-            </Link>
-            <Link href="/CarrinhoDeCompra" className="hover:text-pink-600">
-                CARRINHO
-            </Link>
-            <Link href="/contato" className="hover:text-pink-600">
-                CONTATO
-            </Link>
+                            <nav className="flex items-center gap-8 text-sm font-medium text-gray-700">
+                                <Link
+                                    href="/dashboard"
+                                    className="hover:text-pink-600 transition-colors duration-300"
+                                >
+                                    CATÁLOGO
+                                </Link>
+                                <Link
+                                    href="/CarrinhoDeCompra"
+                                    className="hover:text-pink-600 transition-colors duration-300"
+                                >
+                                    CARRINHO
+                                </Link>
+                                <Link
+                                    href="/contato"
+                                    className="hover:text-pink-600 transition-colors duration-300"
+                                >
+                                    SOBRE
+                                </Link>
 
-            {/* Botão do usuário */}
-            <button
-                onClick={() => setShowMenu(!showMenu)}
-                className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700 transition"
-            >
-                {user.name}
-            </button>
+                                {/* Botão do usuário */}
+                                <button
+                                    onClick={() => setShowMenu(!showMenu)}
+                                    className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300 shadow-md"
+                                >
+                                    {user.name}
+                                </button>
 
-            {/* Dropdown do usuário */}
-            {showMenu && (
-                <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-gray-200 z-50">
-                    <div className="px-4 py-2 border-b border-gray-200">
-                        <div className="text-base font-medium text-gray-800">{user.name}</div>
-                        <div className="text-sm font-medium text-gray-500">{user.email}</div>
-                    </div>
-                    <div className="py-2">
-                        <ResponsiveNavLink href={route('profile.edit')} className="block px-4 py-2 text-sm hover:bg-gray-100">
-                            Profile
-                        </ResponsiveNavLink>
-                        <ResponsiveNavLink
-                            method="post"
-                            href={route('logout')}
-                            as="button"
-                            className="w-full text-left px-4 py-2 text-sm hover:bg-gray-100"
-                        >
-                            Log Out
-                        </ResponsiveNavLink>
-                    </div>
-                </div>
-            )}
-        </nav>
+
+
+                                {/* Dropdown do usuário */}
+                                {showMenu && (
+                                    <div className="absolute right-0 mt-2 w-56 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
+                                        <div className="px-4 py-3 border-b border-gray-100 text-center">
+                                            <div className="text-lg font-semibold text-pink-700">{user.name}</div>
+                                            <div className="text-sm text-gray-500">{user.email}</div>
+                                        </div>
+                                        <div className="flex flex-col items-center py-2">
+                                            <ResponsiveNavLink
+                                                href={route('profile.edit')}
+                                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition rounded"
+                                            >
+                                                Perfil
+                                            </ResponsiveNavLink>
+                                            <ResponsiveNavLink
+                                                method="post"
+                                                href={route('logout')}
+                                                as="button"
+                                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition rounded"
+                                            >
+                                                Sair
+                                            </ResponsiveNavLink>
+                                        </div>
+                                    </div>
+                                )}
+
+                            </nav>
                         </div>
                     </header>
 
@@ -142,13 +172,13 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="min-h-screen bg-gray-50">
                     {/* Faixa superior */}
                     <div
-                      className="text-white text-center text-xs py-1"
-                      style={{ backgroundColor: pinkColor }}
+                        className="text-white text-center text-xs py-1"
+                        style={{ backgroundColor: pinkColor }}
                     >
-                      <strong style={{ fontWeight: '700', color: 'white' }}>
-                        Sua felicidade começa com um doce &{' '}
-                      </strong>
-                      cuidamos de cada detalhe pra ela durar muito mais!
+                        <strong style={{ fontWeight: '700', color: 'white' }}>
+                            Sua felicidade começa com um doce &{' '}
+                        </strong>
+                        cuidamos de cada detalhe pra ela durar muito mais!
                     </div>
 
                     {/* Header */}
@@ -173,7 +203,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                     CARRINHO
                                 </Link>
                                 <Link href="/contato" className="hover:text-pink-600">
-                                    CONTATO
+                                    SOBRE
                                 </Link>
 
                                 <Link
