@@ -8,7 +8,7 @@ export default function GuestLayout({ children }) {
                 <div className="absolute w-96 h-96 bg-white rounded-full blur-3xl opacity-40 z-10 animate-pop" />
 
                 <img
-                    src="imagens/Logo_Gaby.png"
+                    src="imagens/Logo_GabyAtualizada.png"
                     alt="Logo"
                     className="w-48 h-48 z-20 relative object-contain animate-pop"
                     width="400"

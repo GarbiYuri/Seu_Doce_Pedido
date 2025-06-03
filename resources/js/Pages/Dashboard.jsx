@@ -30,25 +30,43 @@ export default function Dashboard({ products }) {
             <Head title="DashBoard" />
 
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
-                {products.map((product) => (
-                    <div
-                        key={product.id}
-                        className="bg-pink-100 border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center"
-                    >
-                        <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
-                        <img src={`/imagem/${product.imagem}`} alt="Imagem do Produto" />
-                        <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
-                        <button
-                            className="mt-4 bg-pink-500 text-white py-2 px-4 rounded-full hover:bg-pink-600 transition duration-300"
-                            onClick={() => addToCart(product.id)}
-                            disabled={buttonTexts[product.id] === "Adicionado!"} // Evita múltiplos cliques
-                        >
-                            {buttonTexts[product.id] || "Adicionar ao Carrinho"}
-                        </button>
-                    </div>
-                ))}
-            </div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6 p-6">
+    {products.map((product) => (
+        <div
+            key={product.id}
+            className="bg-white border border-pink-200 rounded-3xl shadow-md hover:shadow-xl transition transform hover:scale-105 flex flex-col items-center p-5"
+        >
+            <img
+                src={`/imagem/${product.imagem}`}
+                alt={`Imagem de ${product.name}`}
+                className="w-32 h-32 object-cover rounded-xl border border-pink-100"
+            />
+
+            <h2 className="text-lg font-bold text-pink-800 mt-4">
+                {product.name}
+            </h2>
+
+            <p className="text-sm text-gray-500 mt-1">Descrição do produto</p>
+
+            <p className="text-lg font-semibold text-gray-800 mt-3">
+                R$ {product.price}
+            </p>
+
+            <button
+                className={`mt-4 px-6 py-2 rounded-full font-semibold transition duration-300 ${
+                    buttonTexts[product.id] === "Adicionado!"
+                        ? "bg-green-500 hover:bg-green-600"
+                        : "bg-pink-500 hover:bg-pink-600"
+                } text-white shadow-md`}
+                onClick={() => addToCart(product.id)}
+                disabled={buttonTexts[product.id] === "Adicionado!"}
+            >
+                {buttonTexts[product.id] || "Adicionar ao Carrinho"}
+            </button>
+        </div>
+    ))}
+</div>
+
 
         </AuthenticatedLayout>
     );

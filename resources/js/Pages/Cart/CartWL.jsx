@@ -1,18 +1,14 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router } from "@inertiajs/react";
 import { useState } from 'react';
-
+import { Trash2, Minus, Plus } from 'lucide-react';
 
 export default function CartWL() {
-    const { cart = {} } = usePage().props; // Pegando os dados do carrinho
+    const { cart = {} } = usePage().props;
     const { products = [] } = usePage().props;
 
-    // Filtra os produtos que estão no carrinho
     const cartProducts = products.filter(product => cart[product.id]);
-
-    // Calcula o total do carrinho
     const total = cartProducts.reduce((sum, product) => sum + (product.price * cart[product.id]), 0);
-
     const [updatedCart, setUpdatedCart] = useState(cart);
 
     const updateQuantity = (productId, quantity) => {
@@ -21,87 +17,106 @@ export default function CartWL() {
             quantity: quantity,
         }, {
             onSuccess: () => {
-                // Atualiza o estado do carrinho sem recarregar a página
                 setUpdatedCart(prevCart => ({
                     ...prevCart,
                     [productId]: quantity,
                 }));
             },
-            onError: (errors) => {
+            onError: () => {
                 alert('Erro ao atualizar o carrinho.');
             }
         });
-
     };
 
-
-    // Função para diminuir a quantidade
     const decreaseQuantity = (productId) => {
-        const newQuantity = cart[productId] > 0 ? cart[productId] - 1 : 1;
+        const newQuantity = cart[productId] > 1 ? cart[productId] - 1 : 1;
         updateQuantity(productId, newQuantity);
     };
 
-    // Função para remover produto do carrinho
+    const increaseQuantity = (productId) => {
+        const newQuantity = cart[productId] + 1;
+        updateQuantity(productId, newQuantity);
+    };
+
     const removeProduct = (productId) => {
-        router.post('/remove', {
-            product_id: productId,
-        }, {
-            onSuccess: () => {
-                // Atualiza o estado do carrinho após remover o produto
-                window.location.reload(); // Recarrega a página para pegar os dados atualizados do backend
-            },
-            onError: () => {
-                alert('Erro ao remover o produto.');
-            },
+        router.post('/remove', { product_id: productId }, {
+            onSuccess: () => window.location.reload(),
+            onError: () => alert('Erro ao remover o produto.'),
         });
     };
+
     return (
         <AuthenticatedLayout>
             <Head title="Carrinho de Compras" />
 
-            <div className="p-6">
-                <h2 className="text-2xl font-bold text-pink-700 mb-4">Meu Carrinho</h2>
+            <div className="p-6 max-w-3xl mx-auto">
+                <h2 className="text-2xl font-bold text-pink-700 mb-6">Meu Carrinho</h2>
 
                 {cartProducts.length > 0 ? (
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                    <div className="bg-white border border-pink-200 rounded-3xl p-6">
                         {cartProducts.map((product) => (
                             <div
                                 key={product.id}
-                                className="bg-white border border-pink-300 p-4 rounded-2xl shadow-lg hover:shadow-2xl transition duration-300 transform hover:scale-105 text-center relative"
+                                className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
                             >
-                                {/* Botão de remoção do produto (X) */}
-                                <button
-                                    className="absolute top-2 right-2 px-3 py-1 bg-red-600 text-white rounded-full"
-                                    onClick={() => removeProduct(product.id)}
-                                >
-                                    X
-                                </button>
+                                <div className="flex items-center gap-4">
+                                    <img
+                                        src={`/imagem/${product.imagem}`}
+                                        alt={product.name}
+                                        className="w-16 h-16 rounded-xl object-cover"
+                                    />
+                                    <div>
+                                        <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
+                                        <p className="text-sm text-gray-500">Descrição do produto</p>
+                                        <p className="text-md font-bold text-gray-700">R$ {product.price.toFixed(2)}</p>
+                                    </div>
+                                </div>
 
-                                <h2 className="text-xl font-bold text-pink-800">{product.name}</h2>
-                                <p className="text-lg font-semibold text-gray-700 mt-2">R$ {product.price}</p>
-                                <p className="text-md text-gray-600">Quantidade: {cart[product.id]}</p>
-                                <p className="text-md font-bold text-pink-700">Subtotal: R$ {(product.price * cart[product.id]).toFixed(2)}</p>
+                                <div className="flex items-center gap-4">
+                                    <button
+                                        onClick={() => removeProduct(product.id)}
+                                        className="text-red-500 hover:text-red-600"
+                                    >
+                                        <Trash2 size={18} />
+                                    </button>
 
-                                {/* Botão de diminuição de quantidade */}
-                                <button
-                                    className="mt-2 px-4 py-2 bg-pink-600 text-white rounded-lg"
-                                    onClick={() => decreaseQuantity(product.id)}
-                                >
-                                    -
-                                </button>
+                                    <div className="flex items-center gap-2 border border-gray-300 rounded-full px-3 py-1">
+                                        <button
+                                            onClick={() => decreaseQuantity(product.id)}
+                                            className="text-gray-700 hover:text-pink-600"
+                                        >
+                                            <Minus size={16} />
+                                        </button>
+                                        <span className="text-sm font-medium">{cart[product.id]}</span>
+                                        <button
+                                            onClick={() => increaseQuantity(product.id)}
+                                            className="text-gray-700 hover:text-pink-600"
+                                        >
+                                            <Plus size={16} />
+                                        </button>
+                                    </div>
+                                </div>
                             </div>
                         ))}
+
+                        <div className="flex justify-between items-center pt-4">
+                            <span className="text-pink-500 font-semibold">SubTotal</span>
+                            <span className="text-lg font-bold text-gray-800">R$ {total.toFixed(2)}</span>
+                        </div>
+
+                        <div className="flex flex-col gap-3 mt-6">
+                            <button className="bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-full text-sm font-medium">
+                                Finalizar Compra
+                            </button>
+                            <button className="bg-pink-100 hover:bg-pink-200 text-pink-700 py-2 rounded-full text-sm font-medium">
+                                Voltar à Página Inicial
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <p className="text-lg text-gray-600">Seu carrinho está vazio.</p>
                 )}
-
-                {/* Total do Carrinho */}
-                <div className="mt-6 text-center">
-                    <h2 className="text-xl font-bold text-pink-800">Total: R$ {total}</h2>
-                </div>
             </div>
-
         </AuthenticatedLayout>
     );
 }

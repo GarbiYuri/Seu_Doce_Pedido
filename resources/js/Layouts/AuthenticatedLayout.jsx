@@ -44,10 +44,11 @@ export default function AuthenticatedLayout({ header, children }) {
                         className="bg-pink-600 text-white text-center text-xs py-1 font-bold"
                         style={{ letterSpacing: '0.05em' }}
                     >
-                        <strong className="font-bold">
-                            Sua felicidade começa com um doce &;
+                        <strong style={{ fontWeight: '700', color: 'white' }}>
+                            Sua felicidade começa com um doce &{' '}
                         </strong>
                         cuidamos de cada detalhe pra ela durar muito mais!
+
                     </div>
 
                     {/* Header */}
@@ -57,7 +58,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <div className="flex items-center gap-4">
                                 <Link href="/">
                                     <img
-                                        src="/imagens/Logo_Gaby.png"
+                                        src="/imagens/Logo_GabyAtualizada.png"
                                         alt="Logo"
                                         width="80"
                                         height="80"
@@ -187,7 +188,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             {/* Logo e nome */}
                             <div className="flex items-center gap-2">
                                 <Link href="/">
-                                    <img src="/imagens/Logo_Gaby.png" alt="Logo" heigth="100" width="100" />
+                                    <img src="/imagens/Logo_GabyAtualizada.png" alt="Logo" heigth="100" width="100" />
                                 </Link>
                                 <span className="text-2xl font-extrabold" style={{ fontFamily: 'cursive', color: pinkColor }}>
                                     Gaby Guslafer
