@@ -37,6 +37,7 @@ export default function ProductCreate({ categories }) {
 
  return (
   <>
+  <br />
     <style>
       {`
         @import url('https://fonts.googleapis.com/css2?family=Candice&display=swap');

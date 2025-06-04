@@ -75,10 +75,10 @@ export default function AdminLayout({ children }) {
                     <h2 className="text-2xl font-extrabold text-pink-600 mb-6">Painel</h2>
 
                     <Link
-                        href="/dashboard"
+                        href="xDashboardAdmin.jsx"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
-                        <img src="/imagens/House.png" alt="Home" className="h-5 w-5" />
+                        <img src="imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
                         <span className="font-semibold">Home</span>
                     </Link>
 
@@ -86,7 +86,7 @@ export default function AdminLayout({ children }) {
                         href="/"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
-                        <img src="/imagens/sales.png" alt="Vendas" className="h-5 w-5" />
+                        <img src="imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
                         <span className="font-semibold">Vendas</span>
                     </Link>
 
@@ -94,7 +94,7 @@ export default function AdminLayout({ children }) {
                         href="/Categorias"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
-                        <img src="/imagens/categories.png" alt="Categorias" className="h-5 w-5" />
+                        <img src="/imagens/icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
                         <span className="font-semibold">Categorias</span>
                     </Link>
 
@@ -102,7 +102,7 @@ export default function AdminLayout({ children }) {
                         href="/Produtos"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
-                        <img src="/imagens/products.png" alt="Produtos" className="h-5 w-5" />
+                        <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
                         <span className="font-semibold">Produtos</span>
                     </Link>
                 </aside>

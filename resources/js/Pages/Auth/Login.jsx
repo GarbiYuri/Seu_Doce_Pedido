@@ -37,7 +37,7 @@ export default function Login({ status, canResetPassword }) {
                   
             <div className="relative w-full max-w-md font-poppins">
                 <Link
-                    href={route('login')}
+                    href="http://127.0.0.1:8000/"
                     className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
                 >
                     <svg
