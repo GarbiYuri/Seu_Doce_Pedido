@@ -25,8 +25,9 @@ export default function CategoryEdit({ product, categories }) {
     setSelectedCategoryId('');
   };
 
-  return (
-    <div className="max-w-2xl mx-auto p-8 bg-white shadow-xl rounded-lg">
+ return (
+  <div className="bg-pink-100 min-h-screen flex items-center justify-center">
+    <div className="max-w-2xl mx-auto p-2 bg-white shadow-xl rounded-lg border border-pink-300">
       <h2 className="text-3xl font-semibold text-gray-800 mb-6 text-center">Editar Produto</h2>
 
       <form onSubmit={handleSubmit}>
@@ -86,5 +87,7 @@ export default function CategoryEdit({ product, categories }) {
         </button>
       </form>
     </div>
-  );
+  </div>
+);
+
 }

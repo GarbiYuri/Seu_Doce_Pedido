@@ -6,13 +6,15 @@
 
         <title inertia>{{ config('app.name', 'Seu Doce Pedido') }}</title>
 
-        <link rel="shortcut icon" href="imagens/logo-seudocepedido.png" type="image/x-icon">
+        <link rel="shortcut icon" href="imagens/Logo_Gaby.png" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/csswelcome.css">
+        <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
+
         <!-- Scripts -->
         @routes
         @viteReactRefresh

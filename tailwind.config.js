@@ -11,12 +11,19 @@ export default {
     ],
 
     theme: {
-        extend: {
-            fontFamily: {
-                sans: ['Figtree', ...defaultTheme.fontFamily.sans],
-            },
-        },
+  extend: {
+    fontFamily: {
+      sans: ['Poppins', 'sans-serif'],
     },
+    colors: {
+      primary: '#EF3167'
+    }
+  }
+},
 
     plugins: [forms],
+   
+  
 };
+
+  

@@ -47,13 +47,12 @@ export default function UpdatePasswordForm({ className = '' }) {
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-medium text-gray-900">
-                    Update Password
+                <h2 className="text-lg font-bold text-pink-600">
+                    Atualizar Senha
                 </h2>
 
                 <p className="mt-1 text-sm text-gray-600">
-                    Ensure your account is using a long, random password to stay
-                    secure.
+                    Garanta que sua conta esteja usando uma senha longa, segura e difícil de adivinhar.
                 </p>
             </header>
 
@@ -61,7 +60,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 <div>
                     <InputLabel
                         htmlFor="current_password"
-                        value="Current Password"
+                        value="Senha Atual"
                     />
 
                     <TextInput
@@ -83,7 +82,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div>
-                    <InputLabel htmlFor="password" value="New Password" />
+                    <InputLabel htmlFor="password" value="Nova Senha" />
 
                     <TextInput
                         id="password"
@@ -101,7 +100,7 @@ export default function UpdatePasswordForm({ className = '' }) {
                 <div>
                     <InputLabel
                         htmlFor="password_confirmation"
-                        value="Confirm Password"
+                        value="Confirme a Nova Senha"
                     />
 
                     <TextInput
@@ -122,21 +121,25 @@ export default function UpdatePasswordForm({ className = '' }) {
                 </div>
 
                 <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                    <PrimaryButton disabled={processing}>
+                        Salvar
+                    </PrimaryButton>
 
                     <Transition
                         show={recentlySuccessful}
-                        enter="transition ease-in-out"
+                        enter="transition ease-in-out duration-300"
                         enterFrom="opacity-0"
-                        leave="transition ease-in-out"
+                        enterTo="opacity-100"
+                        leave="transition ease-in-out duration-300"
+                        leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <p className="text-sm text-gray-600">
-                            Saved.
+                        <p className="text-sm text-green-600">
+                            Salvo com sucesso.
                         </p>
                     </Transition>
                 </div>
             </form>
         </section>
-    );
+    );  
 }
