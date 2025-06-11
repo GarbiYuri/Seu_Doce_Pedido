@@ -18,7 +18,23 @@ export default function ForgotPassword({ status }) {
     return (
         <GuestLayout>
             <Head title="Recuperar Senha" />
-
+  <Link
+                    href="http://127.0.0.1:8000/"
+                    className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-6 w-6"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth={2}
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                    </svg>
+                    <span>Voltar</span>
+                </Link>
+                
             <div className="mb-4 text-gray-600 font-sans text-sm">
                 Esqueceu sua senha? Sem problemas.
             </div>
@@ -33,6 +49,7 @@ export default function ForgotPassword({ status }) {
             )}
 
             <form onSubmit={submit} className="space-y-4 w-full max-w-md font-sans">
+            
                 <div>
                     <InputLabel htmlFor="email" value="Email" />
                     <TextInput
@@ -47,6 +64,8 @@ export default function ForgotPassword({ status }) {
                         autoComplete="username"
                     />
                     <InputError message={errors.email} className="mt-2" />
+
+                    
                 </div>
 
                 <div className="flex flex-col items-center justify-center pt-4 space-y-4">
@@ -58,6 +77,7 @@ export default function ForgotPassword({ status }) {
                     </PrimaryButton>
 
                 </div>
+                
             </form>
         </GuestLayout>
     );

@@ -2,11 +2,13 @@
 
 namespace App\Http\Middleware;
 
+
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Inertia\Inertia;
 use App\Models\Product;
+use App\Models\Category;
 
 class ListProduct
 {
@@ -18,7 +20,9 @@ class ListProduct
     public function handle(Request $request, Closure $next): Response
     {
         $products = Product::all();
+        $categories = Category::all();
 
+         Inertia::share("categories", $categories);
         Inertia::share("products", $products);
         return $next($request);
     }
