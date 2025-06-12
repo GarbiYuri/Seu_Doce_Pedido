@@ -9,6 +9,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CartWLController;
+use App\Http\Controllers\BannerController;
 
 // Area de Testes 
 
@@ -34,7 +35,7 @@ Route::middleware('auth')->group(function () {
 })->name('VerifyEmail'); 
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
-Route::middleware(EmailVerifiedAt::class)->group(function () {
+//Route::middleware(EmailVerifiedAt::class)->group(function () {
     //Middleware para Somente Admins
     Route::middleware([CheckIfAdmin::class])->group(function () {
         // Rota para a administração do painel
@@ -91,9 +92,14 @@ Route::middleware(EmailVerifiedAt::class)->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Finaliza Auth
-});
+// });
 // Finaliza EmailVerifiedAt
 });
+
+//Rotas do Banner
+
+
+Route::resource('banners', BannerController::class);
 
 require __DIR__.'/auth.php';
 

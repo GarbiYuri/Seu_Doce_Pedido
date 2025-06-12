@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Inertia\Inertia;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\Banner;
 
 class ListProduct
 {
@@ -22,8 +23,9 @@ class ListProduct
         $products = Product::all();
         $categories = Category::all();
 
-         Inertia::share("categories", $categories);
+        Inertia::share("categories", $categories);
         Inertia::share("products", $products);
+        
         return $next($request);
     }
 }

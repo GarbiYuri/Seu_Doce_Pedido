@@ -1,8 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from '@inertiajs/react';
+import { Head, router, usePage, Link } from '@inertiajs/react';
 import { useState } from 'react';
 
-export default function Dashboard({ products, categories }) {
+export default function Dashboard({ products, categories, banner }) {
+        const user = usePage().props.auth.user;
     const [buttonTexts, setButtonTexts] = useState({}); // Estado para armazenar o texto de cada botão
 
     const addToCart = (Id_Product) => {
@@ -23,12 +24,48 @@ export default function Dashboard({ products, categories }) {
 
     };
 
-    return (
+    
+    
+ return (
         <AuthenticatedLayout
 
         >
             <Head title="DashBoard" />
 
+            <div className="container mx-auto text-center mt-10">
+      {banner ? (
+        <>
+          <img
+            src={banner.imagem}
+            alt={banner.nome}
+            className="mx-auto max-w-full h-auto rounded-lg shadow-lg"
+          />
+          <h1 className="text-2xl font-bold mt-4">{banner.nome}</h1>
+
+          {isAdmin && (
+            <Link
+              href={`/banners/${banner.id}/edit`}
+              className="mt-4 inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Editar Banner
+            </Link>
+          )}
+        </>
+      ) : (
+        <>
+         
+
+          {user.admin === 1 && (
+            <Link
+              href="/banners/create"
+              className="mt-4 inline-block bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            >
+              Adicionar Banner
+            </Link>
+          )}
+        </>
+      )}
+    </div>
 
             {categories.map((category) => {
                 const filteredProducts = products.filter(
@@ -62,7 +99,7 @@ export default function Dashboard({ products, categories }) {
 
                                     <h2 className="text-base font-medium text-gray-800">{product.name}</h2>
 
-                                    <p className="text-xs text-gray-500 mb-1">Descrição do produto</p>
+                                    <p className="text-xs text-gray-500 mb-1">{product.descricao}</p>
 
                                     <p className="text-xl font-bold text-gray-900 mb-4">
                                         R${Number(product.price).toFixed(2).replace('.', ',')}
@@ -89,4 +126,6 @@ export default function Dashboard({ products, categories }) {
 
         </AuthenticatedLayout>
     );
+    
+   
 }

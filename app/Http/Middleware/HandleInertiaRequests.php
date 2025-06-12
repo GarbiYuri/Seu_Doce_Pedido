@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\Product;
 use App\Models\Category;
-
+use App\Models\Banner;
 class HandleInertiaRequests extends Middleware
 {
     /**
@@ -36,6 +36,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'banners' =>  Banner::all()->toArray(), 
             'products' => Product::all()->toArray(), 
             'categories' => Category::all()->toArray(),
         ];

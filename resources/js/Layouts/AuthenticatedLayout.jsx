@@ -56,7 +56,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-5">
                             {/* Logo e nome */}
                             <div className="flex items-center gap-4">
-                                <Link href="/">
+                                <Link href="/dashboard">
                                     <img
                                         src="/imagens/Logo_GabyAtualizada.png"
                                         alt="Logo"
@@ -81,6 +81,16 @@ export default function AuthenticatedLayout({ header, children }) {
 
                             {/* Navegação */}
                             <nav className="flex items-center gap-8 text-sm font-medium text-gray-700">
+                                {user.admin === 1 &&(
+                                    <Link
+                                    href="/Administracao"
+                                    className="hover:text-pink-600 transition-colors duration-300"
+                                >
+
+                                    ADMINISTRAÇÃO
+                                </Link>
+                                )}
+                                 
                                 <Link
                                     href="/dashboard"
                                     className="hover:text-pink-600 transition-colors duration-300"
@@ -200,7 +210,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <Link href="/dashboard" className="hover:text-pink-600">
                                     CATÁLOGO
                                 </Link>
-                                <Link href="/CarrinhoDeCompra" className="hover:text-pink-600">
+                                <Link href="/CarrinhoWL" className="hover:text-pink-600">
                                     CARRINHO
                                 </Link>
                                 <Link href="/contato" className="hover:text-pink-600">
