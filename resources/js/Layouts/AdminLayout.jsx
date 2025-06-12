@@ -34,7 +34,7 @@ export default function AdminLayout({ children }) {
             {/* HEADER */}
             <header className="bg-[#EF3167] text-white px-6 py-3 shadow flex items-center justify-between h-20">
                 {/* Logo maior */}
-                <Link href="/Administracao" className="flex-shrink-0">
+                <Link href="/dashboard" className="flex-shrink-0">
                     <img src="/imagens/Logo_ADM.png" alt="Logo ADM" height="100" width="100" />
                 </Link>
 
@@ -75,7 +75,7 @@ export default function AdminLayout({ children }) {
                     <h2 className="text-2xl font-extrabold text-pink-600 mb-6">Painel</h2>
 
                     <Link
-                        href="xDashboardAdmin.jsx"
+                        href="/Administracao"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
                         <img src="imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
@@ -94,7 +94,7 @@ export default function AdminLayout({ children }) {
                         href="/Categorias"
                         className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
                     >
-                        <img src="/imagens/icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
+                        <img src="/imagens/Icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
                         <span className="font-semibold">Categorias</span>
                     </Link>
 

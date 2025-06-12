@@ -13,6 +13,7 @@
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/csswelcome.css">
+         <link rel="stylesheet" href="css/cssParaProducts.css">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
         <!-- Scripts -->

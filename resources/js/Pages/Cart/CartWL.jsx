@@ -64,7 +64,7 @@ export default function CartWL() {
                             <div>
                                 <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
                                 <p className="text-xs text-gray-500">Descrição do produto</p>
-                                <p className="text-md font-bold text-gray-900">R${product.price.toFixed(2).replace('.', ',')}</p>
+                                <p className="text-md font-bold text-gray-900">R${product.price}</p>
                             </div>
                         </div>
 
