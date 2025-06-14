@@ -7,7 +7,8 @@ export default function Welcome({ products, categories }) {
      if (user) {
         router.visit('/dashboard');
     }
-
+    const shop = usePage().props.shop;  
+    const banner = shop.banner;
     const [buttonTexts, setButtonTexts] = useState({}); // Estado para armazenar o texto de cada botão
 
     // Função para adicionar produto ao carrinho
@@ -37,8 +38,23 @@ export default function Welcome({ products, categories }) {
                 <Head title="DashBoard" />
     
     <div>
+             <div className="relative w-full mt-10">
+              
+          {banner  ? (
+            <>
+              <img
+                src={banner.imagem}
+                alt={banner.nome}
+                className="w-full h-auto object-cover max-h-[450px] rounded shadow-md"
+              />
         
-    </div>
+            </>
+          ) : (
+            <div></div>
+          )}
+       
+         </div>
+         </div>
                 {categories.map((category) => {
                     const filteredProducts = products.filter(
                         (product) => product.id_categoria === category.id
