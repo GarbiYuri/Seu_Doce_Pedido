@@ -48,7 +48,8 @@ export default function AuthenticatedLayout({ header, children }) {
                 <div className="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12 flex items-center justify-between py-5">
                     {/* Logo e nome */}
                     <div className="flex items-center gap-4">
-                        <Link href="/dashboard">
+                        {user ? (
+                            <Link href="/dashboard">
                             <img
                                 src="/imagens/Logo_GabyAtualizada.png"
                                 alt="Logo"
@@ -57,6 +58,18 @@ export default function AuthenticatedLayout({ header, children }) {
                                 className="object-contain"
                             />
                         </Link>
+                        ) : (
+                            <Link href="/">
+                            <img
+                                src="/imagens/Logo_GabyAtualizada.png"
+                                alt="Logo"
+                                width="80"
+                                height="80"
+                                className="object-contain"
+                            />
+                        </Link>
+                        )}
+                        
                         <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
                         <h1 style={{ fontFamily: "'Lobster', cursive" }} className="text-3xl text-pink-600 select-none">
                             Gaby Guslafer
@@ -65,28 +78,50 @@ export default function AuthenticatedLayout({ header, children }) {
 
                     {/* Navegação - visível em telas grandes */}
                     <nav className="hidden sm:flex items-center gap-8 text-sm font-medium text-gray-700">
-                        {user && user.admin === 1 && (
+                        {user ? (
+                            <>
+                            {user.admin === 1 && (
                             <Link href="/Administracao" className="hover:text-pink-600 transition-colors duration-300">
                                 ADMINISTRAÇÃO
                             </Link>
-                        )}
+                            )}
                         <Link href="/dashboard" className="hover:text-pink-600 transition-colors duration-300">
                             CATÁLOGO
                         </Link>
                         <Link href="/CarrinhoDeCompra" className="hover:text-pink-600 transition-colors duration-300">
                             CARRINHO
+                        </Link>     
+                            </>
+                        ): (
+                            <>
+                            <Link href="/" className="hover:text-pink-600 transition-colors duration-300">
+                            CATÁLOGO
                         </Link>
+                         <Link href="/CarrinhoWL" className="hover:text-pink-600 transition-colors duration-300">
+                            CARRINHO
+                        </Link>
+                        </>
+                        )}
+                       
                         <Link href="/contato" className="hover:text-pink-600 transition-colors duration-300">
                             SOBRE
                         </Link>
-                        {user && (
+                        {user ? (
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
                                 className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300 shadow-md"
                             >
                                 {user.name}
                             </button>
+                        ) : (
+                            <Link
+                                href="/login"
+                                className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300 shadow-md"
+                            >
+                                LOGIN
+                            </Link>
                         )}
+                         
                     </nav>
 
                     {/* Botão hamburguer - visível em telas pequenas */}
@@ -133,24 +168,39 @@ export default function AuthenticatedLayout({ header, children }) {
                 {/* Menu responsivo para mobile */}
                 {showingNavigationDropdown && (
                     <div className="sm:hidden absolute top-full right-4 mt-2 bg-white shadow-lg rounded-md py-2 px-4 z-50 w-64 space-y-2 text-sm font-medium">
-                        {user && user.admin === 1 && (
-                            <Link href="/Administracao" className="block text-gray-700 hover:text-pink-600">
-                                ADMINISTRAÇÃO
-                            </Link>
+                        {user ? (
+                         <>
+                     {user.admin === 1 && (
+                     <Link href="/Administracao" className="block text-gray-700 hover:text-pink-600">
+                        ADMINISTRAÇÃO
+                     </Link>
                         )}
-                        <Link href="/dashboard" className="block text-gray-700 hover:text-pink-600">
-                            CATÁLOGO
-                        </Link>
-                        <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-pink-600">
+                    <Link href="/dashboard" className="block text-gray-700 hover:text-pink-600">
+                     CATÁLOGO
+                    </Link>
+                    <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-pink-600">
                             CARRINHO
                         </Link>
+                     </>
+                    )  : (
+                        <>
+                    <Link href="/" className="block text-gray-700 hover:text-pink-600">
+                     CATÁLOGO
+                    </Link>
+                    <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-pink-600">
+                    CARRINHO
+                    </Link>
+                        </>
+                    )}
+                     
+                        
                         <Link href="/contato" className="block text-gray-700 hover:text-pink-600">
                             SOBRE
                         </Link>
-                        {user && (
+                        {user ? (
                             <>
                                 <Link href={route('profile.edit')} className="block text-gray-700 hover:text-pink-600">
-                                    Perfil
+                                    PERFIL
                                 </Link>
                                 <Link
                                     method="post"
@@ -158,11 +208,17 @@ export default function AuthenticatedLayout({ header, children }) {
                                     as="button"
                                     className="block w-full text-left text-gray-700 hover:text-pink-600"
                                 >
-                                    Sair
+                                    SAIR
                                 </Link>
                             </>
+                        ):(
+                         <Link href="/login" className="block text-gray-700 hover:text-pink-600">
+                                    LOGIN
+                                </Link>
                         )}
+                        
                     </div>
+                    
                 )}
             </header>
 

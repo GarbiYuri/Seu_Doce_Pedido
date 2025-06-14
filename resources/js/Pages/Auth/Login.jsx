@@ -37,21 +37,22 @@ export default function Login({ status, canResetPassword }) {
                   
             <div className="relative w-full max-w-md font-poppins">
                 <Link
-                    href="/"
-                    className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-6 w-6"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth={2}
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-                    </svg>
-                    <span>Voltar</span>
-                </Link>
+    href="/"
+    className=" top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+>
+    <svg
+        xmlns="http://www.w3.org/2000/svg"
+        className="h-6 w-6"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={2}
+    >
+        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+    </svg>
+    <span>Voltar</span>
+</Link>
+
                 </div>
                 
                
