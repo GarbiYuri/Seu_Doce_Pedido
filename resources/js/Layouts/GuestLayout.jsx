@@ -1,8 +1,9 @@
 export default function GuestLayout({ children }) {
     return (
         <div className="min-h-screen flex">
+            {/* Lado esquerdo - escondido em telas pequenas */}
             <div
-                className="w-1/2 bg-[#EF3167] flex flex-col items-center justify-center relative overflow-hidden"
+                className="hidden md:flex md:w-1/2 bg-[#EF3167] flex-col items-center justify-center relative overflow-hidden"
                 style={{ perspective: '800px' }}
             >
                 <div className="absolute w-96 h-96 bg-white rounded-full blur-3xl opacity-40 z-10 animate-pop" />
@@ -42,10 +43,10 @@ export default function GuestLayout({ children }) {
                 `}</style>
             </div>
 
-           <div className="w-1/2 bg-white flex flex-col items-center justify-center p-8 relative">
-    {children}
-</div>
-
+            {/* Lado direito - ocupa 100% em telas pequenas, 50% em md+ */}
+            <div className="w-full md:w-1/2 bg-white flex flex-col items-center justify-center p-8 relative">
+                {children}
+            </div>
         </div>
     );
 }

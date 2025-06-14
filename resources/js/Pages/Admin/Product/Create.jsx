@@ -1,164 +1,237 @@
-import React, { useState } from 'react';
-import { router } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { router, usePage } from '@inertiajs/react';
+import Modal from '@/Components/Modal';
+import CategoryEdit from './Show'; // componente para editar produto (modal)
+import { FiBox, FiTrash2, FiSearch } from 'react-icons/fi';
 
 export default function ProductCreate({ categories }) {
+  const { products } = usePage().props;
+
+  // Estados para criação do produto
   const [name, setName] = useState('');
-  const [price, setPrice] = useState('');
   const [descricao, setDescricao] = useState('');
+  const [price, setPrice] = useState('');
+  const [id_categoria, setIdCategoria] = useState(categories.length > 0 ? categories[0].id : '');
   const [imagem, setImagem] = useState(null);
-  const [selectedCategoryId, setSelectedCategoryId] = useState('');
 
-  const handleImageChange = (e) => {
-    setImagem(e.target.files[0]);
-  };
+  // Estados para filtro de busca
+  const [searchTerm, setSearchTerm] = useState('');
 
+  // Estados para modal de edição
+  const [modalOpen, setModalOpen] = useState(false);
+  const [productToEdit, setProductToEdit] = useState(null);
+
+  // Função para criar produto
   const handleSubmit = (e) => {
     e.preventDefault();
-
     const formData = new FormData();
     formData.append('name', name);
-    formData.append('price', price);
-    formData.append('id_categoria', selectedCategoryId);
     formData.append('descricao', descricao);
-    if (imagem) {
-      formData.append('imagem', imagem);
-    }
+    formData.append('price', price);
+    formData.append('id_categoria', id_categoria);
+    if (imagem) formData.append('imagem', imagem);
 
-    router.post(route('products.store'), formData, {
+    router.post('/products', formData, {
       forceFormData: true,
+      onSuccess: () => {
+        setName('');
+        setDescricao('');
+        setPrice('');
+        setIdCategoria(categories.length > 0 ? categories[0].id : '');
+        setImagem(null);
+      },
     });
-
-    setName('');
-    setPrice('');
-    setDescricao('');
-    setImagem(null);
-    setSelectedCategoryId('');
   };
 
- return (
-  <>
-  <br />
-    <style>
-      {`
-        @import url('https://fonts.googleapis.com/css2?family=Candice&display=swap');
-      `}
-    </style>
+  // Abrir modal para editar
+  const openEditModal = (product) => {
+    setProductToEdit(product);
+    setModalOpen(true);
+  };
 
-    <form
-      onSubmit={handleSubmit}
-      encType="multipart/form-data"
-      className="max-w-4xl mx-auto space-y-4 mb-8 bg-white border border-pink-300 rounded-3xl p-8 shadow-sm"
-    >
-      <h2
-        className="text-3xl font-extrabold text-pink-600 mb-6 text-center"
-        style={{ fontFamily: "'Candice', cursive" }}
+  // Fechar modal
+  const closeEditModal = () => {
+    setModalOpen(false);
+    setProductToEdit(null);
+  };
+
+  // Deletar produto
+  const handleDelete = (id) => {
+    if (confirm('Tem certeza que deseja excluir este produto?')) {
+      router.delete(`/products/${id}`);
+    }
+  };
+
+  // Filtra produtos pelo termo digitado
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+      {/* Formulário de criação */}
+      <form
+        onSubmit={handleSubmit}
+        className="bg-white border border-pink-200 rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
+        encType="multipart/form-data"
       >
-        Criar Produto
-      </h2>
+        <h2 className="text-3xl font-extrabold text-pink-600 text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
+          Cadastrar Produto
+        </h2>
 
-      <div>
-        <label
-          htmlFor="name"
-          className="block text-sm font-semibold text-pink-700 mb-1"
+        <div>
+          <label htmlFor="name" className="block text-sm font-semibold text-pink-700 mb-1">
+            Nome
+          </label>
+          <input
+            id="name"
+            type="text"
+            value={name}
+            onChange={e => setName(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            placeholder="Nome do produto"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="descricao" className="block text-sm font-semibold text-pink-700 mb-1">
+            Descrição
+          </label>
+          <textarea
+            id="descricao"
+            value={descricao}
+            onChange={e => setDescricao(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            placeholder="Descrição do produto"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="price" className="block text-sm font-semibold text-pink-700 mb-1">
+            Preço
+          </label>
+          <input
+            id="price"
+            type="number"
+            step="0.01"
+            min="0"
+            value={price}
+            onChange={e => setPrice(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            placeholder="Preço do produto"
+          />
+        </div>
+
+        <div>
+          <label htmlFor="id_categoria" className="block text-sm font-semibold text-pink-700 mb-1">
+            Categoria
+          </label>
+          <select
+            id="id_categoria"
+            value={id_categoria}
+            onChange={e => setIdCategoria(e.target.value)}
+            required
+            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+          >
+            {categories.map(cat => (
+              <option key={cat.id} value={cat.id}>
+                {cat.name}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div>
+          <label htmlFor="imagem" className="block text-sm font-semibold text-pink-700 mb-1">
+            Imagem
+          </label>
+          <input
+            id="imagem"
+            type="file"
+            accept="image/*"
+            onChange={e => setImagem(e.target.files[0])}
+            className="w-full"
+          />
+        </div>
+
+        <button
+          type="submit"
+          className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"
         >
-          Nome
-        </label>
+          Salvar Produto
+        </button>
+      </form>
+
+      {/* Barra de pesquisa */}
+      <div className="mt-10 mb-6 max-w-md mx-auto flex items-center gap-3">
+        <FiSearch className="text-pink-500 w-6 h-6" />
         <input
           type="text"
-          id="name"
-          className="w-full px-3 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
+          placeholder="Pesquisar produto..."
+          value={searchTerm}
+          onChange={e => setSearchTerm(e.target.value)}
+          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
         />
       </div>
 
-      <div>
-        <label
-          htmlFor="price"
-          className="block text-sm font-semibold text-pink-700 mb-1"
-        >
-          Preço
-        </label>
-        <input
-          type="number"
-          id="price"
-          name="price"
-          value={price}
-          onChange={(e) => setPrice(e.target.value)}
-          className="w-full px-3 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
-          required
-        />
+      {/* Lista de produtos filtrados */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+        {filteredProducts.length > 0 ? (
+          filteredProducts.map(product => (
+            <div
+              key={product.id}
+              className="bg-white border border-pink-200 rounded-xl p-4 shadow hover:shadow-md transition"
+            >
+              <img
+                src={`/imagem/${product.imagem}`}
+                alt={product.name}
+                className="w-full h-40 object-cover rounded-md mb-3"
+              />
+              <h4 className="text-pink-700 font-semibold text-lg">{product.name}</h4>
+              <p className="text-gray-500 text-sm">{product.descricao}</p>
+              <p className="text-pink-600 font-bold mt-1">R$ {parseFloat(product.price).toFixed(2)}</p>
+
+              <div className="flex gap-3 mt-4">
+                <button
+                  onClick={() => openEditModal(product)}
+                  className="text-blue-600 hover:text-blue-800 flex items-center gap-1 text-sm"
+                >
+                  <FiBox className="w-4 h-4" />
+                  Editar
+                </button>
+
+                <button
+                  onClick={() => {
+                    if (confirm('Tem certeza que deseja excluir este produto?')) {
+                      router.delete(`/products/${product.id}`);
+                    }
+                  }}
+                  className="text-red-600 hover:text-red-800 flex items-center gap-1 text-sm"
+                >
+                  <FiTrash2 className="w-4 h-4" />
+                  Excluir
+                </button>
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-center text-pink-600 font-semibold">Nenhum produto encontrado.</p>
+        )}
       </div>
 
-      <div>
-        <label
-          htmlFor="descricao"
-          className="block text-sm font-semibold text-pink-700 mb-1"
-        >
-          Descrição
-        </label>
-        <input
-          type="text"
-          id="descricao"
-          className="w-full px-3 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
-          value={descricao}
-          onChange={(e) => setDescricao(e.target.value)}
-          required
-        />
-      </div>
-
-      <div>
-        <label
-          htmlFor="category"
-          className="block text-sm font-semibold text-pink-700 mb-1"
-        >
-          Categoria
-        </label>
-        <select
-          id="category"
-          className="w-full px-3 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
-          value={selectedCategoryId}
-          onChange={(e) => setSelectedCategoryId(e.target.value)}
-          required
-        >
-          <option value="">Selecione uma categoria</option>
-          {categories.map((category) => (
-            <option key={category.id} value={category.id}>
-              {category.name}
-            </option>
-          ))}
-        </select>
-      </div>
-
-      <div>
-        <label
-          htmlFor="imagem"
-          className="block text-sm font-semibold text-pink-700 mb-1"
-        >
-          Imagem
-        </label>
-        <input
-          type="file"
-          name="imagem"
-          id="imagem"
-          onChange={handleImageChange}
-          className="w-full px-3 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition bg-white text-sm"
-          accept="image/*"
-        />
-      </div>
-
-      <button
-        type="submit"
-        className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"
-      >
-        Salvar
-      </button>
-
-      {/* Espaço entre o formulário e visualização dos produtos */}
-      <div className="mt-8">{/* Visualização dos produtos */}</div>
-    </form>
-  </>
-);
+      {/* Modal de edição */}
+      <Modal show={modalOpen} onClose={closeEditModal} maxWidth="2xl" closeable={true}>
+        {productToEdit && (
+          <CategoryEdit
+            product={productToEdit}
+            categories={categories}
+            onClose={closeEditModal} // fecha o modal após salvar
+          />
+        )}
+      </Modal>
+    </div>
+  );
 }
-

@@ -86,22 +86,45 @@ class ProductController extends Controller
      * Update the specified resource in storage.
      */
     public function update(Request $request, $id): RedirectResponse
-    {
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'id_categoria' => 'required|Integer',
-        ]);
+{
+    // Validação dos campos, incluindo descricao e imagem
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric|min:0',
+        'id_categoria' => 'required|integer',
+        'descricao' => 'nullable|string',
+        'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // valida imagem opcional
+    ]);
 
-        $product = product::findOrFail($id);
-        $product->update([
-            'name' => $request->name,
-            'price' => $request->price,
-            'id_categoria' => $request->id_categoria,
-        ]);
+    $product = Product::findOrFail($id);
 
-        return redirect()->route('Produtos');
+    // Preparar os dados para atualizar
+    $data = [
+        'name' => $request->name,
+        'price' => $request->price,
+        'id_categoria' => $request->id_categoria,
+        'descricao' => $request->descricao ?? $product->descricao,
+    ];
+
+    // Se veio imagem no request, salva e atualiza o nome no banco
+    if ($request->hasFile('imagem')) {
+        $image = $request->file('imagem');
+        $imageName = time() . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('imagem'), $imageName);
+        $data['imagem'] = $imageName;
+
+        // Opcional: apagar imagem antiga para não ficar lixo no servidor
+        if ($product->imagem && file_exists(public_path('imagem/' . $product->imagem))) {
+            unlink(public_path('imagem/' . $product->imagem));
+        }
     }
+
+    // Atualiza o produto
+    $product->update($data);
+
+    return redirect()->route('Produtos')->with('success', 'Produto atualizado com sucesso!');
+}
+
 
     /**
      * Remove the specified resource from storage.

@@ -10,6 +10,7 @@ use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CartWLController;
 use App\Http\Controllers\BannerController;
+use App\Http\Controllers\ShopController;
 
 // Area de Testes 
 
@@ -100,6 +101,13 @@ Route::middleware('auth')->group(function () {
 
 
 Route::resource('banners', BannerController::class);
+Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('banners.destroy');
+
+//Rotas do Shop
+
+Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
+Route::post('/shop/banner', [ShopController::class, 'update']); // para alterar o banner
+
 
 require __DIR__.'/auth.php';
 

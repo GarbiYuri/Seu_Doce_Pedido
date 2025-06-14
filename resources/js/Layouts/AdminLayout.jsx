@@ -6,6 +6,7 @@ export default function AdminLayout({ children }) {
     const user = usePage().props.auth.user;
 
     const [showMenu, setShowMenu] = useState(false);
+    const [showSidebar, setShowSidebar] = useState(false); // 👈 controle da sidebar
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
 
@@ -32,14 +33,24 @@ export default function AdminLayout({ children }) {
     return (
         <div className="min-h-screen bg-[#f8f8f8] font-sans">
             {/* HEADER */}
-            <header className="bg-[#EF3167] text-white px-6 py-3 shadow flex items-center justify-between h-20">
+            <header className="bg-[#EF3167] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+                {/* Botão hamburguer - visível só no mobile */}
+                <button
+                    className="md:hidden flex items-center"
+                    onClick={() => setShowSidebar(true)}
+                >
+                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
+
                 {/* Logo maior */}
                 <Link href="/dashboard" className="flex-shrink-0">
                     <img src="/imagens/Logo_ADM.png" alt="Logo ADM" height="100" width="100" />
                 </Link>
 
-                {/* Frase centralizada com fonte maior */}
-                <div className="flex-1 text-center">
+                {/* Frase centralizada */}
+                <div className="flex-1 text-center hidden md:block">
                     <span className="text-lg font-medium italic leading-snug block">
                         A cada novo dia, você tem a chance de fazer diferente e melhor!
                     </span>
@@ -67,54 +78,54 @@ export default function AdminLayout({ children }) {
                 </div>
             </header>
 
+            {/* LAYOUT GERAL */}
+            <div className="flex min-h-screen">
+                {/* MENU LATERAL - desktop + responsivo (off-canvas) */}
+                <aside
+                    className={`
+                        fixed z-30 inset-y-0 left-0 transform md:relative md:translate-x-0
+                        transition-transform duration-300 ease-in-out
+                        w-64 bg-white/60 backdrop-blur-md border-r border-pink-100 p-6 shadow-lg
+                        ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
+                    `}
+                >
+                    {/* Botão fechar no mobile */}
+                    <div className="md:hidden flex justify-end mb-4">
+                        <button onClick={() => setShowSidebar(false)} className="text-pink-600 hover:text-pink-800">
+                            ✕
+                        </button>
+                    </div>
 
-            {/* MENU E CONTEÚDO EM COLUNA */}
-            <div className="flex min-h-screen bg-pink-50">
-                {/* MENU LATERAL */}
-                <aside className="bg-white/60 backdrop-blur-md border-r border-pink-100 w-full md:w-64 p-6 flex flex-col gap-4 shadow-lg">
                     <h2 className="text-2xl font-extrabold text-pink-600 mb-6">Painel</h2>
 
-                    <Link
-                        href="/Administracao"
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
-                    >
-                        <img src="imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
+                    <Link href="/Administracao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                        <img src="/imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
                         <span className="font-semibold">Home</span>
                     </Link>
 
-                    <Link
-                        href="/"
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
-                    >
-                        <img src="imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
+                    <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                        <img src="/imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
                         <span className="font-semibold">Vendas</span>
                     </Link>
 
-                    <Link
-                        href="/Categorias"
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
-                    >
+                    <Link href="/Categorias" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
                         <img src="/imagens/Icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
                         <span className="font-semibold">Categorias</span>
                     </Link>
 
-                    <Link
-                        href="/Produtos"
-                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition"
-                    >
+                    <Link href="/Produtos" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
                         <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
                         <span className="font-semibold">Produtos</span>
                     </Link>
                 </aside>
 
                 {/* CONTEÚDO PRINCIPAL */}
-                <main className="flex-1 p-6">
+                <main className="flex-1 p-6 bg-pink-50">
                     <div className="bg-white rounded-3xl shadow-xl p-8 transition hover:scale-[1.01] duration-200">
                         {children}
                     </div>
                 </main>
             </div>
-
         </div>
     );
 }
