@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, usePage, router } from "@inertiajs/react";
+import { Head, usePage, router, useForm } from "@inertiajs/react";
 import { useState } from 'react';
 import { Trash2, Minus, Plus } from 'lucide-react';
 
@@ -28,6 +28,35 @@ export default function CartWL() {
         });
     };
 
+    /*
+    const form = useForm({
+          id: p.Id_Product,
+          name: p.name,
+          quantity: p.quantity,
+          price: p.price,
+        tipoPedido,
+      });
+    
+      useEffect(() => {
+        form.setData('tipoPedido', tipoPedido);
+      }, [tipoPedido]);
+    
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        form.post(route('pagar'), {
+          onSuccess: (page) => {
+            const initPoint = page.props.init_point;
+            if (initPoint) {
+              window.open(url, '_blank');
+              window.location.href = initPoint;
+            }
+          },
+          onError: () => {
+            alert('Erro ao processar o pagamento.');
+          }
+        });
+      };
+*/
     const decreaseQuantity = (productId) => {
         const newQuantity = cart[productId] > 1 ? cart[productId] - 1 : 1;
         updateQuantity(productId, newQuantity);

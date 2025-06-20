@@ -1,10 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import { Head, usePage } from '@inertiajs/react';
 import DeleteUserForm from './Partials/DeleteUserForm';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
+import PersonalInfoForm from './Partials/PersonalInfoForm';
 
 export default function Edit({ mustVerifyEmail, status }) {
+    const informacoes = usePage().props.auth.informacoes;
     return (
         <AuthenticatedLayout
             header={
@@ -26,12 +28,18 @@ export default function Edit({ mustVerifyEmail, status }) {
                     </div>
 
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
+                        <PersonalInfoForm informacoes={informacoes} />
+                    </div>
+
+                    <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                         <UpdatePasswordForm className="max-w-xl" />
                     </div>
 
                     <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                         <DeleteUserForm className="max-w-xl" />
                     </div>
+
+                    
                 </div>
             </div>
         </AuthenticatedLayout>

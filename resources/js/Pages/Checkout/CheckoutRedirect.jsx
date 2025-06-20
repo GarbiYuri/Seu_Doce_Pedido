@@ -1,23 +1,14 @@
-import {  Head, usePage, router } from '@inertiajs/react';
-import React, { useState } from 'react';
+import { Head, usePage } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CheckoutRedirect() {
-const { init_point, cartItems, userAddress, cpf, isPickup } = usePage().props;
-
-
+  const { init_point, cartItems, userAddress, isPickup, frete } = usePage().props;
+  const informacoes = usePage().props.auth.informacoes;
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
-
-  const pagar = () => {
-    setIsLoading(true);
-    router.post('/checkout/pay', { products: cartItems }, {
-      onError: () => setIsLoading(false)
-    });
-  };
 
   return (
     <>
@@ -34,7 +25,7 @@ const { init_point, cartItems, userAddress, cpf, isPickup } = usePage().props;
               {cartItems.map((item) => (
                 <li key={item.id} className="flex items-center justify-between border-b py-3">
                   <div className="flex items-center gap-4">
-                    <img src={`/imagem/${item.imagem}`} className="w-16 h-16 object-contain rounded" />
+                    <img src={`/imagem/${item.imagem}`} alt={item.name} className="w-16 h-16 object-contain rounded" />
                     <div>
                       <h2 className="font-semibold text-gray-800">{item.name}</h2>
                       <p className="text-sm text-gray-600">
@@ -51,27 +42,59 @@ const { init_point, cartItems, userAddress, cpf, isPickup } = usePage().props;
           )}
         </div>
 
-        <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
-          <span>Total:</span>
-          <span className="text-pink-600">R$ {total.toFixed(2).replace('.', ',')}</span>
+        
+        <div className="bg-white shadow-md rounded-lg p-4 mb-6">
+          <h2 className="text-xl font-semibold mb-3 text-pink-600">Suas Informações</h2>
+  
+          <p><strong>CPF:</strong> {informacoes.cpf}</p>
+
+          {isPickup ? (
+            <p className="text-green-600 font-semibold mt-2">🏬 Retirada na loja (sem taxa de entrega)</p>
+          ) : (
+            <>
+              <p className="mt-2"><strong>Endereço:</strong></p>
+              {userAddress ? (
+                <>
+                  <p>{informacoes.rua}, {informacoes.number}</p>
+                  <p>{informacoes.bairro} - {informacoes.cidade}/{informacoes.estado}</p>
+                  <p>CEP: {informacoes.cep}</p>
+                </>
+              ) : (
+                <p>Endereço não informado</p>
+              )}
+            </>
+          )}
         </div>
 
-<div className="bg-white shadow-md rounded-lg p-4 mb-6">
-  <h2 className="text-xl font-semibold mb-3 text-pink-600">Informações do cliente</h2>
-  
-  <p><strong>CPF:</strong> {cpf}</p>
-
-  {isPickup ? (
-    <p className="text-green-600 font-semibold mt-2">🏬 Retirada na loja (sem taxa de entrega)</p>
-  ) : (
-    <>
-      <p className="mt-2"><strong>Endereço:</strong></p>
-      <p>{userAddress.street}, {userAddress.number}</p>
-      <p>{userAddress.bairro} - {userAddress.cidade}/{userAddress.estado}</p>
-      <p>CEP: {userAddress.zip}</p>
-    </>
-  )}
-</div>
+<div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
+          <span>SubTotal:</span>
+          <span className="text-pink-600">R$ {total.toFixed(2).replace('.', ',')}</span>
+        
+        </div>
+ {isPickup ? (
+           <>
+          <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
+          <span>Frete:</span>
+          <span className="text-pink-600">R$ 0,00</span>
+        
+        </div>
+           </>
+          ) : (
+            <>
+             <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
+          <span>Frete:</span>
+          <span className="text-pink-600">R$ {frete.toFixed(2).replace('.', ',')}</span>
+        
+        </div>
+            </>
+          )}
+          <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
+          <span>Total:</span>
+          <span className="text-pink-600">
+  {(frete + total).toFixed(2).replace('.', ',')}
+</span>
+        
+        </div>
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4">
           <a
             href="/CarrinhoDeCompra"
@@ -83,13 +106,13 @@ const { init_point, cartItems, userAddress, cpf, isPickup } = usePage().props;
           </a>
 
           <a
-  href={init_point}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 text-center rounded-full"
->
-  Ir para o Mercado Pago
-</a>
+            href={init_point}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 text-center rounded-full"
+          >
+            Ir para o Mercado Pago
+          </a>
         </div>
       </div>
     </>

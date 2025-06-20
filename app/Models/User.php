@@ -52,4 +52,8 @@ class User extends Authenticatable
 {
     $this->notify(new CustomVerifyEmail());  // Use a sua notificação personalizada
 }
+public function informacoesPessoais()
+{
+    return $this->hasOne(InformacoesPessoais::class, 'user_id');
+}
 }
