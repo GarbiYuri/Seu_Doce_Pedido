@@ -3,104 +3,119 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use MercadoPago\MercadoPagoConfig;
+use MercadoPago\Client\Preference\PreferenceClient;
+use MercadoPago\Exceptions\MPApiException;
+use Illuminate\Support\Facades\DB;
+use Inertia\Inertia;
 
 
 class MercadoPagoController extends Controller
 {
+    public function pagar(Request $request)
+    {
+        if($request->method() === "POST"){
+// Define o token de acesso
+        try{
+        $user = auth()->user();
 
-    public function config(){
-        MercadoPagoConfig::setAccessToken("ACCESS_TOKEN");
-        $client = new PreferenceClient();
-        $preference = $client->create([
-        "back_urls"=>array(
-            "success" => "https://test.com/success",
-            "failure" => "https://test.com/failure",
-            "pending" => "https://test.com/pending"
-        ),
-        "differential_pricing" => array(
-            "id" => 1,
-        ),
-        "expires" => false,
-        "items" => array(
-            array(
-                "id" => "1234",
-                "title" => "Dummy Title",
-                "description" => "Dummy description",
-                "picture_url" => "https://www.myapp.com/myimage.jpg",
-                "category_id" => "car_electronics",
-                "quantity" => 2,
-                "currency_id" => "BRL",
-                "unit_price" => 100
-            )
-        ),
-        "marketplace_fee" => 0,
-        "payer" => array(
-            "name" => "Test",
-            "surname" => "User",
-            "email" => "your_test_email@example.com",
-            "phone" => array(
-                "area_code" => "11",
-                "number" => "4444-4444"
-            ),
-            "identification" => array(
-                "type" => "CPF",
-                "number" => "19119119100"
-            ),
-            "address" => array(
-                "zip_code" => "06233200",
-                "street_name" => "Street",
-                "street_number" => "123"
-            )
-        ),
-        "additional_info" => "Discount: 12.00",
-        "auto_return" => "all",
-        "binary_mode" => true,
-        "external_reference" => "1643827245",
-        "marketplace" => "none",
-        "notification_url" => "https://notificationurl.com",
-        "operation_type" => "regular_payment",
-        "payment_methods" => array(
-            "default_payment_method_id" => "master",
-            "excluded_payment_types" => array(
-                array(
-                    "id" => "visa"
-                )
-            ),
-            "excluded_payment_methods" => array(
-                array(
-                    "id" => ""
-                )
-            ),
-            "installments" => 5,
-            "default_installments" => 1
-        ),
-        "shipments" >= array(
-            "mode" => "custom",
-            "local_pickup" => false,
-            "default_shipping_method" => null,
-            "free_methods" => array(
-                array(
-                    "id" => 1
-                )
-            ),
-            "cost" => 10,
-            "free_shipping" => false,
-            "dimensions" => "10x10x20,500",
-            "receiver_address" => array(
-                "zip_code" => "06000000",
-                "street_number" => "123",
-                "street_name" => "Street",
-                "floor" => "12",
-                "apartment" => "120A",
-                "city_name" => "Rio de Janeiro",
-                "state_name" => "Rio de Janeiro",
-                "country_name" => "Brasil"
-            )
-        ),
-        "statement_descriptor" => "Test Store",
-        ]);
-        
-        echo implode($preference);
+
+        MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+
+        $products = $request->input('products');
+
+         $items = [];
+        $total = 0;
+
+        foreach ($products as $product) {
+       $items[] = [
+    "id" => $product['id'],
+    "title" => $product['name'],
+    "quantity" => (int) $product['quantity'],
+    "currency_id" => "BRL",
+    "unit_price" => (float) $product['price'],
+];
+        $total += $product['price'] * $product['quantity'];
     }
+    $items[] = [
+        "id" => "delivery_fee",
+        "title" => "Taxa de entrega",
+        "quantity" => 1,
+        "currency_id" => "BRL",
+        "unit_price" => 4,
+    ];
+    
 
+
+        $client = new PreferenceClient();
+
+        // Cria a preferência
+        $preference = $client->create([
+            "back_urls" => [
+                "success" => route('checkout.success'),
+                "failure" => route('checkout.failure'),
+                "pending" => route('checkout.pending')
+            ],
+            "items" => $items,
+            "payer" => [
+                
+    "name" => $user->name, 
+    "surname" => "",
+    "email" => $user->email,
+                "address" => [
+                    "zip_code" => "06233200",
+                    "street_name" => "Rua Teste",
+                    "street_number" => "123"
+                ]
+            ],
+            
+            "binary_mode" => true,
+            "notification_url" => "https://seusite.com/notificacoes"
+        ]);
+         $userId = auth()->id();
+
+    $cart = DB::table('cart')
+        ->where('id_user', $userId)
+        ->first();
+
+    $products = DB::table('cart_product')
+        ->join('product', 'cart_product.Id_Product', '=', 'product.id')
+        ->where('Id_Cart', $cart->id)
+        ->select(
+            'product.id',
+            'product.name',
+            'product.price',
+            'product.imagem',
+            'cart_product.quantity'
+        )
+        ->get();
+
+       return Inertia::render('Checkout/CheckoutRedirect', [
+    'init_point' => $preference->init_point,
+    'cartItems' => $products,
+    'userAddress' => [
+        'street' => 'Rua Exemplo',
+        'number' => '123',
+        'zip' => '01234567',
+        'bairro' => 'Centro',
+        'cidade' => 'São Paulo',
+        'estado' => 'SP'
+    ],
+    'cpf' => '123.456.789-00',
+    'isPickup' => false // ou false se for entrega
+]);
+        
+        }catch (MPApiException $e) {
+        // Verifique a resposta de erro completa
+        return response()->json([
+            'message' => 'Erro na API do Mercado Pago',
+            'error' => $e->getApiResponse()->getContent()
+        ], 500);
+        
+        }
+    }else{
+            return Inertia::render('Dashboard');
+        }
+        }
+        
 }

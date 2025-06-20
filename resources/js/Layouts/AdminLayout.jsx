@@ -103,7 +103,7 @@ export default function AdminLayout({ children }) {
                         <span className="font-semibold">Home</span>
                     </Link>
 
-                    <Link href="/" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Vendas" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
                         <img src="/imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
                         <span className="font-semibold">Vendas</span>
                     </Link>

@@ -12,8 +12,8 @@ class ShopSeeder extends Seeder
     {
         // Primeiro cria ou encontra um banner
         $banner = Banner::firstOrCreate(
-            ['nome' => 'Banner Principal'], // condição
-            ['imagem' => 'banner.jpg']     // valores caso precise criar
+            ['nome' => 'Banner Principal'], 
+            ['imagem' => 'banner.jpg']   
         );
 
         // Cria a loja com o id do banner

@@ -1,33 +1,48 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router } from "@inertiajs/react";
+import { Head, router, usePage, useForm } from "@inertiajs/react";
 import { useState } from 'react';
 import { Trash2, Minus, Plus } from 'lucide-react';
 
 export default function Cart({ cartProducts }) {
     const [updatedCart, setUpdatedCart] = useState(cartProducts);
 
-    const updateQuantity = (productId, quantity) => {
-        router.post("/updateC", {
-            product_id: productId,
-            quantity: quantity,
-        }, {
-            onSuccess: () => {
-                setUpdatedCart(prevCart =>
-                    prevCart.map(product =>
-                        product.Id_Product === productId ? { ...product, quantity } : product
-                    )
-                );
-            },
-            onError: () => {
-                alert('Erro ao atualizar o carrinho.');
-            }
-        });
-    };
+ const form = useForm({
+  products: updatedCart.map(p => ({
+    id: p.Id_Product,
+    name: p.name,
+    quantity: p.quantity,
+    price: p.price,
+  })),
+});
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  form.post(route('pagar'), {
+    onSuccess: (page) => {
+      const initPoint = page.props.init_point;
+      if (initPoint) {
+        window.open(url, '_blank');
+        window.location.href = initPoint;  // redireciona para checkout Mercado Pago    
+      }
+    },
+    onError: () => {
+      alert('Erro ao processar o pagamento.');
+    }
+  });
+};
+
+
+ 
 
     const decreaseQuantity = (productId) => {
         const product = updatedCart.find(p => p.Id_Product === productId);
-        const newQuantity = product && product.quantity > 1 ? product.quantity - 1 : 1;
+        const newQuantity = product && product.quantity > 1 ? product.quantity - 1 : 0;
+        if(newQuantity === 0){
+            removeProduct(productId)
+        }else{
         updateQuantity(productId, newQuantity);
+        }
+        
     };
 
     const increaseQuantity = (productId) => {
@@ -50,7 +65,24 @@ export default function Cart({ cartProducts }) {
     };
 
     const total = updatedCart.reduce((sum, product) => sum + (product.price * product.quantity), 0);
-
+   const updateQuantity = (productId, quantity) => {
+        
+        router.post("/updateC", {
+            product_id: productId,
+            quantity: quantity,
+        }, {
+            onSuccess: () => {
+                setUpdatedCart(prevCart =>
+                    prevCart.map(product =>
+                        product.Id_Product === productId ? { ...product, quantity } : product
+                    )
+                );
+            },
+            onError: () => {
+                alert('Erro ao atualizar o carrinho.');
+            }
+        });
+    };
     return (
         <AuthenticatedLayout>
             <Head title="Carrinho de Compras" />
@@ -114,13 +146,16 @@ export default function Cart({ cartProducts }) {
                     </div>
 
                     {/* Botões */}
-                    <div className="flex flex-col gap-3 mt-6">
-                        <button className="bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-full text-sm font-medium shadow-md">
-                            Finalizar Compra
-                        </button>
-                        <button className="bg-pink-100 hover:bg-pink-200 text-pink-700 py-2 rounded-full text-sm font-medium shadow-inner">
-                            Voltar à Página Inicial
-                        </button>
+                    <div className="flex flex-col gap-3 mt-6 items-center">
+                    <form target="_blank" onSubmit={handleSubmit} method="post">
+                        
+  <button
+    type="submit"
+    className="bg-pink-500 hover:bg-pink-600 text-white py-2 pl-5 pr-5 rounded-full text-sm font-medium shadow-md"
+  >
+    Finalizar Compra
+  </button>
+</form>
                     </div>
                 </div>
             ) : (
