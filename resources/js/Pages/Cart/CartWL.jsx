@@ -28,13 +28,12 @@ export default function CartWL() {
         });
     };
 
+    /*
     const form = useForm({
-        products: updatedCart.map(p => ({
           id: p.Id_Product,
           name: p.name,
           quantity: p.quantity,
           price: p.price,
-        })),
         tipoPedido,
       });
     
@@ -57,7 +56,7 @@ export default function CartWL() {
           }
         });
       };
-
+*/
     const decreaseQuantity = (productId) => {
         const newQuantity = cart[productId] > 1 ? cart[productId] - 1 : 1;
         updateQuantity(productId, newQuantity);
