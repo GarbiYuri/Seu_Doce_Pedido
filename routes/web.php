@@ -12,6 +12,7 @@ use App\Http\Controllers\CartWLController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\InformacoesPessoaisController;
 
 
 // Area de Testes 
@@ -42,11 +43,18 @@ Route::get('/CheckoutRedirect', function () {
         return Inertia::render('Checkout/CheckoutRedirect');
 })->name('CheckoutRedirect');
 
+//Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
- // Rota para a verificação do email
+ 
+    // Rota para a verificação do email
  Route::get('/VerifyEmail', function () {
     return Inertia::render('Auth/VerifyEmail');
 })->name('VerifyEmail'); 
+
+//Rota de Informações Pessoais
+
+Route::resource('informacoes', InformacoesPessoaisController::class);
+
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 //Route::middleware(EmailVerifiedAt::class)->group(function () {
@@ -130,6 +138,7 @@ Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])
 Route::get('/pagamento/sucesso', fn() => 'Pagamento aprovado!')->name('pagamento.sucesso');
 Route::get('/pagamento/falha', fn() => 'Pagamento falhou!')->name('pagamento.falha');
 Route::get('/pagamento/pendente', fn() => 'Pagamento pendente!')->name('pagamento.pendente');
+
 
 
 require __DIR__.'/auth.php';

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\InformacoesPessoais;
 use App\Models\User;
 use App\Models\Cart;
 use Illuminate\Auth\Events\Registered;
@@ -47,6 +48,10 @@ class RegisteredUserController extends Controller
         Cart::create([
             'id_user' => $user->id, // Associando o usuário ao carrinho
             'subTotal' => 0, // Pode começar com 0 ou NULL, dependendo da regra de negócio
+        ]);
+
+         InformacoesPessoais::create([
+            'user_id' => $user->id, // Associando o usuário às informações
         ]);
 
 
