@@ -38,6 +38,7 @@ class HandleInertiaRequests extends Middleware
             'auth' => [
                 'user' => $request->user(),
             ],
+            'csrf_token' => csrf_token(),
             'bannerss' => Banner::all()->toArray(),
             'shop' => Shop::with('banner')->find(1), // id fixo da loja
             'products' => Product::all()->toArray(), 

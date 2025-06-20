@@ -7,6 +7,7 @@ export default function Welcome({ products, categories }) {
   const shop = usePage().props.shop;  
   const banner = shop.banner;
 
+
   // Estados para busca e filtro
   const [searchText, setSearchText] = useState('');
   const [filterField, setFilterField] = useState('all');
@@ -25,6 +26,8 @@ export default function Welcome({ products, categories }) {
     const [dragInfo, setDragInfo] = useState({ isDragging: false, startX: 0, scrollLeft: 0, activeIndex: null });
     
     useEffect(() => {
+     
+  
       carouselRefs.current = categories.map((_, i) => carouselRefs.current[i] ?? React.createRef());
     }, [categories]);
     
@@ -98,6 +101,7 @@ export default function Welcome({ products, categories }) {
   // Função para adicionar produto ao carrinho (session / cache)
   const addToCart = (productId) => {
     router.post("/cartwl/add", { product_id: productId, quantity: 1 }, {
+      preserveScroll: true,
       onSuccess: () => {
         setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionado!" }));
       },

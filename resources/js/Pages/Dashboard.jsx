@@ -91,7 +91,8 @@ const scrollRightBtn = (index) => {
   };
 
   const addToCart = (Id_Product) => {
-    router.post("/cart/add", { Id_Product }, {
+    router.post("/cart/add", { Id_Product },  {
+      preserveScroll: true,
       onSuccess: () => {
         setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionado!" }));
         setTimeout(() => {
