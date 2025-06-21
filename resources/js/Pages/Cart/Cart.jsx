@@ -60,6 +60,7 @@ export default function Cart({ cartProducts }) {
         router.post('/deleteC', {
             product_id: productId,
         }, {
+          preserveScroll: true,
             onSuccess: () => {
                 setUpdatedCart(prevCart => prevCart.filter(product => product.Id_Product !== productId));
             },
@@ -76,6 +77,7 @@ export default function Cart({ cartProducts }) {
             product_id: productId,
             quantity: quantity,
         }, {
+          preserveScroll: true,
             onSuccess: () => {
                 setUpdatedCart(prevCart =>
                     prevCart.map(product =>
@@ -154,12 +156,15 @@ export default function Cart({ cartProducts }) {
           <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
             <FinalizarPedido tipoPedido={tipoPedido} setTipoPedido={setTipoPedido} informacoes={informacoes} />
 
+          <div className="flex flex-col gap-3 mt-6">
             <button
               type="submit"
               className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
             >
               Continuar Compra
             </button>
+          </div>
+            
           </form>
         </div>
       ) : (

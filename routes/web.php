@@ -43,6 +43,10 @@ Route::get('/CheckoutRedirect', function () {
         return Inertia::render('Checkout/CheckoutRedirect');
 })->name('CheckoutRedirect');
 
+Route::get('/CheckoutRedirectWL', function () {
+        return Inertia::render('Checkout/CheckoutRedirectWL');
+})->name('CheckoutRedirectWL');
+
 //Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
  
@@ -134,7 +138,7 @@ Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar o
 Route::post('/shop/banner', [ShopController::class, 'update']); // para alterar o banner
 
 Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');
-
+Route::match(['get', 'post'], '/pagarWL', [MercadoPagoController::class, 'pagarWL'])->name('pagarWL');
 Route::get('/pagamento/sucesso', fn() => 'Pagamento aprovado!')->name('pagamento.sucesso');
 Route::get('/pagamento/falha', fn() => 'Pagamento falhou!')->name('pagamento.falha');
 Route::get('/pagamento/pendente', fn() => 'Pagamento pendente!')->name('pagamento.pendente');

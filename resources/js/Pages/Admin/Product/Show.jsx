@@ -15,12 +15,11 @@ export default function CategoryEdit({ product, categories, onClose }) {
       setPrice(product.price);
       setDescription(product.descricao || '');
       setSelectedCategoryId(product.id_categoria);
-      setPreviewImage(`/imagem/${product.imagem}`); // URL da imagem atual para preview
-      setImageFile(null); // Nenhuma nova imagem selecionada inicialmente
+      setPreviewImage(`/imagem/${product.imagem}`);
+      setImageFile(null);
     }
   }, [product]);
 
-  // Preview da imagem quando seleciona nova
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -32,101 +31,104 @@ export default function CategoryEdit({ product, categories, onClose }) {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Usar FormData para enviar imagem junto
     const formData = new FormData();
     formData.append('name', name);
     formData.append('price', price);
     formData.append('descricao', description);
     formData.append('id_categoria', selectedCategoryId);
-
     if (imageFile) {
       formData.append('imagem', imageFile);
     }
 
     router.post(`/products/${product.id}?_method=PUT`, formData, {
       forceFormData: true,
-      onSuccess: () => {
-        onClose(); // Fecha o modal após salvar
-      },
+      preserveScroll: true,
+      onSuccess: onClose,
     });
   };
 
   return (
-    <div>
-      <h2 className="text-2xl font-semibold text-pink-600 mb-4 text-center">Editar Produto</h2>
-      <form onSubmit={handleSubmit} className="space-y-4" encType="multipart/form-data">
+    <div className="bg-white rounded-2xl p-8 shadow-xl w-full max-w-xl mx-auto">
+      <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">Editar Produto</h2>
+      <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
+        
+        {/* Nome */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">Nome</label>
+          <label className="block mb-1 font-medium text-gray-700">Nome do Produto</label>
           <input
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
             required
           />
         </div>
 
+        {/* Preço */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">Preço</label>
+          <label className="block mb-1 font-medium text-gray-700">Preço</label>
           <input
             type="number"
+            step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
             required
           />
         </div>
 
+        {/* Descrição */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">Descrição</label>
+          <label className="block mb-1 font-medium text-gray-700">Descrição</label>
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500"
-            rows={3}
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            rows={4}
+            placeholder="Detalhes do produto..."
           />
         </div>
 
+        {/* Categoria */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">Categoria</label>
+          <label className="block mb-1 font-medium text-gray-700">Categoria</label>
           <select
             value={selectedCategoryId}
             onChange={(e) => setSelectedCategoryId(e.target.value)}
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
             required
           >
             <option value="">Selecione uma categoria</option>
             {categories.map((cat) => (
-              <option key={cat.id} value={cat.id}>
-                {cat.name}
-              </option>
+              <option key={cat.id} value={cat.id}>{cat.name}</option>
             ))}
           </select>
         </div>
 
+        {/* Imagem */}
         <div>
-          <label className="block mb-1 font-semibold text-gray-700">Imagem</label>
-          {/* Preview da imagem */}
+          <label className="block mb-2 font-medium text-gray-700">Imagem do Produto</label>
           {previewImage && (
             <img
               src={previewImage}
               alt="Preview"
-              className="mb-2 w-32 h-32 object-cover rounded-md border border-pink-300"
+              className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
             />
           )}
           <input
             type="file"
             accept="image/*"
             onChange={handleImageChange}
-            className="w-full"
+            className="w-full text-sm text-gray-600"
           />
         </div>
 
+        {/* Botão */}
         <button
           type="submit"
-          className="w-full py-2 bg-pink-600 text-white font-bold rounded-xl hover:bg-pink-700 transition"
+          className="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-xl shadow-lg transition"
         >
-          Salvar
+          Salvar Alterações
         </button>
       </form>
     </div>

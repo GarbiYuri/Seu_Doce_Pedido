@@ -1,7 +1,8 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage, router, useForm } from "@inertiajs/react";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Trash2, Minus, Plus } from 'lucide-react';
+import FinalizarPedidoWL from './FinalizarPedidoWL';
 
 export default function CartWL() {
     const { cart = {} } = usePage().props;
@@ -9,13 +10,31 @@ export default function CartWL() {
 
     const cartProducts = products.filter(product => cart[product.id]);
     const total = cartProducts.reduce((sum, product) => sum + (product.price * cart[product.id]), 0);
-    const [updatedCart, setUpdatedCart] = useState(cart);
+    const [updatedCart, setUpdatedCart] = useState(cartProducts);
+    const [tipoPedido, setTipoPedido] = useState('retirada');
+
+      const [dadosEntrega, setDadosEntrega] = useState({
+    nome: '',
+    cpf:'',
+    rua: '',
+    numero: '',
+    bairro: '',
+    cidade: '',
+    estado: '',
+    cep: '',
+    telefone: ''
+  });
+
+  useEffect(() => {
+  form.setData('dadosEntrega', dadosEntrega);
+}, [dadosEntrega]);
 
     const updateQuantity = (productId, quantity) => {
         router.post("/update", {
             product_id: productId,
             quantity: quantity,
         }, {
+             preserveScroll: true,
             onSuccess: () => {
                 setUpdatedCart(prevCart => ({
                     ...prevCart,
@@ -28,37 +47,8 @@ export default function CartWL() {
         });
     };
 
-    /*
-    const form = useForm({
-          id: p.Id_Product,
-          name: p.name,
-          quantity: p.quantity,
-          price: p.price,
-        tipoPedido,
-      });
-    
-      useEffect(() => {
-        form.setData('tipoPedido', tipoPedido);
-      }, [tipoPedido]);
-    
-      const handleSubmit = (e) => {
-        e.preventDefault();
-        form.post(route('pagar'), {
-          onSuccess: (page) => {
-            const initPoint = page.props.init_point;
-            if (initPoint) {
-              window.open(url, '_blank');
-              window.location.href = initPoint;
-            }
-          },
-          onError: () => {
-            alert('Erro ao processar o pagamento.');
-          }
-        });
-      };
-*/
     const decreaseQuantity = (productId) => {
-        const newQuantity = cart[productId] > 1 ? cart[productId] - 1 : 1;
+        const newQuantity = cart[productId] >= 1 ? cart[productId] - 1 : 1;
         updateQuantity(productId, newQuantity);
     };
 
@@ -69,16 +59,55 @@ export default function CartWL() {
 
     const removeProduct = (productId) => {
         router.post('/remove', { product_id: productId }, {
-            onSuccess: () => window.location.reload(),
+            preserveScroll: true,
+            onSuccess: () => setUpdatedCart(prev => {
+    const newCart = { ...prev };
+    delete newCart[productId];
+    return newCart;
+  }),
             onError: () => alert('Erro ao remover o produto.'),
         });
     };
+  const form = useForm({
+        products: cartProducts.map(p => ({
+       id: p.id,
+       name: p.name,
+       quantity: cart[p.id],
+       price: p.price,
+       imagem : p.imagem,
+     })),
+     tipoPedido,
+     dadosEntrega,
+   });
+ 
+   useEffect(() => {
+     form.setData('tipoPedido', tipoPedido);
+   }, [tipoPedido]);
+ 
+   const handleSubmit = (e) => {
+     e.preventDefault();
+     form.post(route('pagarWL'), {
+       onSuccess: (page) => {
+         const initPoint = page.props.init_point;
+         if (initPoint) {
+           window.open(url, '_blank');
+           window.location.href = initPoint;
+         }
+       },
+       onError: () => {
+         alert('Erro ao processar o pagamento.');
+       }
+     });
+   };
+ 
+
 
     return (
         <AuthenticatedLayout>
             <Head title="Carrinho de Compras" />
-            <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md">
-                {cartProducts.map((product) => (
+                {cartProducts.length > 0 ? (
+                    <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md">
+                 {cartProducts.map((product) => (
                     <div
                         key={product.id}
                         className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
@@ -135,16 +164,30 @@ export default function CartWL() {
                 </div>
 
                 {/* Botões */}
-                <div className="flex flex-col gap-3 mt-6">
-                    <button className="bg-pink-500 hover:bg-pink-600 text-white py-2 rounded-full text-sm font-medium shadow-md">
-                        Finalizar Compra
-                    </button>
-                    <button className="bg-pink-100 hover:bg-pink-200 text-pink-700 py-2 rounded-full text-sm font-medium shadow-inner">
-                        Voltar à Página Inicial
-                    </button>
-                </div>
+                  {/* Formulário único */}
+          <form onSubmit={handleSubmit} className="mt-6">
+            {/* Passa dadosEntrega e setDadosEntrega para FinalizarPedidoWL */}
+            <FinalizarPedidoWL
+              tipoPedido={tipoPedido}
+              setTipoPedido={setTipoPedido}
+              dadosEntrega={dadosEntrega}
+              setDadosEntrega={setDadosEntrega}
+            />
+
+            <div className="flex flex-col gap-3 mt-6">
+              <button
+                type="submit"
+                disabled={form.processing}
+                className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
+              >
+                Continuar Compra
+              </button>
+            </div>
+          </form>
             </div>
 
+                ):(   <p className="text-center text-xl text-gray-500">Seu carrinho está vazio.</p>)}
+            
         </AuthenticatedLayout>
     );
 }
