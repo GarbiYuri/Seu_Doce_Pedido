@@ -2,9 +2,8 @@ import { Head, usePage } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CheckoutRedirect() {
-  const { init_point, cartItems, userAddress, isPickup, frete } = usePage().props;
-  const informacoes = usePage().props.auth.informacoes;
-  const user = usePage().props.auth.user;
+  const { init_point, cartItems, userAddress, isPickup, frete, dadosEntrega } = usePage().props;
+
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
@@ -24,9 +23,12 @@ export default function CheckoutRedirect() {
           ) : (
             <ul>
               {cartItems.map((item) => (
+                
                 <li key={item.id} className="flex items-center justify-between border-b py-3">
+                  
                   <div className="flex items-center gap-4">
                     <img src={`/imagem/${item.imagem}`} alt={item.name} className="w-16 h-16 object-contain rounded" />
+                    
                     <div>
                       <h2 className="font-semibold text-gray-800">{item.name}</h2>
                       <p className="text-sm text-gray-600">
@@ -46,11 +48,9 @@ export default function CheckoutRedirect() {
         
         <div className="bg-white shadow-md rounded-lg p-4 mb-6">
           <h2 className="text-xl font-semibold mb-3 text-pink-600">Suas Informações</h2>
-          
-          <p>Nome: {user.name}</p>
-          <p>Telefone: {informacoes.telefone}</p>
-          <p><strong>CPF:</strong> {informacoes.cpf}</p>
-
+          <p>Nome: {dadosEntrega.nome}</p>
+          <p>Telefone: {dadosEntrega.telefone ? dadosEntrega.telefone : ' Não Informado'}</p>
+          <p><strong>CPF:{dadosEntrega.cpf ? dadosEntrega.cpf : ' Não Informado'}</strong> </p>
           {isPickup ? (
             <p className="text-green-600 font-semibold mt-2">🏬 Retirada na loja (sem taxa de entrega)</p>
           ) : (
@@ -58,9 +58,9 @@ export default function CheckoutRedirect() {
               <p className="mt-2"><strong>Endereço:</strong></p>
               {userAddress ? (
                 <>
-                  <p>{informacoes.rua}, {informacoes.numero}</p>
-                  <p>{informacoes.bairro} - {informacoes.cidade}/{informacoes.estado}</p>
-                  <p>CEP: {informacoes.cep}</p>
+                  <p>{dadosEntrega.rua}, {dadosEntrega.numero}</p>
+                  <p>{dadosEntrega.bairro} - {dadosEntrega.cidade}/{dadosEntrega.estado}</p>
+                  <p>CEP: {dadosEntrega.cep}</p>
                 </>
               ) : (
                 <p>Endereço não informado</p>
@@ -100,7 +100,7 @@ export default function CheckoutRedirect() {
         </div>
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4">
           <a
-            href="/CarrinhoDeCompra"
+            href="/CarrinhoWL"
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
           >

@@ -36,10 +36,19 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+
+        $imagemNome = null;
+
+         if ($request->hasFile('imagem')) {
+        $imagemNome = time() . '.' . $request->imagem->extension();
+        $request->imagem->move(public_path('imagens/categorias'), $imagemNome);
+    }
 
         Category::create([
             'name' => $request->name,
+            'imagem' => $imagemNome,
         ]);
 
         return redirect()->route('Categorias');
@@ -67,11 +76,23 @@ class CategoryController extends Controller
     {
         $request->validate([
             'name' => 'required|string|max:255',
+            'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
         ]);
+        $categoria = Category::findOrFail($id);
+        $imagemNome = null;
 
-        $category = Category::findOrFail($id);
-        $category->update([
+        if ($request->hasFile('imagem')) {
+    $image = $request->file('imagem');
+    $imagemNome = time() . '.' . $image->getClientOriginalExtension();
+    $image->move(public_path('imagens/categorias'), $imagemNome);
+    $categoria->imagem = $imagemNome;
+}
+
+
+        
+        $categoria->update([
             'name' => $request->name,
+            'imagem' => $imagemNome,
         ]);
 
         return redirect()->route('Categorias');

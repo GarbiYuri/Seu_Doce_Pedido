@@ -14,15 +14,17 @@ export default function UpdateProfileInformation({
 
     const { data, setData, patch, errors, processing, recentlySuccessful } =
         useForm({
+            
             name: user.name,
             email: user.email,
         });
 
     const submit = (e) => {
-        e.preventDefault();
-
-        patch(route('profile.update'));
-    };
+    e.preventDefault();
+    patch(route('profile.update'), {
+        preserveScroll: true,
+    });
+};
 
     return (
         <section className={className}>

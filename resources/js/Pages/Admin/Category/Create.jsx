@@ -4,13 +4,26 @@ import { FiFolderPlus, FiFolder, FiEye, FiTrash2 } from 'react-icons/fi'; // Íc
 
 export default function CategoryCreate() {
     const [name, setName] = useState('');
+    const [imagem, setImagem] = useState(null);
     const { categories } = usePage().props;
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        router.post('/categories', { name });
-        setName('');
-    };
+
+    const formData = new FormData();
+    formData.append('name', name);
+    if (imagem) {
+    formData.append('imagem', imagem);
+  }
+
+        router.post('/categories', formData, {
+    forceFormData: true, // garante que envie como multipart/form-data
+    onSuccess: () => {
+      setName('');
+      setImagem(null);
+    },
+  });
+};
 
     const handleDelete = (id) => {
         if (confirm('Tem certeza que deseja excluir esta categoria?')) {
@@ -52,7 +65,18 @@ export default function CategoryCreate() {
                         placeholder="Digite o nome da nova categoria"
                     />
                 </div>
-
+         <div>
+          <label htmlFor="imagem" className="block text-sm font-semibold text-pink-700 mb-1">
+            Imagem
+          </label>
+          <input
+            id="imagem"
+            type="file"
+            accept="image/*"
+            onChange={e => setImagem(e.target.files[0])}
+            className="w-full"
+          />
+        </div>
                 <button
                     type="submit"
                     className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"

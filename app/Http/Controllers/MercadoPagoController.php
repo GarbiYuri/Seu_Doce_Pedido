@@ -109,6 +109,80 @@ class MercadoPagoController extends Controller
         return Inertia::render('Dashboard');
     }
 }
+  public function pagarWL(Request $request)
+{
+    if ($request->method() === "POST") {
+        try {
 
+            MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+
+            $products = $request->input('products');
+            $tipoPedido = $request->input('tipoPedido', 'retirada'); 
+            $dadosEntrega = $request->input('dadosEntrega');
+
+            $items = [];
+            $total = 0;
+
+            // Adiciona produtos ao array de items
+            foreach ($products as $product) {
+                $items[] = [
+                    "id" => $product['id'],
+                    "title" => $product['name'],
+                    "quantity" => (int) $product['quantity'],
+                    "currency_id" => "BRL",
+                    "unit_price" => (float) $product['price'],
+                    "imagem" => $product['imagem'] ?? null,
+                ];
+                $total += $product['price'] * $product['quantity'];
+            }
+
+            // Se for entrega, adiciona taxa de entrega
+            if ($tipoPedido === 'entrega') {
+                $items[] = [
+                    "id" => "delivery_fee",
+                    "title" => "Taxa de entrega",
+                    "quantity" => 1,
+                    "currency_id" => "BRL",
+                    "unit_price" => 4, // valor fixo da entrega (pode ser variável)
+                ];
+                $frete = 4;
+                $total += $frete;
+            }else{
+                 $frete = 0.00;
+            }
+
+
+            $client = new PreferenceClient();
+
+            // Cria a preferência Mercado Pago
+            $preference = $client->create([
+                "back_urls" => [
+                    "success" => route('checkout.success'),
+                    "failure" => route('checkout.failure'),
+                    "pending" => route('checkout.pending')
+                ],
+                "items" => $items,
+                "binary_mode" => true,
+            ]);
+
+
+            return Inertia::render('Checkout/CheckoutRedirectWL', [
+                'init_point' => $preference->init_point,
+                'cartItems' => $products,
+                'dadosEntrega' => $dadosEntrega,
+                'userAddress' => $tipoPedido === 'entrega' ? true : null,
+                'isPickup' => $tipoPedido === 'retirada',
+                'frete' => $frete,
+            ]);
+        } catch (MPApiException $e) {
+            return response()->json([
+                'message' => 'Erro na API do Mercado Pago',
+                'error' => $e->getApiResponse()->getContent()
+            ], 500);
+        }
+    } else {
+        return Inertia::render('Dashboard');
+    }
+}
         
 }

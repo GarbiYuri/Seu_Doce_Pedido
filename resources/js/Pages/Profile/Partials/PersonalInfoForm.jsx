@@ -50,13 +50,17 @@ export default function PersonalInfoForm() {
 
   const submit = (e) => {
     e.preventDefault();
-    put(route('informacoes.update', informacoes.id));
+    
+    put(route('informacoes.update', informacoes.id), {
+    preserveScroll: true,
+    });
+    
   };
 
   return (
     <section className="mt-6">
       <header>
-        <h2 className="text-lg font-medium text-gray-900">Informações Pessoais</h2>
+        <h2 className="text-lg font-bold text-pink-600">Informações Pessoais</h2>
         <p className="mt-1 text-sm text-gray-600">
           Adicione seu endereço, telefone e CPF para facilitar o processo de entrega.
         </p>
@@ -74,8 +78,8 @@ export default function PersonalInfoForm() {
             placeholder="Rua"
             value={data.rua}
             onChange={e => setData('rua', e.target.value)}
-            className="border rounded p-2 bg-gray-100 cursor-not-allowed"
-            readOnly 
+            className="border rounded p-2 bg-gray-100 "
+            
           />
           <input
             placeholder="Número"
@@ -87,22 +91,22 @@ export default function PersonalInfoForm() {
             placeholder="Bairro"
             value={data.bairro}
             onChange={e => setData('bairro', e.target.value)}
-            className="border rounded p-2 bg-gray-100 cursor-not-allowed"
-            readOnly 
+            className="border rounded p-2 bg-gray-100 "
+            
           />
           <input
             placeholder="Cidade"
             value={data.cidade}
             onChange={e => setData('cidade', e.target.value)}
-            className="border rounded p-2 bg-gray-100 cursor-not-allowed"
-            readOnly 
+            className="border rounded p-2 bg-gray-100 "
+           
           />
           <input
             placeholder="Estado"
             value={data.estado}
             onChange={e => setData('estado', e.target.value)}
-            className="border rounded p-2 bg-gray-100 cursor-not-allowed"
-            readOnly 
+            className="border rounded p-2 bg-gray-100 "
+         
           />
           <input
             placeholder="Telefone"
