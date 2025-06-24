@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Traits\ToStringFormat;
 use Illuminate\Http\Request;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
@@ -18,15 +19,23 @@ class MercadoPagoController extends Controller
 {
     if ($request->method() === "POST") {
         try {
+ 
             $user = auth()->user();
 
             MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
 
+            $informacoes  = $request->input('informacoes');
             $products = $request->input('products');
             $tipoPedido = $request->input('tipoPedido', 'retirada'); 
 
             $items = [];
+    
             $total = 0;
+
+           
+
+               
+           
 
             // Adiciona produtos ao array de items
             foreach ($products as $product) {
@@ -34,11 +43,15 @@ class MercadoPagoController extends Controller
                     "id" => $product['id'],
                     "title" => $product['name'],
                     "quantity" => (int) $product['quantity'],
+                    "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],
+                    "description" => $product['description'],
                     "currency_id" => "BRL",
                     "unit_price" => (float) $product['price'],
                 ];
                 $total += $product['price'] * $product['quantity'];
             }
+
+            
 
             // Se for entrega, adiciona taxa de entrega
             if ($tipoPedido === 'entrega') {
@@ -51,7 +64,24 @@ class MercadoPagoController extends Controller
                 ];
                 $frete = 4;
                 $total += $frete;
+                 $payer = [
+        "name" => $user->name,
+        "email" => $user->email,
+        "phone" => [
+            "number" => (string) $informacoes['telefone'],
+        ],
+    ];  
             }else{
+               
+                   
+    $payer = [
+        "name" => $user->name,
+        "email" => $user->email,
+        "phone" => [
+            "number" => (string) $informacoes['telefone'],
+        ],
+    ];  
+                
                  $frete = 0.00;
             }
 
@@ -60,17 +90,15 @@ class MercadoPagoController extends Controller
 
             // Cria a preferência Mercado Pago
             $preference = $client->create([
-                "back_urls" => [
-                    "success" => route('checkout.success'),
-                    "failure" => route('checkout.failure'),
-                    "pending" => route('checkout.pending')
-                ],
+                "back_urls" => array(
+                    "success" => "success",
+                    "failure" => "failure",
+                    "pending" => "pending"
+                ),
+                "auto_return" => "all",
                 "items" => $items,
-                "payer" => [
-                    "name" => $user->name,
-                    "email" => $user->email,
-                ],
-                "binary_mode" => true,
+                "payer" => $payer,
+    
             ]);
 
             // Busca os produtos do carrinho para mostrar no retorno
@@ -157,9 +185,9 @@ class MercadoPagoController extends Controller
             // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => [
-                    "success" => route('checkout.success'),
-                    "failure" => route('checkout.failure'),
-                    "pending" => route('checkout.pending')
+                    "success" => route('success'),
+                    "failure" => route('failure'),
+                    "pending" => route('pending')
                 ],
                 "items" => $items,
                 "binary_mode" => true,

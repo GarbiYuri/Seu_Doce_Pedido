@@ -22,6 +22,7 @@
         "@fontsource/poppins": "^5.2.6",
         "@headlessui/react": "^2.2.4",
         "@inertiajs/inertia": "^0.11.1",
+        "@mercadopago/sdk-react": "^1.0.3",
         "lucide-react": "^0.514.0",
         "react-icons": "^5.5.0"
     }
