@@ -72,6 +72,7 @@ export default function CartWL() {
         products: cartProducts.map(p => ({
        id: p.id,
        name: p.name,
+       description : p.descricao,
        quantity: cart[p.id],
        price: p.price,
        imagem : p.imagem,
@@ -121,7 +122,7 @@ export default function CartWL() {
                             />
                             <div>
                                 <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
-                                <p className="text-xs text-gray-500">Descrição do produto</p>
+                                <p className="text-xs text-gray-500">{product.descricao}</p>
                                 <p className="text-md font-bold text-gray-900">R${product.price}</p>
                             </div>
                         </div>
