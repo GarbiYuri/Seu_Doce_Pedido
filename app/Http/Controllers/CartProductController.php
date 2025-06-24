@@ -30,6 +30,7 @@ class CartProductController extends Controller
         'product.name',
         'product.price',
         'product.imagem',
+        'product.descricao',
         'cart_product.quantity'
     )
     ->get();

@@ -13,6 +13,7 @@ use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\InformacoesPessoaisController;
+use App\Http\Controllers\CheckoutController;
 
 
 // Area de Testes 
@@ -27,17 +28,16 @@ Route::post('/remove', [CartWLController::class, 'destroy']);
 
 //Rotas do Checkout
 
-Route::get('/checkout.success', function () {
-            return Inertia::render('Checkout/success');
-        })->name('checkout.success');
+Route::get('/success', 
+[CheckoutController::class, 'success'])
+->name('success');
 
-Route::get('/checkout.failure', function () {
-            return Inertia::render('Checkout/failure');
-        })->name('checkout.failure');
 
-Route::get('/checkout.pending', function () {
-            return Inertia::render('Checkout/pending');
-        })->name('checkout.pending');
+Route::get('/failure', 
+[CheckoutController::class, 'failure'])->name('failure');
+
+Route::get('/pending', [CheckoutController::class, 'pending'])
+->name('pending');
 
 Route::get('/CheckoutRedirect', function () {
         return Inertia::render('Checkout/CheckoutRedirect');

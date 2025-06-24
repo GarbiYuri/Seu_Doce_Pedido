@@ -176,8 +176,15 @@ export default function Dashboard({ products, categories, bannerss }) {
           ref={categoriaRef}
           className="flex items-center gap-4 overflow-x-auto px-2 py-2 hide-scrollbar scroll-smooth"
         >
-          {categories.map((category) => (
-            <div
+          {categories.map((category) => {
+            const filteredCategoryProducts = filteredProducts.filter(
+          p => p.id_categoria === category.id
+         );
+
+  if (filteredCategoryProducts.length === 0) return null;
+
+         return(
+          <div
               key={category.id}
               className="flex flex-col items-center text-center cursor-pointer transition-transform hover:scale-105 flex-shrink-0"
               onClick={() => {
@@ -198,7 +205,9 @@ export default function Dashboard({ products, categories, bannerss }) {
               </div>
               <p className="mt-2 text-sm font-semibold text-gray-700">{category.name.toUpperCase()}</p>
             </div>
-          ))}
+         )
+            
+})}
         </div>
 
         {/* Botão direito */}

@@ -15,13 +15,23 @@ export default function Cart({ cartProducts }) {
       name: p.name,
       quantity: p.quantity,
       price: p.price,
+      imagem: p.imagem,
+      description : p.descricao,
+      
     })),
+    informacoes,
     tipoPedido,
   });
+
+
 
   useEffect(() => {
     form.setData('tipoPedido', tipoPedido);
   }, [tipoPedido]);
+  updatedCart.map(p => ({
+    
+  }))
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -97,6 +107,7 @@ export default function Cart({ cartProducts }) {
       {updatedCart.length > 0 ? (
         <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
           {updatedCart.map((product) => (
+              
             <div
               key={product.Id_Product}
               className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
@@ -110,8 +121,9 @@ export default function Cart({ cartProducts }) {
                 />
                 <div>
                   <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
-                  <p className="text-xs text-gray-500">Descrição do produto</p>
+                  <p className="text-xs text-gray-500">{product.descricao}</p>
                   <p className="text-md font-bold text-gray-900">R$ {product.price}</p>
+            
                 </div>
               </div>
 
