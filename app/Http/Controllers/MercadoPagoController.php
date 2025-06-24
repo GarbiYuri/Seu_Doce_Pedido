@@ -43,7 +43,7 @@ class MercadoPagoController extends Controller
                     "id" => $product['id'],
                     "title" => $product['name'],
                     "quantity" => (int) $product['quantity'],
-                    "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],
+                  /*  "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],*/ //usar quando hospedado
                     "description" => $product['description'],
                     "currency_id" => "BRL",
                     "unit_price" => (float) $product['price'],
@@ -53,14 +53,14 @@ class MercadoPagoController extends Controller
 
             
 
-            // Se for entrega, adiciona taxa de entrega
+            // Se for entrega, adiciona taxa de entrega + dados de endereço
             if ($tipoPedido === 'entrega') {
                 $items[] = [
                     "id" => "delivery_fee",
                     "title" => "Taxa de entrega",
                     "quantity" => 1,
                     "currency_id" => "BRL",
-                    "unit_price" => 4, // valor fixo da entrega (pode ser variável)
+                    "unit_price" => 4, // valor fixo da entrega (precisa aplicar api para dinamizar)
                 ];
                 $frete = 4;
                 $total += $frete;
@@ -95,9 +95,10 @@ class MercadoPagoController extends Controller
                     "failure" => "failure",
                     "pending" => "pending"
                 ),
-                "auto_return" => "all",
+              /*  "auto_return" => "all",*/ // Usar somente com Hospedagem
                 "items" => $items,
                 "payer" => $payer,
+                "binary_mode" => true,
     
             ]);
 
@@ -150,13 +151,16 @@ class MercadoPagoController extends Controller
 
             $items = [];
             $total = 0;
+            $payer =[];
 
             // Adiciona produtos ao array de items
             foreach ($products as $product) {
                 $items[] = [
                     "id" => $product['id'],
                     "title" => $product['name'],
-                    "quantity" => (int) $product['quantity'],
+                     /*  "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],*/ //usar quando hospedado
+                     "description" => $product['description'],
+                     "quantity" => (int) $product['quantity'],
                     "currency_id" => "BRL",
                     "unit_price" => (float) $product['price'],
                     "imagem" => $product['imagem'] ?? null,
@@ -164,20 +168,37 @@ class MercadoPagoController extends Controller
                 $total += $product['price'] * $product['quantity'];
             }
 
-            // Se for entrega, adiciona taxa de entrega
+            
+
+            // Se for entrega, adiciona taxa de entrega + dados de endereço
             if ($tipoPedido === 'entrega') {
                 $items[] = [
                     "id" => "delivery_fee",
                     "title" => "Taxa de entrega",
                     "quantity" => 1,
                     "currency_id" => "BRL",
-                    "unit_price" => 4, // valor fixo da entrega (pode ser variável)
+                    "unit_price" => 4, // valor fixo da entrega (precisa aplicar api para dinamizar)
                 ];
                 $frete = 4;
                 $total += $frete;
+                 $payer = [
+            "name" => $dadosEntrega['nome'],
+            "phone" => [
+            "number" => $dadosEntrega['telefone'],
+            ],
+        ];
             }else{
+        $payer = [
+            "name" => $dadosEntrega['nome'],
+            "phone" => [
+            "number" => $dadosEntrega['telefone'],
+            ],
+        ];
                  $frete = 0.00;
             }
+
+
+
 
 
             $client = new PreferenceClient();
@@ -189,7 +210,9 @@ class MercadoPagoController extends Controller
                     "failure" => route('failure'),
                     "pending" => route('pending')
                 ],
+            /*  "auto_return" => "all",*/ // Usar somente com Hospedagem
                 "items" => $items,
+                "payer" => $payer,
                 "binary_mode" => true,
             ]);
 
