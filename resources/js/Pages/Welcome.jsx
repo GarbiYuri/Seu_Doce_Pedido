@@ -7,6 +7,7 @@ export default function Welcome({ products, categories }) {
   const shop = usePage().props.shop;  
   const banner = shop.banner;
 
+
   // Estados para busca e filtro
   const [searchText, setSearchText] = useState('');
   const [filterField, setFilterField] = useState('all');
@@ -18,59 +19,6 @@ export default function Welcome({ products, categories }) {
   // Estado para armazenar o texto de cada botão "Adicionar ao carrinho"
   const [buttonTexts, setButtonTexts] = useState({});
 
-  // Ref para o carrossel da categoria
-    const carouselRefs = useRef([]);
-
-    // Variáveis para controle do drag
-    const [dragInfo, setDragInfo] = useState({ isDragging: false, startX: 0, scrollLeft: 0, activeIndex: null });
-    
-    useEffect(() => {
-      carouselRefs.current = categories.map((_, i) => carouselRefs.current[i] ?? React.createRef());
-    }, [categories]);
-    
-    const startDrag = (e, index) => {
-      const carousel = carouselRefs.current[index]?.current;
-      if (!carousel) return;
-    
-      setDragInfo({
-        isDragging: true,
-        startX: e.pageX || e.touches[0].pageX,
-        scrollLeft: carousel.scrollLeft,
-        activeIndex: index,
-      });
-      carousel.classList.add('select-none');
-    };
-    
-    const onDrag = (e) => {
-      if (!dragInfo.isDragging) return;
-    
-      const carousel = carouselRefs.current[dragInfo.activeIndex]?.current;
-      if (!carousel) return;
-    
-      const x = e.pageX || e.touches[0].pageX;
-      const walk = (x - dragInfo.startX) * 1.5;
-      carousel.scrollLeft = dragInfo.scrollLeft - walk;
-    };
-    
-    const endDrag = () => {
-      if (dragInfo.activeIndex === null) return;
-      const carousel = carouselRefs.current[dragInfo.activeIndex]?.current;
-      if (!carousel) return;
-    
-      carousel.classList.remove('select-none');
-      setDragInfo({ isDragging: false, startX: 0, scrollLeft: 0, activeIndex: null });
-    };
-    
-      // Funções para botões (scroll com clique)
-     const scrollLeftBtn = (index) => {
-      const carousel = carouselRefs.current[index]?.current;
-      if (carousel) carousel.scrollBy({ left: -300, behavior: 'smooth' });
-    };
-    
-    const scrollRightBtn = (index) => {
-      const carousel = carouselRefs.current[index]?.current;
-      if (carousel) carousel.scrollBy({ left: 300, behavior: 'smooth' });
-    };
 
   // Monitorar scroll para mostrar/ocultar botão voltar ao topo
   useEffect(() => {
@@ -98,6 +46,7 @@ export default function Welcome({ products, categories }) {
   // Função para adicionar produto ao carrinho (session / cache)
   const addToCart = (productId) => {
     router.post("/cartwl/add", { product_id: productId, quantity: 1 }, {
+      preserveScroll: true,
       onSuccess: () => {
         setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionado!" }));
       },
@@ -143,6 +92,30 @@ export default function Welcome({ products, categories }) {
     }
   });
 
+  const carousel = useRef(null);
+
+  const handleLeftClick = (e) =>{
+    e.preventDefault();
+    console.log(carousel.current.offsetWidth);
+    carousel.current.scrollLeft -= carousel.current.offsetWidth;
+  }
+  const handleRightClick = (e) =>{
+    e.preventDefault();
+    console.log(carousel.current.offsetWidth);
+     carousel.current.scrollLeft += carousel.current.offsetWidth;
+  }
+
+    const categoriaRef = useRef(null);
+  
+    const scrollLeft = () => {
+      categoriaRef.current.scrollLeft -= 200;
+    };
+  
+    const scrollRight = () => {
+      categoriaRef.current.scrollLeft += 200;
+    };
+  
+
   return (
     <AuthenticatedLayout>
       <Head title="Bem-vindo" />
@@ -152,12 +125,74 @@ export default function Welcome({ products, categories }) {
           <img
             src={banner.imagem}
             alt={banner.nome}
-            className="w-full h-auto object-cover max-h-[450px] rounded shadow-md"
+              className="w-full max-h-[px] object-contain rounded shadow-md mx-auto"
           />
         ) : (
           <div></div>
         )}
       </div>
+
+<div className="relative w-full">
+      <h2 className="text-center text-xl font-bold text-gray-800 mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
+
+      <div className="flex items-center justify-between px-4">
+        {/* Botão esquerdo */}
+        <button
+          onClick={scrollLeft}
+          className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
+        >
+          <FiChevronLeft className="text-pink-600" size={24} />
+        </button>
+
+        {/* Carrossel */}
+        <div
+          ref={categoriaRef}
+          className="flex items-center gap-4 overflow-x-auto px-2 py-2 hide-scrollbar scroll-smooth"
+        >
+        
+          {categories.map((category) => {
+              const filteredCategoryProducts = filteredProducts.filter(
+         p => p.id_categoria === category.id
+       );
+     
+       if (filteredCategoryProducts.length === 0) return null;
+
+        return (
+         <div
+              key={category.id}
+              className="flex flex-col items-center text-center cursor-pointer transition-transform hover:scale-105 flex-shrink-0"
+              onClick={() => {
+                const el = document.getElementById(`categoria-${category.id}`);
+                if (el) el.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
+              <div className="w-24 h-24 rounded-full border-2 border-pink-500 overflow-hidden flex items-center justify-center bg-white shadow">
+                {category.imagem ? (
+                  <img
+                    src={`/imagens/categorias/${category.imagem}`}
+                    alt={category.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <span className="text-xs text-gray-500">Sem imagem</span>
+                )}
+              </div>
+              <p className="mt-2 text-sm font-semibold text-gray-700">{category.name.toUpperCase()}</p>
+            </div>
+       );
+           
+})}
+        </div>
+
+        {/* Botão direito */}
+        <button
+          onClick={scrollRight}
+          className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
+        >
+          <FiChevronRight className="text-pink-600" size={24} />
+        </button>
+      </div>
+    </div>
 
       {/* Barra de pesquisa e filtro */}
       <div className="flex items-center gap-2 my-6 max-w-md mx-auto relative">
@@ -214,40 +249,18 @@ export default function Welcome({ products, categories }) {
      
      
        return (
-         <div key={category.id} className="mb-20 relative">
+         <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
            <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
              {category.name.toUpperCase()}
            </h2>
      
-           {/* Botões de navegação */}
-           <button
-             onClick={scrollLeftBtn}
-             className="hidden lg:flex items-center justify-center absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
-           >
-             <FiChevronLeft size={24} />
-           </button>
-     
-           <button
-             onClick={scrollRightBtn}
-             className="hidden lg:flex items-center justify-center absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
-           >
-             <FiChevronRight size={24} />
-           </button>
-     
            {/* Carrossel com drag */}
-           <div className="overflow-x-auto px-8">
-            <div
-               key={category.id}
-               ref={carouselRefs.current[index]}
-               className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
-               onMouseDown={(e) => startDrag(e, index)}
-               onMouseMove={onDrag}
-               onMouseUp={endDrag}
-               onMouseLeave={endDrag}
-               onTouchStart={(e) => startDrag(e, index)}
-               onTouchMove={onDrag}
-               onTouchEnd={endDrag}
-             >
+           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carousel}>
+  <div
+
+    className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
+
+  >
                {filteredCategoryProducts.map(product => (
                  <div
                    key={product.id}
@@ -284,10 +297,24 @@ export default function Welcome({ products, categories }) {
                ))}
              </div>
            </div>
+            {/* Botões de navegação */}
+<button
+  onClick={handleLeftClick}
+  className=" lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+>
+  <FiChevronLeft size={24} />
+</button>
+
+<button
+  onClick={handleRightClick}
+  className=" lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+>
+  <FiChevronRight size={24} />
+</button>
          </div>
        );
      })}
-
+   
       {/* Botão voltar ao topo */}
       {showScrollTop && (
         <button

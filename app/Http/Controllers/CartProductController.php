@@ -22,10 +22,17 @@ class CartProductController extends Controller
          // Realiza o INNER JOIN entre a tabela cart_product, cart e product
     $cartProducts = DB::table('cart_product')
     ->join('product', 'cart_product.Id_Product', '=', 'product.id')
-    ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id') // JOIN com a tabela de carrinho
+    ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id')
     ->where('cart.Id_User', $userId)
-    ->select('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price','product.imagem' ,DB::raw('count(cart_product.Id_Product) as quantity'))
-    ->groupBy('cart_product.Id_Cart', 'cart_product.Id_Product', 'product.name', 'product.price', 'product.imagem')
+    ->select(
+        'cart_product.Id_Cart',
+        'cart_product.Id_Product',
+        'product.name',
+        'product.price',
+        'product.imagem',
+        'product.descricao',
+        'cart_product.quantity'
+    )
     ->get();
 
     
@@ -34,7 +41,7 @@ class CartProductController extends Controller
             'cartProducts' => $cartProducts,
         ]);
     }
-    public function store(Request $request)
+   public function store(Request $request)
 {
     $request->validate([
         'Id_Product' => 'required|exists:product,id',
@@ -47,13 +54,30 @@ class CartProductController extends Controller
         return response()->json(['message' => 'Carrinho não encontrado.'], 404);
     }
 
-    // Adiciona o produto ao carrinho
-    $cartProduct = cart_product::create([
-        'Id_Product' => $request->Id_Product,
-        'Id_Cart' => $cart->id, // Usa o carrinho do usuário logado   
-    ]);
+    // Verifica se o produto já está no carrinho
+    $existingProduct = DB::table('cart_product')
+        ->where('Id_Cart', $cart->id)
+        ->where('Id_Product', $request->Id_Product)
+        ->first();
 
-    return Redirect::back()->with('success', 'Produto Adicionado Ao Carrinho!');
+    if ($existingProduct) {
+        // Já existe -> apenas incrementa a quantidade
+        DB::table('cart_product')
+            ->where('Id_Cart', $cart->id)
+            ->where('Id_Product', $request->Id_Product)
+            ->update([
+                'quantity' => $existingProduct->quantity + 1,
+            ]);
+    } else {
+        // Ainda não existe -> cria um novo registro
+        DB::table('cart_product')->insert([
+            'Id_Cart' => $cart->id,
+            'Id_Product' => $request->Id_Product,
+            'quantity' => 1,
+        ]);
+    }
+
+    return Redirect::back()->with('success', 'Produto adicionado ao carrinho!');
 }
 public function update(Request $request)
 {
@@ -77,21 +101,13 @@ public function update(Request $request)
         ->where('Id_Product', $productId)
         ->first();
 
+        
     if ($cartProduct) {
-        if ($quantity > 0) {
-            // Atualiza a quantidade no banco de dados
             DB::table('cart_product')
             ->where('Id_Product', $productId)
             ->where('Id_Cart', $cart->id)
-            ->limit(1)
-            ->delete();
-        } else {
-            // Remove o produto do carrinho se a quantidade for 0
-            DB::table('cart_product')
-                ->where('Id_Cart', $cart->id)
-                ->where('Id_Product', $productId)
-                ->delete();
-        }
+            ->update(['quantity' => $quantity]);
+       
 
         return Redirect::back()->with('success', 'Carrinho atualizado!');
     }

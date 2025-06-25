@@ -11,29 +11,54 @@ use App\Http\Controllers\CartProductController;
 use App\Http\Controllers\CartWLController;
 use App\Http\Controllers\BannerController;
 use App\Http\Controllers\ShopController;
+use App\Http\Controllers\MercadoPagoController;
+use App\Http\Controllers\InformacoesPessoaisController;
+use App\Http\Controllers\CheckoutController;
+
 
 // Area de Testes 
 
 
 // Area de Testes 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-    ]);
-});
 
 Route::post('/cartwl/add', [CartWLController::class, 'store']);
 Route::get('CarrinhoWL', [CartWLController::class, 'index']);
 Route::post('/update', [CartWLController::class, 'update']);
 Route::post('/remove', [CartWLController::class, 'destroy']);
 
+//Rotas do Checkout
 
+Route::get('/success', 
+[CheckoutController::class, 'success'])
+->name('success');
+
+
+Route::get('/failure', 
+[CheckoutController::class, 'failure'])->name('failure');
+
+Route::get('/pending', [CheckoutController::class, 'pending'])
+->name('pending');
+
+Route::get('/CheckoutRedirect', function () {
+        return Inertia::render('Checkout/CheckoutRedirect');
+})->name('CheckoutRedirect');
+
+Route::get('/CheckoutRedirectWL', function () {
+        return Inertia::render('Checkout/CheckoutRedirectWL');
+})->name('CheckoutRedirectWL');
+
+//Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
- // Rota para a verificação do email
+ 
+    // Rota para a verificação do email
  Route::get('/VerifyEmail', function () {
     return Inertia::render('Auth/VerifyEmail');
 })->name('VerifyEmail'); 
+
+//Rota de Informações Pessoais
+
+Route::resource('informacoes', InformacoesPessoaisController::class);
+
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 //Route::middleware(EmailVerifiedAt::class)->group(function () {
@@ -65,6 +90,10 @@ Route::middleware('auth')->group(function () {
         // Rota para os produtos, com as funcionalidades do CRUD
         Route::resource('products', ProductController::class);
 
+
+        Route::get('/Vendas', function(){
+            return Inertia::render('Admin/Vendas/Vendas');
+        })->name('Vendas');
 
         // Finaliza CheckifAdmin
     });
@@ -107,6 +136,13 @@ Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('bann
 
 Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
 Route::post('/shop/banner', [ShopController::class, 'update']); // para alterar o banner
+
+Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');
+Route::match(['get', 'post'], '/pagarWL', [MercadoPagoController::class, 'pagarWL'])->name('pagarWL');
+Route::get('/pagamento/sucesso', fn() => 'Pagamento aprovado!')->name('pagamento.sucesso');
+Route::get('/pagamento/falha', fn() => 'Pagamento falhou!')->name('pagamento.falha');
+Route::get('/pagamento/pendente', fn() => 'Pagamento pendente!')->name('pagamento.pendente');
+
 
 
 require __DIR__.'/auth.php';

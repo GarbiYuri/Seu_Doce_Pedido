@@ -1,13 +1,40 @@
-import React, { useState } from 'react';
-import { router, Head } from '@inertiajs/react';
+import React, { useState, useEffect } from 'react';
+import { router } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CategoryEdit({ category }) {
   const [name, setName] = useState(category.name);
+  const [imageFile, setImageFile] = useState(null);
+  const [previewImage, setPreviewImage] = useState('');
+
+  // Carregar imagem atual ao iniciar
+  useEffect(() => {
+    if (category.imagem) {
+      setPreviewImage(`/imagens/categorias/${category.imagem}`);
+    }
+  }, [category]);
+
+  // Atualizar imagem selecionada
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImageFile(file);
+      setPreviewImage(URL.createObjectURL(file));
+    }
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    router.put(`/categories/${category.id}`, { name });
+
+    const formData = new FormData();
+    formData.append('name', name);
+    if (imageFile) {
+      formData.append('imagem', imageFile);
+    }
+
+    router.post(`/categories/${category.id}?_method=PUT`, formData, {
+      forceFormData: true,
+    });
   };
 
   const handleBack = () => {
@@ -36,7 +63,7 @@ export default function CategoryEdit({ category }) {
           Editar Categoria
         </h2>
 
-        <form onSubmit={handleSubmit}>
+        <form onSubmit={handleSubmit} encType="multipart/form-data">
           <div className="mb-4">
             <label
               htmlFor="name"
@@ -52,6 +79,26 @@ export default function CategoryEdit({ category }) {
               onChange={(e) => setName(e.target.value)}
               required
               placeholder="Digite o novo nome da categoria"
+            />
+          </div>
+
+          {/* Imagem */}
+          <div>
+            <label className="block mb-2 font-medium text-pink-700">
+              Imagem da Categoria
+            </label>
+            {previewImage && (
+              <img
+                src={previewImage}
+                alt="Preview"
+                className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
+              />
+            )}
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageChange}
+              className="w-full text-sm text-gray-600"
             />
           </div>
 

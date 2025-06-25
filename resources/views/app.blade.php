@@ -14,11 +14,15 @@
         <link rel="stylesheet" href="css/style.css">
         <link rel="stylesheet" href="css/csswelcome.css">
          <link rel="stylesheet" href="css/cssParaProducts.css">
+          <link rel="stylesheet" href="css/cssCarrossel.css">
         <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet">
 
         <!-- Scripts -->
         @routes
-        @viteReactRefresh
+         <!-- Tirar Na produção
+         @viteReactRefresh 
+         -->
+       
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>
