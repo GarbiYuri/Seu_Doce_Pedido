@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
+import { FiFolderPlus } from 'react-icons/fi'; // Ícones
 
 export default function CategoryEdit({ category }) {
   const [name, setName] = useState(category.name);
@@ -81,26 +82,46 @@ export default function CategoryEdit({ category }) {
               placeholder="Digite o novo nome da categoria"
             />
           </div>
+{/* Imagem */}
+<div>
+  <label className="block text-sm font-semibold text-pink-700 mb-1">
+    Imagem da Categoria
+  </label>
 
-          {/* Imagem */}
-          <div>
-            <label className="block mb-2 font-medium text-pink-700">
-              Imagem da Categoria
-            </label>
-            {previewImage && (
-              <img
-                src={previewImage}
-                alt="Preview"
-                className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
-              />
-            )}
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleImageChange}
-              className="w-full text-sm text-gray-600"
-            />
-          </div>
+  {/* Prévia da imagem, se houver */}
+  {previewImage && (
+    <img
+      src={previewImage}
+      alt="Prévia da imagem"
+      className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
+    />
+  )}
+
+  {/* Botão customizado e nome do arquivo */}
+  <div className="flex items-center gap-4">
+    <label
+      htmlFor="imagem"
+      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+    >
+      <FiFolderPlus className="mr-2" />
+      Selecionar nova imagem
+    </label>
+
+    <span className="text-sm text-gray-700 truncate max-w-[200px]">
+      {imageFile?.name || 'Nenhuma imagem nova selecionada'}
+    </span>
+  </div>
+
+  {/* Input real, mas oculto */}
+  <input
+    id="imagem"
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="hidden"
+  />
+</div>
+
 
           <button
             type="submit"

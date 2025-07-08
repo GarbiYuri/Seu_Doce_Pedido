@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { router } from '@inertiajs/react';
+import {FiFolderPlus } from 'react-icons/fi';
 
 export default function CategoryEdit({ product, categories, onClose }) {
   const [name, setName] = useState('');
@@ -107,21 +108,44 @@ export default function CategoryEdit({ product, categories, onClose }) {
 
         {/* Imagem */}
         <div>
-          <label className="block mb-2 font-medium text-gray-700">Imagem do Produto</label>
-          {previewImage && (
-            <img
-              src={previewImage}
-              alt="Preview"
-              className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
-            />
-          )}
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleImageChange}
-            className="w-full text-sm text-gray-600"
-          />
-        </div>
+  <label className="block text-sm font-semibold text-pink-700 mb-1">
+    Imagem do Produto
+  </label>
+
+  {/* Prévia da imagem, se houver */}
+  {previewImage && (
+    <img
+      src={previewImage}
+      alt="Prévia da imagem"
+      className="mb-3 w-32 h-32 object-cover rounded-xl border border-gray-300 shadow-sm"
+    />
+  )}
+
+  {/* Botão de seleção e nome da imagem */}
+  <div className="flex items-center gap-4">
+    <label
+      htmlFor="imagemProduto"
+      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+    >
+      <FiFolderPlus className="mr-2" />
+      Selecionar imagem
+    </label>
+
+    <span className="text-sm text-gray-700 truncate max-w-[200px]">
+      {imageFile?.name || 'Nenhuma imagem selecionada'}
+    </span>
+  </div>
+
+  {/* Input de imagem real (oculto) */}
+  <input
+    id="imagemProduto"
+    type="file"
+    accept="image/*"
+    onChange={handleImageChange}
+    className="hidden"
+  />
+</div>
+
 
         {/* Botão */}
         <button

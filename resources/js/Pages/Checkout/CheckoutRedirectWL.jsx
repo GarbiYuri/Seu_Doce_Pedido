@@ -93,8 +93,8 @@ export default function CheckoutRedirect() {
           )}
           <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>Total:</span>
-          <span className="text-pink-600">
-  {(frete + total).toFixed(2).replace('.', ',')}
+          <span className="text-pink-600">R$ 
+  {( frete + total).toFixed(2).replace('.', ',')}
 </span>
         
         </div>

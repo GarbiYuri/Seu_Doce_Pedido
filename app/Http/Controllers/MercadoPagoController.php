@@ -91,9 +91,9 @@ class MercadoPagoController extends Controller
             // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => array(
-                    "success" => "success",
-                    "failure" => "failure",
-                    "pending" => "pending"
+                    "success" => "https://https://192.168.15.13/success",
+                    "failure" => "https://https://192.168.15.13/failure",
+                    "pending" => "https://https://192.168.15.13/pending"
                 ),
               /*  "auto_return" => "all",*/ // Usar somente com Hospedagem
                 "items" => $items,
