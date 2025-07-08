@@ -92,18 +92,18 @@ export default function Welcome({ products, categories }) {
     }
   });
 
-  const carousel = useRef(null);
-
-  const handleLeftClick = (e) =>{
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);
-    carousel.current.scrollLeft -= carousel.current.offsetWidth;
-  }
-  const handleRightClick = (e) =>{
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);
-     carousel.current.scrollLeft += carousel.current.offsetWidth;
-  }
+   const carouselsRef = useRef({});
+ 
+  const handleLeftClick = (categoryId) => {
+   const el = carouselsRef.current[categoryId]?.current;
+   if (el) el.scrollLeft -= 200;
+ };
+ 
+ const handleRightClick = (categoryId) => {
+   const el = carouselsRef.current[categoryId]?.current;
+   if (el) el.scrollLeft += 200;
+ };
+   
 
     const categoriaRef = useRef(null);
   
@@ -247,20 +247,30 @@ export default function Welcome({ products, categories }) {
      
        if (filteredCategoryProducts.length === 0) return null;
      
+      if (!carouselsRef.current[category.id]) {
+         carouselsRef.current[category.id] = React.createRef();
+       }
      
        return (
          <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
+     
            <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
              {category.name.toUpperCase()}
            </h2>
-     
+            {/* Botão Esquerdo */}
+         <button
+             onClick={() => handleLeftClick(category.id)}
+             className="lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+           >
+             <FiChevronLeft size={24} />
+           </button>
+         
            {/* Carrossel com drag */}
-           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carousel}>
-  <div
-
-    className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
-
-  >
+           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carouselsRef.current[category.id]}>
+            <div
+               key={category.id}
+               className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
+             >
                {filteredCategoryProducts.map(product => (
                  <div
                    key={product.id}
@@ -297,20 +307,15 @@ export default function Welcome({ products, categories }) {
                ))}
              </div>
            </div>
-            {/* Botões de navegação */}
-<button
-  onClick={handleLeftClick}
-  className=" lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
->
-  <FiChevronLeft size={24} />
-</button>
-
-<button
-  onClick={handleRightClick}
-  className=" lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
->
-  <FiChevronRight size={24} />
-</button>
+                      {/* Botão Direito */}
+           
+           
+          <button
+             onClick={() => handleRightClick(category.id)}
+             className="lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+           >
+             <FiChevronRight size={24} />
+           </button>
          </div>
        );
      })}

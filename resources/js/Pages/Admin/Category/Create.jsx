@@ -65,18 +65,36 @@ export default function CategoryCreate() {
                         placeholder="Digite o nome da nova categoria"
                     />
                 </div>
-         <div>
-          <label htmlFor="imagem" className="block text-sm font-semibold text-pink-700 mb-1">
-            Imagem
-          </label>
-          <input
-            id="imagem"
-            type="file"
-            accept="image/*"
-            onChange={e => setImagem(e.target.files[0])}
-            className="w-full"
-          />
-        </div>
+       <div>
+  <label className="block text-sm font-semibold text-pink-700 mb-1">
+    Imagem da Categoria
+  </label>
+
+  <div className="flex items-center gap-4">
+    <label
+      htmlFor="imagem"
+      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+    >
+      <FiFolderPlus className="mr-2" />
+      Selecionar imagem
+    </label>
+
+    {/* Mostrar nome do arquivo selecionado */}
+    <span className="text-sm text-gray-700 truncate max-w-[200px]">
+      {imagem?.name || 'Nenhuma imagem selecionada'}
+    </span>
+  </div>
+
+  {/* Input real oculto */}
+  <input
+    id="imagem"
+    type="file"
+    accept="image/*"
+    onChange={(e) => setImagem(e.target.files[0])}
+    className="hidden"
+  />
+</div>
+
                 <button
                     type="submit"
                     className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"

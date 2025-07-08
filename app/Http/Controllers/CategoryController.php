@@ -88,12 +88,17 @@ class CategoryController extends Controller
     $categoria->imagem = $imagemNome;
 }
 
-
-        
+        if($imagemNome){
         $categoria->update([
             'name' => $request->name,
             'imagem' => $imagemNome,
         ]);
+        }else{
+             $categoria->update([
+            'name' => $request->name,
+        ]);
+        }    
+        
 
         return redirect()->route('Categorias');
     }

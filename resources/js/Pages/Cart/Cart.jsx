@@ -9,6 +9,8 @@ export default function Cart({ cartProducts }) {
   const [updatedCart, setUpdatedCart] = useState(cartProducts);
   const [tipoPedido, setTipoPedido] = useState('retirada');
 
+  const [botao, setBotao] = useState(false);
+
   const form = useForm({
     products: updatedCart.map(p => ({
       id: p.Id_Product,
@@ -164,9 +166,12 @@ export default function Cart({ cartProducts }) {
             </span>
           </div>
 
+    
+            <FinalizarPedido tipoPedido={tipoPedido} setTipoPedido={setTipoPedido} informacoes={informacoes}  setBotao={setBotao}/>
           {/* Formulário único envolvendo tudo */}
-          <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
-            <FinalizarPedido tipoPedido={tipoPedido} setTipoPedido={setTipoPedido} informacoes={informacoes} />
+          {botao == false ? (
+            <div>
+           <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
 
           <div className="flex flex-col gap-3 mt-6">
             <button
@@ -178,7 +183,32 @@ export default function Cart({ cartProducts }) {
           </div>
             
           </form>
-        </div>
+            </div>
+          ) : (
+            <div>
+               <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
+
+          <div className="flex flex-col gap-3 mt-6">
+            <button
+  type="submit"
+  disabled={botao} // Desativa quando "botao" é true
+  className={`bg-pink-500 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 transition 
+    ${botao ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-600'}
+  `}
+>
+  Continuar Compra
+</button>
+          </div>
+            
+          </form>
+            </div>
+          )}
+           
+       
+            </div>
+         
+         
+
       ) : (
         <p className="text-center text-xl text-gray-500">Seu carrinho está vazio.</p>
       )}

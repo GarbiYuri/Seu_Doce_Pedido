@@ -3,7 +3,7 @@ import { Head, usePage, router } from '@inertiajs/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useState } from 'react';
 
-export default function DashboardAdmin() {
+export default function Promocao() {
   const { auth, usuarios } = usePage().props;
   const user = auth.user;
 
@@ -25,11 +25,11 @@ export default function DashboardAdmin() {
 
   return (
     <AdminLayout>
-      <Head title="Vendas" />
+      <Head title="Administração" />
 
       <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-2xl">
         <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">
-          Lista de Usuários
+          aaaaaaaa
         </h1>
 
         {/* Barra de pesquisa */}
@@ -83,7 +83,23 @@ export default function DashboardAdmin() {
                       </span>
                     </td>
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 text-center">
-                    
+                      {usuario.id !== 1 ? (
+                        <button
+                          onClick={() => toggleAdmin(usuario.id)}
+                          className={`w-full md:w-auto px-5 py-2 rounded-full text-sm font-semibold transition-colors 
+                          ${
+                            usuario.admin
+                              ? 'bg-red-500 hover:bg-red-600'
+                              : 'bg-green-500 hover:bg-green-600'
+                          } text-white`}
+                        >
+                          {usuario.admin ? 'Remover Admin' : 'Tornar Admin'}
+                        </button>
+                      ) : (
+                        <span className="text-gray-400 italic text-sm md:text-base">
+                          Impossível Alterar
+                        </span>
+                      )}
                     </td>
                   </tr>
                 ))
