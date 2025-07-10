@@ -19,6 +19,7 @@ export default function Cart({ cartProducts }) {
       price: p.price,
       imagem: p.imagem,
       description : p.descricao,
+      id_categoria : p.id_categoria,
       
     })),
     informacoes,

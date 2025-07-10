@@ -59,6 +59,15 @@ return [
             'throw' => false,
             'report' => false,
         ],
+        'r2_produtos' => [
+    'driver' => 's3',
+    'key' => env('R2_PRODUTOS_KEY'),
+    'secret' => env('R2_PRODUTOS_SECRET'),
+    'region' => 'auto',
+    'bucket' => env('R2_PRODUTOS_BUCKET'),
+    'endpoint' => env('R2_PRODUTOS_ENDPOINT'),
+    'visibility' => 'public',
+],
 
     ],
 

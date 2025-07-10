@@ -279,7 +279,7 @@ const handleRightClick = (categoryId) => {
               className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex-shrink-0 flex flex-col items-center text-center shadow-md snap-center transition-transform hover:scale-[1.03]"
             >
               <img
-                src={`/imagem/${product.imagem}`}
+                src={`${product.imagem}`}
                 alt={`Imagem de ${product.name}`}
                 className="w-44 h-44 object-contain rounded-md mb-4"
               />

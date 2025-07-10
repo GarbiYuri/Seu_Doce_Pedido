@@ -8,6 +8,7 @@ use App\Models\Category;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Storage;
 
 class ProductController extends Controller
 {
@@ -33,35 +34,45 @@ class ProductController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-    {
-        //Requisição e validação das informações
-        $request->validate([
-            'name' => 'required|string|max:255',
-            'price' => 'required|numeric|min:0',
-            'id_categoria' => 'required|Integer',
-            'descricao' =>  'required|string|max:255',
-            'imagem' => 'image|mimes:jpeg,png,jpg|max:2024'
-        ]);
 
-        // Upload da logo
-        if ($request->hasFile('imagem')) {
-        $ImagemName = time() . '.' . $request->imagem->extension();
-        $request->imagem->move(public_path('imagem'), $ImagemName);
-        }
 
-        Product::create([
-            'name' => $request->name,
-            'price' => $request->price,
-            'id_categoria' => $request->id_categoria,
-            'descricao' =>  $request->descricao,
-            'imagem' => $ImagemName,
+public function store(Request $request): RedirectResponse
+{
+    // Requisição e validação das informações
+    $request->validate([
+        'name' => 'required|string|max:255',
+        'price' => 'required|numeric|min:0',
+        'id_categoria' => 'required|integer',
+        'descricao' => 'required|string|max:255',
+        'imagem' => 'required|image|mimes:jpeg,png,jpg|max:2024'
+    ]);
 
-        ]);
+    $urlImagem = null;
 
-        return redirect()->route('Produtos');
+    // Upload da imagem para Cloudflare R2
+    if ($request->hasFile('imagem')) {
+        $arquivo = $request->file('imagem');
+        $nomeArquivo = time() . '.' . $arquivo->getClientOriginalExtension();
 
+        // Salvar no bucket 'r2' (definido no filesystems.php)
+        Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
+
+        // Montar URL pública para salvar no banco
+        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
     }
+
+    // Criar o produto com a URL completa da imagem
+    Product::create([
+        'name' => $request->name,
+        'price' => $request->price,
+        'id_categoria' => $request->id_categoria,
+        'descricao' => $request->descricao,
+        'imagem' => $urlImagem,  // Salva URL completa aqui
+    ]);
+
+    return redirect()->route('Produtos');
+}
+
 
     /**
      * Display the specified resource.
