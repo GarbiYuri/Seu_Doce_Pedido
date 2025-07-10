@@ -90,7 +90,7 @@ public function success(Request $request)
         Venda::where('id', $vendaId)->update(['status' => 'pago']);
     }
 
-    return Inertia::render('/');
+    return Inertia::render('Dashboard');
 }
 
 public function pending(Request $request)
@@ -101,7 +101,7 @@ public function pending(Request $request)
         Venda::where('id', $vendaId)->update(['status' => 'pagamento_pendente']);
     }
 
-    return Inertia::render('/');
+    return Inertia::render('Dashboard');
 }
 
 public function failure(Request $request)
@@ -112,6 +112,6 @@ public function failure(Request $request)
         Venda::where('id', $vendaId)->update(['status' => 'falha_pagamento']);
     }
 
-    return Inertia::render('/');
+    return Inertia::render('Dashboard');
 }
 }
