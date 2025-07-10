@@ -28,6 +28,11 @@ Route::post('/remove', [CartWLController::class, 'destroy']);
 
 //Rotas do Checkout
 
+
+Route::get('/Vendas',  
+[CheckoutController::class, 'index'])
+->name('vendas.index');
+
 Route::get('/success', 
 [CheckoutController::class, 'success'])
 ->name('success');
@@ -95,9 +100,9 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::resource('products', ProductController::class);
 
 
-        Route::get('/Vendas', function(){
-            return Inertia::render('Admin/Vendas/Vendas');
-        })->name('Vendas');
+        Route::get('/VendasLayout', function(){
+            return Inertia::render('Admin/Vendas/VendasLayout');
+        })->name('VendasLayout');
 
         // Finaliza CheckifAdmin
     });

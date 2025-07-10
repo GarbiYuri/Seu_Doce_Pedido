@@ -9,7 +9,8 @@ use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Exceptions\MPApiException;
 use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
-
+use App\Models\Venda;
+use App\Models\VendaProduct;
 
 class MercadoPagoController extends Controller
 {
@@ -32,10 +33,7 @@ class MercadoPagoController extends Controller
     
             $total = 0;
 
-           
-
-               
-           
+    
 
             // Adiciona produtos ao array de items
             foreach ($products as $product) {
@@ -88,17 +86,57 @@ class MercadoPagoController extends Controller
 
             $client = new PreferenceClient();
 
+
+                // 1. Cria a venda no banco
+        $venda = Venda::create([
+         'id_user' => $user->id,
+         'status' => 'iniciada', // ou 'pendente'
+        'valor' => $total,
+        'tipo' => $tipoPedido, // retirada ou entrega
+        'nome' => $user->name,
+        'email' => $user->email,
+        'telefone' => $informacoes['telefone'],
+        'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
+        'rua' => $informacoes['rua'] ?? null,
+        'numero' => $informacoes['numero'] ?? null,
+        'cep' => $informacoes['cep'] ?? null,
+        ]);
+
+
+
+        // 2. Salva os produtos da venda
+    foreach ($products as $product) {
+    $categoriaNome = null;
+    if (!empty($product['id_categoria'])) {
+        $categoriaNome = DB::table('category')
+            ->where('id', $product['id_categoria'])
+            ->value('name'); 
+    }
+    VendaProduct::create([
+        'id_venda' => $venda->id,
+        'id_product' => $product['id'],
+        'nome' => $product['name'],
+        'preco' => $product['price'],
+        'descricao' => $product['description'] ?? '',
+        'imagem' => $product['imagem'] ?? '',
+        'id_category' => $product['id_categoria'] ?? 0, // se tiver
+        'categoria' => $categoriaNome ?? 'Sem categoria',
+        'quantity' => $product['quantity'],
+    ]);
+}
+
             // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => array(
-                    "success" => "https://https://192.168.15.13/success",
-                    "failure" => "https://https://192.168.15.13/failure",
-                    "pending" => "https://https://192.168.15.13/pending"
+                    "success" => "https://www.seudocepedido.shop/success",
+                    "failure" => "https://www.seudocepedido.shop/failure",
+                    "pending" => "https://www.seudocepedido.shop/pending"
                 ),
-              /*  "auto_return" => "all",*/ // Usar somente com Hospedagem
+                "auto_return" => "all",
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,
+                "external_reference" => (string) $venda->id,
     
             ]);
 
@@ -120,6 +158,7 @@ class MercadoPagoController extends Controller
                     'cart_product.quantity'
                 )
                 ->get();
+
 
             return Inertia::render('Checkout/CheckoutRedirect', [
                 'init_point' => $preference->init_point,
@@ -210,7 +249,7 @@ class MercadoPagoController extends Controller
                     "failure" => route('failure'),
                     "pending" => route('pending')
                 ],
-            /*  "auto_return" => "all",*/ // Usar somente com Hospedagem
+                "auto_return" => "all",
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,

@@ -213,7 +213,7 @@ export default function ProductCreate({ categories }) {
               className="bg-white border border-pink-200 rounded-xl p-4 shadow hover:shadow-md transition"
             >
               <img
-                src={`/imagem/${product.imagem}`}
+                src={`${product.imagem}`}
                 alt={product.name}
                 className="w-full h-40 object-cover rounded-md mb-3"
               />

@@ -16,7 +16,7 @@ export default function CategoryEdit({ product, categories, onClose }) {
       setPrice(product.price);
       setDescription(product.descricao || '');
       setSelectedCategoryId(product.id_categoria);
-      setPreviewImage(`/imagem/${product.imagem}`);
+      setPreviewImage(`${product.imagem}`);
       setImageFile(null);
     }
   }, [product]);
