@@ -27,13 +27,22 @@ export default function Cart({ cartProducts }) {
   });
 
 
+useEffect(() => {
+  form.setData('products', updatedCart.map(p => ({
+    id: p.Id_Product,
+    name: p.name,
+    quantity: p.quantity,
+    price: p.price,
+    imagem: p.imagem,
+    description: p.descricao,
+    id_categoria: p.id_categoria,
+  })));
+}, [updatedCart]);
 
-  useEffect(() => {
-    form.setData('tipoPedido', tipoPedido);
-  }, [tipoPedido]);
-  updatedCart.map(p => ({
-    
-  }))
+
+useEffect(() => {
+  form.setData('tipoPedido', tipoPedido);
+}, [tipoPedido]);
   
 
   const handleSubmit = (e) => {
@@ -118,7 +127,7 @@ export default function Cart({ cartProducts }) {
               {/* Produto */}
               <div className="flex items-center gap-4">
                 <img
-                  src={`/imagem/${product.imagem}`}
+                  src={`${product.imagem}`}
                   alt={product.name}
                   className="w-20 h-20 rounded-xl object-cover"
                 />

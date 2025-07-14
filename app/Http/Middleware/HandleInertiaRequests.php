@@ -9,7 +9,7 @@ use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Banner;
 use Illuminate\Support\Facades\Crypt;
-
+use App\Models\Cart;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -34,23 +34,41 @@ class HandleInertiaRequests extends Middleware
      *
      * @return array<string, mixed>
      */
-    public function share(Request $request): array
-    {
- $info = $request->user()?->informacoesPessoais?->descriptografado();
+  
 
-        return [
-            ...parent::share($request),
-            'auth' => [
-                'user' => $request->user(),
-                'informacoes' => $info,
+public function share(Request $request): array
+{
+    $user = $request->user();
+    $info = $user?->informacoesPessoais?->descriptografado();
 
+    $cartCount = 0;
 
-            ],
-            'csrf_token' => csrf_token(),
-            'bannerss' => Banner::all()->toArray(),
-            'shop' => Shop::with('banner')->find(1), // id fixo da loja
-            'products' => Product::all()->toArray(), 
-            'categories' => Category::all()->toArray(),
-        ];
+    if ($user) {
+        $cart = \App\Models\Cart::where('id_user', $user->id)->first();
+
+        if ($cart) {
+            $cartCount = \App\Models\cart_product::where('Id_Cart', $cart->id)->sum('quantity');
+        }
     }
+
+    return [
+        ...parent::share($request),
+
+        'auth' => [
+            'user' => $user,
+            'informacoes' => $info,
+            'cart' => [
+                'totalItems' => $cartCount,
+            ],
+        ],
+
+        'csrf_token' => csrf_token(),
+        'bannerss' => Banner::all()->toArray(),
+        'shop' => Shop::with('banner')->find(1),
+        'products' => Product::all()->toArray(),
+        'categories' => Category::all()->toArray(),
+    ];
+}
+
+
 }

@@ -1,9 +1,10 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Link ,Head, router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from '@/Components/Modal'; 
+import { ShoppingCart, ReceiptText, MessagesSquare, LogOut } from 'lucide-react';
 import CreateBannerForm from '@/Pages/Banner/CreateBanner'; 
-import { FiEdit, FiPlus, FiTrash, FiFilter,  FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiShoppingCart,FiEdit, FiPlus, FiTrash, FiFilter,  FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
 export default function Dashboard({ products, categories, bannerss }) {
   const [showSelectBannerModal, setShowSelectBannerModal] = useState(false);
@@ -15,6 +16,11 @@ export default function Dashboard({ products, categories, bannerss }) {
   const [filterField, setFilterField] = useState('all');
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  const [showFloating, setShowFloating] = useState(false);
+  const [showCartNotification, setShowCartNotification] = useState(false);
+const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
+
 
   const user = usePage().props.auth.user;
   const shop = usePage().props.shop;  
@@ -27,12 +33,17 @@ export default function Dashboard({ products, categories, bannerss }) {
 
 
   useEffect(() => {
+    if (!showScrollTop) {
+    setShowCartNotification(false);
+  }
     const handleScroll = () => {
       setShowScrollTop(window.pageYOffset > 100);
+      setShowFloating(window.pageYOffset > 100);
+      
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [showScrollTop]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -43,7 +54,9 @@ export default function Dashboard({ products, categories, bannerss }) {
       preserveScroll: true,
       onSuccess: () => {
         setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionado!" }));
+        setShowCartNotification(true);
         setTimeout(() => {
+          
           setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
         }, 800);
       },
@@ -209,9 +222,26 @@ const handleRightClick = (categoryId) => {
               </div>
               <p className="mt-2 text-sm font-semibold text-gray-700">{category.name.toUpperCase()}</p>
             </div>
+            
          )
             
 })}
+{showCartNotification && (
+  <div className="fixed bottom-6 right-20 bg-pink-600 text-white rounded-full shadow-lg p-3 flex items-center justify-center z-50 animate-fade-in-out cursor-pointer"
+    title="Ver carrinho"
+  >
+    <Link href="/CarrinhoDeCompra" className="relative flex items-center justify-center">
+      <FiShoppingCart size={24} />
+      {cartTotal > 0 && (
+        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+          {cartTotal}
+        </span>
+      )}
+    </Link>
+  </div>
+)}
+
+
         </div>
 
         {/* Botão direito */}
@@ -254,7 +284,9 @@ const handleRightClick = (categoryId) => {
   }
 
   return (
+    
     <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
+      
 
       <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
         {category.name.toUpperCase()}
@@ -326,14 +358,79 @@ const handleRightClick = (categoryId) => {
       <Modal show={showCreateBannerModal} onClose={() => setShowCreateBannerModal(false)}>
         <CreateBannerForm closeModal={() => setShowCreateBannerModal(false)} />
       </Modal>
+ {showFloating && (
+  <div className="fixed bottom-20 right-6 z-50">
+    {/* Botão dos 3 pontinhos */}
+    <button
+      onClick={() => setShowFloatingMenu(prev => {
+        if(!prev) setShowCartNotification(false);
+        return !prev
+      })}
+      className="p-3 bg-white text-pink-600 border border-pink-600 rounded-full shadow-lg hover:bg-pink-100 transition"
+      title="Mais opções"
+    >
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 2a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+      </svg>
+    </button>
+
+    {/* Menu horizontal de ícones */}
+    {showFloatingMenu && (
+      
+      <div className="absolute bottom-16 right-0 transform translate-x-0 bg-white border border-gray-200 rounded-full shadow-lg px-4 py-2 flex gap-4">
+        <Link
+  href="/CarrinhoDeCompra"
+  className="relative flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+  title="Carrinho"
+>
+ <ShoppingCart className="h-6 w-6" />
+  {cartTotal > 0 && (
+    <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+      {cartTotal}
+    </span>
+  )}
+</Link>
+
+
+        <Link
+          href="/MeusPedidos"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Meus Pedidos"
+        >
+          <ReceiptText className="h-6 w-6" />
+        </Link>
+
+        <Link
+          href="/contato"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Contato"
+        >
+        <MessagesSquare className="h-5 w-5" />
+        </Link>
+
+        <Link
+          method="post"
+          href={route('logout')}
+          as="button"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Sair"
+        >
+          <LogOut className="h-6 w-6" />
+        </Link>
+      </div>
+    )}
+  </div>
+)}
 
       {showScrollTop && (
+        
         <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
         </button>
       )}
+      
     </AuthenticatedLayout>
   );
 }

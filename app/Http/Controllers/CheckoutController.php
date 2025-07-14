@@ -7,6 +7,8 @@ use App\Models\Venda;
 use App\Models\VendaProduct;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
+use App\Models\Cart;
 class CheckoutController extends Controller
 {
   public function index()
@@ -80,6 +82,88 @@ class CheckoutController extends Controller
     return Inertia::render('Admin/Vendas/VendasLayout', [
         'vendas' => $vendas,
     ]);
+}
+
+
+public function meuspedidos()
+{
+    
+
+    $user = Auth::user();
+
+    $vendas = DB::select("
+        SELECT 
+            v.id as venda_id,
+            v.status,
+            v.valor,
+            v.tipo,
+            v.created_at,
+            u.name as cliente_nome,
+            u.email as cliente_email,
+            vp.nome as produto_nome,
+            vp.preco as produto_preco,
+            vp.quantity as produto_quantidade,
+            vp.descricao as produto_descricao
+        FROM vendas v
+        JOIN venda_products vp ON v.id = vp.id_venda
+        JOIN users u ON u.id = v.id_user
+        WHERE u.id = ?
+        ORDER BY v.created_at DESC
+    ", [$user->id]);
+
+    return Inertia::render('Pedido/MeusPedidos', [
+        'vendas' => $vendas,
+    ]);
+}
+public function cancelarPedido(Request $request, $id)
+{
+    $userId = Auth::id();
+    $retornar = $request->input('retornar', false);
+    
+    DB::transaction(function () use ($id, $userId, $retornar) {
+        if($retornar){
+        // Busca os produtos da venda
+        $produtosDaVenda = DB::table('venda_products')
+            ->where('id_venda', $id)
+            ->get();
+
+        // Busca ou cria o carrinho do usuário
+        $cart = Cart::firstOrCreate(['id_user' => $userId]);
+
+        foreach ($produtosDaVenda as $produto) {
+            // Verifica se o produto já está no carrinho
+            $produtoNoCarrinho = DB::table('cart_product')
+                ->where('Id_Cart', $cart->id)
+                ->where('Id_Product', $produto->id_product)
+                ->first();
+
+            if ($produtoNoCarrinho) {
+                // Incrementa quantidade
+                DB::table('cart_product')
+                    ->where('Id_Cart', $cart->id)
+                    ->where('Id_Product', $produto->id_product)
+                    ->update([
+                        'quantity' => $produtoNoCarrinho->quantity + $produto->quantity,
+                    ]);
+            } else {
+                // Insere novo produto no carrinho
+                DB::table('cart_product')->insert([
+                    'Id_Cart' => $cart->id,
+                    'Id_Product' => $produto->id_product,
+                    'quantity' => $produto->quantity,
+                ]);
+            }
+        }
+    }
+
+        // Deleta os produtos da venda
+        DB::table('venda_products')->where('id_venda', $id)->delete();
+
+        // Deleta a venda
+        DB::table('vendas')->where('id', $id)->delete();
+    });
+
+    return redirect()->back()->with('success', 'Pedido cancelado e produtos devolvidos ao carrinho.');
 }
 
 public function success(Request $request)

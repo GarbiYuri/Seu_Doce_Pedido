@@ -124,6 +124,18 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
     Route::post('/updateC', [CartProductController::class, 'update']);
     Route::post('/deleteC', [CartProductController::class, 'destroy']);
     
+    // Rota Pedido
+      Route::get('/MeusPedidos', function () {
+        return Inertia::render('Pedido/MeusPedidos');
+    })->name('MeusPedidos');
+
+    // Rota Pedido PHP
+      Route::get('/MeusPedidos', [CheckoutController::class, 'meuspedidos']);
+
+     
+    Route::post('/meus-pedidos/{id}/cancelar', [CheckoutController::class, 'cancelarPedido']);
+
+
 
     // Rotas de perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
