@@ -14,6 +14,7 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\InformacoesPessoaisController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\VendaController;
 
 
 // Area de Testes 
@@ -103,6 +104,10 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::get('/VendasLayout', function(){
             return Inertia::render('Admin/Vendas/VendasLayout');
         })->name('VendasLayout');
+
+        Route::post('/admin/vendas/{id}/status', [VendaController::class, 'atualizarStatus'
+    ])->name('vendas.atualizarStatus');
+
 
         // Finaliza CheckifAdmin
     });
