@@ -90,7 +90,10 @@ export default function AuthenticatedLayout({ header, children }) {
                         </Link>
                         <Link href="/CarrinhoDeCompra" className="hover:text-pink-600 transition-colors duration-300">
                             CARRINHO
-                        </Link>     
+                        </Link>   
+                           <Link href="/MeusPedidos" className="hover:text-pink-600 transition-colors duration-300">
+                            Meus Pedidos
+                        </Link> 
                             </>
                         ): (
                             <>

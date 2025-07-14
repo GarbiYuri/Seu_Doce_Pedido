@@ -116,7 +116,7 @@ export default function CartWL() {
                         {/* Produto */}
                         <div className="flex items-center gap-4">
                             <img
-                                src={`/imagem/${product.imagem}`}
+                                src={`${product.imagem}`}
                                 alt={product.name}
                                 className="w-20 h-20 rounded-xl object-cover"
                             />

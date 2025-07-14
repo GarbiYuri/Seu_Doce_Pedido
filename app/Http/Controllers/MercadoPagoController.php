@@ -159,6 +159,9 @@ class MercadoPagoController extends Controller
                 )
                 ->get();
 
+            DB::table('cart_product')
+                ->where('Id_Cart', $cart->id)
+                ->delete();
 
             return Inertia::render('Checkout/CheckoutRedirect', [
                 'init_point' => $preference->init_point,
