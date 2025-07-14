@@ -10,24 +10,17 @@ export default function VendasLayout() {
   const [buscaNome, setBuscaNome] = useState('');
   const [dataSelecionada, setDataSelecionada] = useState('');
 
-  const avancarStatus = (vendaId, statusAtual) => {
-    const proximosStatus = {
-      iniciado: 'em_preparo',
-      em_preparo: 'em_entrega',
-      em_entrega: 'entregue',
-    };
-
-    const proximo = proximosStatus[statusAtual];
-    if (!proximo) return;
-
-    router.post(`/admin/vendas/${vendaId}/status`, { status: proximo });
-  };
-
-  const cancelarPedido = (vendaId) => {
-    if (confirm('Deseja realmente descartar este pedido?')) {
-      router.post(`/admin/vendas/${vendaId}/cancelar`);
+  const avancarStatus = (vendaId, novoStatus) => {
+  router.post(
+    `/admin/vendas/${vendaId}/status`,
+    { status: novoStatus },
+    {
+      preserveScroll: true,
+      preserveState: true,
+      only: ['vendas'], // opcional: limita recarregamento
     }
-  };
+  );
+};
 
   const coresStatus = {
     iniciado: 'bg-red-100 text-red-700',
@@ -43,7 +36,7 @@ export default function VendasLayout() {
 
     return vendas.filter((venda) => {
       const dataVenda = new Date(venda.created_at);
-      if (venda.status === 'iniciada') return false;
+//      if (venda.status === 'iniciado') return false;
 
       if (dataSelecionada) {
         const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
@@ -189,14 +182,24 @@ export default function VendasLayout() {
                 <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
 
-              {pedidoSelecionado.status !== 'entregue' && (
+              
                 <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                  <button
-                    onClick={() => avancarStatus(pedidoSelecionado.id, pedidoSelecionado.status)}
-                    className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full shadow font-semibold"
-                  >
-                    CONFIRMAR
-                  </button>
+                 <div className="flex gap-4 items-center mt-4">
+  <select
+    value={pedidoSelecionado.status}
+    onChange={(e) =>
+      avancarStatus(pedidoSelecionado.id, e.target.value)
+    }
+    className="border px-4 py-2 rounded"
+  >
+    <option value="iniciado">Iniciado</option>
+    <option value="em_preparo">Em Preparo</option>
+    <option value="em_entrega">Em Entrega</option>
+    <option value="entregue">Entregue</option>
+  </select>
+
+  
+</div>
 
                   {pedidoSelecionado.status !== 'pago' && (
                     <button
@@ -207,7 +210,7 @@ export default function VendasLayout() {
                     </button>
                   )}
                 </div>
-              )}
+      
             </>
           ) : (
             <p className="text-gray-500">Selecione um pedido para ver os detalhes</p>

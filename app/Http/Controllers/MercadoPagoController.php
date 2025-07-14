@@ -90,7 +90,7 @@ class MercadoPagoController extends Controller
                 // 1. Cria a venda no banco
         $venda = Venda::create([
          'id_user' => $user->id,
-         'status' => 'iniciada', // ou 'pendente'
+         'status' => 'iniciado', // ou 'pendente'
         'valor' => $total,
         'tipo' => $tipoPedido, // retirada ou entrega
         'nome' => $user->name,
