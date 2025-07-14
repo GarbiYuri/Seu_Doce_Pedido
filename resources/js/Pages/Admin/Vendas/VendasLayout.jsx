@@ -1,22 +1,15 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, usePage, router } from '@inertiajs/react';
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 
 export default function VendasLayout() {
   const { vendas } = usePage().props;
 
   const [pedidoSelecionado, setPedidoSelecionado] = useState(vendas[0] || null);
-
-  // Estado para filtro de data: 'todos', 'hoje', '7dias'
   const [filtroData, setFiltroData] = useState('todos');
-
-  // Estado para filtro por nome
   const [buscaNome, setBuscaNome] = useState('');
-
   const [dataSelecionada, setDataSelecionada] = useState('');
 
-
-  // Função para avançar status da venda (mantida)
   const avancarStatus = (vendaId, statusAtual) => {
     const proximosStatus = {
       iniciado: 'em_preparo',
@@ -27,9 +20,13 @@ export default function VendasLayout() {
     const proximo = proximosStatus[statusAtual];
     if (!proximo) return;
 
-    router.post(`/admin/vendas/${vendaId}/status`, {
-      status: proximo,
-    });
+    router.post(`/admin/vendas/${vendaId}/status`, { status: proximo });
+  };
+
+  const cancelarPedido = (vendaId) => {
+    if (confirm('Deseja realmente descartar este pedido?')) {
+      router.post(`/admin/vendas/${vendaId}/cancelar`);
+    }
   };
 
   const coresStatus = {
@@ -39,51 +36,40 @@ export default function VendasLayout() {
     entregue: 'bg-green-100 text-green-700',
   };
 
-  // Filtra vendas com base no filtro de data e busca por nome
- const vendasFiltradas = useMemo(() => {
-  const hoje = new Date();
-  const seteDiasAtras = new Date();
-  seteDiasAtras.setDate(hoje.getDate() - 7);
+  const vendasFiltradas = useMemo(() => {
+    const hoje = new Date();
+    const seteDiasAtras = new Date();
+    seteDiasAtras.setDate(hoje.getDate() - 7);
 
-  return vendas.filter((venda) => {
-    const dataVenda = new Date(venda.created_at);
+    return vendas.filter((venda) => {
+      const dataVenda = new Date(venda.created_at);
+      if (venda.status === 'iniciada') return false;
 
- 
+      if (dataSelecionada) {
+        const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
+        if (dataVendaFormatada !== dataSelecionada) return false;
+      }
 
-    // Filtro de data selecionada
-    if (dataSelecionada) {
-     const dataVendaFormatada = new Date(venda.created_at).toISOString().split('T')[0];
-if (dataVendaFormatada !== dataSelecionada) return false;
+      if (filtroData === 'hoje') {
+        if (
+          dataVenda.getDate() !== hoje.getDate() ||
+          dataVenda.getMonth() !== hoje.getMonth() ||
+          dataVenda.getFullYear() !== hoje.getFullYear()
+        ) return false;
+      } else if (filtroData === '7dias') {
+        if (dataVenda < seteDiasAtras) return false;
+      }
 
-    }
-
-    // Filtro por "hoje" ou "últimos 7 dias"
-    if (filtroData === 'hoje') {
       if (
-        dataVenda.getDate() !== hoje.getDate() ||
-        dataVenda.getMonth() !== hoje.getMonth() ||
-        dataVenda.getFullYear() !== hoje.getFullYear()
-      )
-        return false;
-    } else if (filtroData === '7dias') {
-      if (dataVenda < seteDiasAtras) return false;
-    }
+        buscaNome.trim() !== '' &&
+        !venda.nome.toLowerCase().includes(buscaNome.toLowerCase())
+      ) return false;
 
-    // Filtro por nome
-    if (
-      buscaNome.trim() !== '' &&
-      !venda.nome.toLowerCase().includes(buscaNome.toLowerCase())
-    ) {
-      return false;
-    }
+      return true;
+    });
+  }, [vendas, filtroData, buscaNome, dataSelecionada]);
 
-    return true;
-  });
-}, [vendas, filtroData, buscaNome, dataSelecionada]);
-
-
-  // Atualiza pedido selecionado se vendasFiltradas mudar
-  useState(() => {
+  useEffect(() => {
     if (vendasFiltradas.length > 0) {
       setPedidoSelecionado(vendasFiltradas[0]);
     } else {
@@ -94,59 +80,43 @@ if (dataVendaFormatada !== dataSelecionada) return false;
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-
       <h1 className="text-center text-pink-600 text-3xl font-bold mb-6">Gaby Guslafer</h1>
 
       {/* Filtros */}
       <div className="max-w-6xl mx-auto px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
-        {/* Botões de filtro de data */}
         <div className="flex gap-2">
-          <button
-            onClick={() => setFiltroData('todos')}
-            className={`px-4 py-2 rounded-full font-semibold ${
-              filtroData === 'todos' ? 'bg-pink-600 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Todos
-          </button>
-          <button
-            onClick={() => setFiltroData('hoje')}
-            className={`px-4 py-2 rounded-full font-semibold ${
-              filtroData === 'hoje' ? 'bg-pink-600 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Hoje
-          </button>
-          <button
-            onClick={() => setFiltroData('7dias')}
-            className={`px-4 py-2 rounded-full font-semibold ${
-              filtroData === '7dias' ? 'bg-pink-600 text-white' : 'bg-gray-200'
-            }`}
-          >
-            Últimos 7 dias
-          </button>
+          {['todos', 'hoje', '7dias'].map((tipo) => (
+            <button
+              key={tipo}
+              onClick={() => setFiltroData(tipo)}
+              className={`px-4 py-2 rounded-full font-semibold ${
+                filtroData === tipo ? 'bg-pink-600 text-white' : 'bg-gray-200'
+              }`}
+            >
+              {tipo === 'todos' ? 'Todos' : tipo === 'hoje' ? 'Hoje' : 'Últimos 7 dias'}
+            </button>
+          ))}
         </div>
+
         <input
-  type="date"
-  value={dataSelecionada}
-  onChange={(e) => setDataSelecionada(e.target.value)}
-  className="px-4 py-2 rounded border border-gray-300"
-/>
+          type="date"
+          value={dataSelecionada}
+          onChange={(e) => setDataSelecionada(e.target.value)}
+          className="px-4 py-2 rounded border border-gray-300 w-full sm:w-auto"
+        />
 
-
-        {/* Campo de busca por nome */}
         <input
           type="text"
           placeholder="Buscar por nome do cliente..."
           value={buscaNome}
           onChange={(e) => setBuscaNome(e.target.value)}
-          className="px-4 py-2 rounded border border-gray-300 max-w-xs w-full"
+          className="px-4 py-2 rounded border border-gray-300 w-full sm:max-w-xs"
         />
       </div>
 
-      <div className="flex gap-6 px-4 max-w-6xl mx-auto">
+      <div className="flex flex-col lg:flex-row gap-6 px-4 max-w-6xl mx-auto">
         {/* Lista lateral */}
-        <div className="w-1/3 space-y-4 max-h-[70vh] overflow-y-auto">
+        <div className="w-full lg:w-1/3 space-y-4 max-h-[70vh] overflow-y-auto">
           {vendasFiltradas.length > 0 ? (
             vendasFiltradas.map((venda) => (
               <div
@@ -164,12 +134,8 @@ if (dataVendaFormatada !== dataSelecionada) return false;
                 </div>
                 <p className="text-sm text-gray-600">
                   Pedido feito:{' '}
-                  {new Date(venda.created_at).toLocaleDateString('pt-BR', {
-                    day: '2-digit',
-                    month: '2-digit',
-                    year : 'numeric',
-                  })}{' '}
-                  — #{String(venda.id).padStart(5, '0')}
+                  {new Date(venda.created_at).toLocaleDateString('pt-BR')} — #
+                  {String(venda.id).padStart(5, '0')}
                 </p>
               </div>
             ))
@@ -181,7 +147,7 @@ if (dataVendaFormatada !== dataSelecionada) return false;
         </div>
 
         {/* Painel da direita */}
-        <div className="w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[70vh] overflow-y-auto">
+        <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[70vh] overflow-y-auto">
           {pedidoSelecionado ? (
             <>
               <h2 className="text-xl font-bold mb-2 text-pink-600">Pedido #{pedidoSelecionado.id}</h2>
@@ -194,20 +160,14 @@ if (dataVendaFormatada !== dataSelecionada) return false;
               </p>
 
               <div className="text-sm text-gray-800 space-y-1">
-                <p>
-                  <strong>Cliente:</strong> {pedidoSelecionado.nome}
-                </p>
-                <p>
-                  <strong>Contato:</strong> {pedidoSelecionado.telefone}
-                </p>
+                <p><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
+                <p><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
               </div>
 
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
                   <p className="font-semibold mt-2">Endereço de Entrega</p>
-                  <p>
-                    {pedidoSelecionado.rua}, {pedidoSelecionado.numero}
-                  </p>
+                  <p>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
                   <p>{pedidoSelecionado.endereco}</p>
                   <p>{pedidoSelecionado.cep}</p>
                 </div>
@@ -225,33 +185,29 @@ if (dataVendaFormatada !== dataSelecionada) return false;
               </div>
 
               <div className="text-sm text-gray-700">
-                <p className="mt-2">
-                  <strong>Pagamento:</strong>
-                </p>
-                <p>
-                  <strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}
-                </p>
+                <p className="mt-2"><strong>Pagamento:</strong></p>
+                <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
 
-             {pedidoSelecionado.status !== 'entregue' && (
-  <div className="flex gap-4 mt-4">
-    <button
-      onClick={() => avancarStatus(pedidoSelecionado.id, pedidoSelecionado.status)}
-      className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full shadow font-semibold"
-    >
-      CONFIRMAR
-    </button>
+              {pedidoSelecionado.status !== 'entregue' && (
+                <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                  <button
+                    onClick={() => avancarStatus(pedidoSelecionado.id, pedidoSelecionado.status)}
+                    className="bg-pink-600 hover:bg-pink-700 text-white px-4 py-2 rounded-full shadow font-semibold"
+                  >
+                    CONFIRMAR
+                  </button>
 
-    {pedidoSelecionado.status !== 'pago' && (
-      <button
-        onClick={() => cancelarPedido(pedidoSelecionado.id)}
-        className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
-      >
-        DESCARTAR
-      </button>
-    )}
-  </div>
-)}
+                  {pedidoSelecionado.status !== 'pago' && (
+                    <button
+                      onClick={() => cancelarPedido(pedidoSelecionado.id)}
+                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
+                    >
+                      DESCARTAR
+                    </button>
+                  )}
+                </div>
+              )}
             </>
           ) : (
             <p className="text-gray-500">Selecione um pedido para ver os detalhes</p>
