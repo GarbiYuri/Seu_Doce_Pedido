@@ -96,20 +96,18 @@ public function store(Request $request): RedirectResponse
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id): RedirectResponse
+public function update(Request $request, $id): RedirectResponse
 {
-    // Validação dos campos, incluindo descricao e imagem
     $request->validate([
         'name' => 'required|string|max:255',
         'price' => 'required|numeric|min:0',
         'id_categoria' => 'required|integer',
         'descricao' => 'nullable|string',
-        'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048', // valida imagem opcional
+        'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
     ]);
 
     $product = Product::findOrFail($id);
 
-    // Preparar os dados para atualizar
     $data = [
         'name' => $request->name,
         'price' => $request->price,
@@ -117,20 +115,30 @@ public function store(Request $request): RedirectResponse
         'descricao' => $request->descricao ?? $product->descricao,
     ];
 
-    // Se veio imagem no request, salva e atualiza o nome no banco
     if ($request->hasFile('imagem')) {
-        $image = $request->file('imagem');
-        $imageName = time() . '.' . $image->getClientOriginalExtension();
-        $image->move(public_path('imagem'), $imageName);
-        $data['imagem'] = $imageName;
+        $arquivo = $request->file('imagem');
+        $nomeArquivo = time() . '.' . $arquivo->getClientOriginalExtension();
 
-        // Opcional: apagar imagem antiga para não ficar lixo no servidor
-        if ($product->imagem && file_exists(public_path('imagem/' . $product->imagem))) {
-            unlink(public_path('imagem/' . $product->imagem));
-        }
+    // Deleta imagem antiga no R2 se existir
+    if ($product->imagem) {
+        // Extrai o nome do arquivo antigo da URL
+        $caminhoAntigo = str_replace('https://cdn.seudocepedido.shop/imagens/', '', $product->imagem);
+
+        // Deleta do R2
+        Storage::disk('r2_produtos')->delete('imagens/' . $caminhoAntigo);
     }
 
-    // Atualiza o produto
+        // Upload no Cloudflare R2 (disk 'r2_produtos' configurado)
+        Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
+
+        // URL pública
+        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $data['imagem'] = $urlImagem;
+
+        // (Opcional) apagar imagem antiga — só se for local. 
+        // Se for R2, precisaria de Storage::disk('r2_produtos')->delete(...)
+    }
+
     $product->update($data);
 
     return redirect()->route('Produtos')->with('success', 'Produto atualizado com sucesso!');
