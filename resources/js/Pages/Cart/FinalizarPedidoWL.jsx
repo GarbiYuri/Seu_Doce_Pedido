@@ -106,6 +106,17 @@ export default function FinalizarPedido({ tipoPedido, setTipoPedido, dadosEntreg
             />
           </div>
            <div>
+            <label className="block text-sm font-semibold">Email</label>
+            <input
+            required
+              type="text"
+              name="email"
+              value={dadosEntrega.email}
+              onChange={handleInputChange}
+              className="w-full border px-3 py-2 rounded"
+            />
+          </div>
+           <div>
             <label className="block text-sm font-semibold">CPF</label>
             <input
               type="text"
@@ -115,6 +126,7 @@ export default function FinalizarPedido({ tipoPedido, setTipoPedido, dadosEntreg
               className="w-full border px-3 py-2 rounded"
             />
           </div>
+          
 </div>
       {tipoPedido === 'entrega' && (
         <div className="mt-4 p-4 border rounded bg-gray-50 space-y-3">

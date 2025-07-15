@@ -108,6 +108,8 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::post('/admin/vendas/{id}/status', [VendaController::class, 'atualizarStatus'
     ])->name('vendas.atualizarStatus');
 
+    Route::post('/admin/vendas/{id}/cancelar', [VendaController::class, 'cancelar'
+    ])->name('vendas.cancelar');
 
         // Finaliza CheckifAdmin
     });

@@ -22,7 +22,8 @@ export default function CartWL() {
     cidade: '',
     estado: '',
     cep: '',
-    telefone: ''
+    telefone: '',
+    email: ''
   });
 
   useEffect(() => {
@@ -76,6 +77,7 @@ export default function CartWL() {
        quantity: cart[p.id],
        price: p.price,
        imagem : p.imagem,
+       id_categoria : p.id_categoria,
      })),
      tipoPedido,
      dadosEntrega,
