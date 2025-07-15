@@ -245,12 +245,53 @@ class MercadoPagoController extends Controller
 
             $client = new PreferenceClient();
 
+
+
+                // 1. Cria a venda no banco
+        $venda = Venda::create([
+         'status' => 'iniciado',
+        'valor' => $total,
+        'tipo' => $tipoPedido, // retirada ou entrega
+        'nome' => $dadosEntrega['nome'],
+        'email' => $dadosEntrega['email'],
+        'telefone' => $dadosEntrega['telefone'],
+        'endereco' => $dadosEntrega['bairro']  . ' - ' . $dadosEntrega['cidade'] ?? null,
+        'rua' => $dadosEntrega['rua'] ?? null,
+        'numero' => $dadosEntrega['numero'] ?? null,
+        'cep' => $dadosEntrega['cep'] ?? null,
+        ]);
+
+
+
+        // 2. Salva os produtos da venda
+    foreach ($products as $product) {
+    $categoriaNome = null;
+    if (!empty($product['id_categoria'])) {
+        $categoriaNome = DB::table('category')
+            ->where('id', $product['id_categoria'])
+            ->value('name'); 
+    }
+    VendaProduct::create([
+        'id_venda' => $venda->id,
+        'id_product' => $product['id'],
+        'nome' => $product['name'],
+        'preco' => $product['price'],
+        'descricao' => $product['description'] ?? '',
+        'imagem' => $product['imagem'] ?? '',
+        'id_category' => $product['id_categoria'] ?? null, // se tiver
+        'categoria' => $categoriaNome ?? 'Sem categoria',
+        'quantity' => $product['quantity'],
+    ]);
+    }
+
+
+
             // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => [
-                    "success" => route('success'),
-                    "failure" => route('failure'),
-                    "pending" => route('pending')
+                     "success" => "https://www.seudocepedido.shop/success",
+                    "failure" => "https://www.seudocepedido.shop/failure",
+                    "pending" => "https://www.seudocepedido.shop/pending"
                 ],
                 "auto_return" => "all",
                 "items" => $items,

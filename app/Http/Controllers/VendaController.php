@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Venda;
-
+use Illuminate\Support\Facades\DB;
 class VendaController extends Controller
 {
     
@@ -28,4 +28,14 @@ public function atualizarStatus(Request $request, $id)
 
     return redirect()->back()->with('success', 'Atualizado Status');
 }
+
+public function cancelar($id)
+{
+    DB::table('vendas')->where('id', $id)->delete();
+    DB::table('venda_products')->where('id_venda', $id)->delete();
+
+     return redirect()->back()->with('success', 'Venda Descartada');
 }
+
+}
+

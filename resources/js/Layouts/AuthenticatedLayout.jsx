@@ -92,7 +92,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             CARRINHO
                         </Link>   
                            <Link href="/MeusPedidos" className="hover:text-pink-600 transition-colors duration-300">
-                            Meus Pedidos
+                            MEUS PEDIDOS
                         </Link> 
                             </>
                         ): (
@@ -184,6 +184,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-pink-600">
                             CARRINHO
                         </Link>
+                           <Link href="/MeusPedidos" className="block text-gray-700 hover:text-pink-600">
+                            MEUS PEDIDOS
+                        </Link> 
                      </>
                     )  : (
                         <>

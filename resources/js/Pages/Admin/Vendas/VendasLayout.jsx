@@ -5,7 +5,7 @@ import { useState, useMemo, useEffect } from 'react';
 export default function VendasLayout() {
   const { vendas } = usePage().props;
 
-  const [pedidoSelecionado, setPedidoSelecionado] = useState(vendas[0] || null);
+  const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
   const [filtroData, setFiltroData] = useState('todos');
   const [buscaNome, setBuscaNome] = useState('');
   const [dataSelecionada, setDataSelecionada] = useState('');
@@ -17,10 +17,21 @@ export default function VendasLayout() {
     {
       preserveScroll: true,
       preserveState: true,
-      only: ['vendas'], // opcional: limita recarregamento
+      only: ['vendas'], 
     }
   );
 };
+
+const cancelarPedido = (pedidoId) => {
+  router.post(
+    `/admin/vendas/${pedidoId}/cancelar`,
+    {
+      preserveScroll: true,
+      preserveState: true,
+       only: ['vendas'],
+    }
+  );
+}
 
   const coresStatus = {
     iniciado: 'bg-red-100 text-red-700',
@@ -62,13 +73,21 @@ export default function VendasLayout() {
     });
   }, [vendas, filtroData, buscaNome, dataSelecionada]);
 
-  useEffect(() => {
-    if (vendasFiltradas.length > 0) {
-      setPedidoSelecionado(vendasFiltradas[0]);
-    } else {
-      setPedidoSelecionado(null);
-    }
-  }, [vendasFiltradas]);
+useEffect(() => {
+  if (pedidoSelecionado) {
+    localStorage.setItem('pedidoSelecionadoId', pedidoSelecionado.id);
+  }
+}, [pedidoSelecionado]);
+
+useEffect(() => {
+  const idSalvo = localStorage.getItem('pedidoSelecionadoId');
+  if (vendasFiltradas.length > 0) {
+    const vendaSalva = vendasFiltradas.find(v => String(v.id) === idSalvo);
+    setPedidoSelecionado(vendaSalva || vendasFiltradas[0]);
+  } else {
+    setPedidoSelecionado(null);
+  }
+}, [vendasFiltradas]);
 
   return (
     <AdminLayout>
@@ -201,9 +220,9 @@ export default function VendasLayout() {
   
 </div>
 
-                  {pedidoSelecionado.status !== 'pago' && (
+                 {pedidoSelecionado.status !== 'pago' && (
                     <button
-                      onClick={() => cancelarPedido(pedidoSelecionado.id)}
+                      onClick={(e) => cancelarPedido(pedidoSelecionado.id, e.target.value)}
                       className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
                     >
                       DESCARTAR
