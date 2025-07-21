@@ -9,6 +9,7 @@ export default function CategoryEdit({ product, categories, onClose }) {
   const [selectedCategoryId, setSelectedCategoryId] = useState('');
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
+const [ativo, setAtivo] = useState(false);
 
   useEffect(() => {
     if (product) {
@@ -18,6 +19,7 @@ export default function CategoryEdit({ product, categories, onClose }) {
       setSelectedCategoryId(product.id_categoria);
       setPreviewImage(`${product.imagem}`);
       setImageFile(null);
+      setAtivo(product.ativo);
     }
   }, [product]);
 
@@ -40,6 +42,7 @@ export default function CategoryEdit({ product, categories, onClose }) {
     if (imageFile) {
       formData.append('imagem', imageFile);
     }
+    formData.append('ativo', ativo ? 1 : 0);
 
     router.post(`/products/${product.id}?_method=PUT`, formData, {
       forceFormData: true,
@@ -144,6 +147,18 @@ export default function CategoryEdit({ product, categories, onClose }) {
     onChange={handleImageChange}
     className="hidden"
   />
+</div>
+<div className="flex items-center gap-2">
+  <input
+    id="ativo"
+    type="checkbox"
+    checked={ativo}
+    onChange={() => setAtivo(!ativo)}
+    className="w-5 h-5 rounded"
+  />
+  <label htmlFor="ativo" className="text-gray-700 font-medium">
+    Produto Ativo
+  </label>
 </div>
 
 

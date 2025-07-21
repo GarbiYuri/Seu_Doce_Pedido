@@ -15,6 +15,7 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\InformacoesPessoaisController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\VendaController;
+use App\Http\Controllers\PromocaoController;
 
 
 // Area de Testes 
@@ -76,8 +77,9 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         })->name('Administracao');
 
         Route::get('/Promocao', function(){
-            return Inertia::render('Admin/Promocao/index');
+            return Inertia::render('Admin/Promocao/Promocoes');
         })->name('Promocao');
+ 
 
         // Rota para os produtos
         Route::get('/Produtos', function () {
@@ -110,6 +112,22 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
 
     Route::post('/admin/vendas/{id}/cancelar', [VendaController::class, 'cancelar'
     ])->name('vendas.cancelar');
+
+    
+// Rotas de Promoção
+
+Route::resource('promocoes', PromocaoController::class);
+
+//Rotas do Banner
+
+
+Route::resource('banners', BannerController::class);
+Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('banners.destroy');
+
+//Rotas do Shop
+
+Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
+Route::post('/shop/atualizar', [ShopController::class, 'update']); // para alterar o banner
 
         // Finaliza CheckifAdmin
     });
@@ -154,16 +172,6 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
 // Finaliza EmailVerifiedAt
 });
 
-//Rotas do Banner
-
-
-Route::resource('banners', BannerController::class);
-Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('banners.destroy');
-
-//Rotas do Shop
-
-Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
-Route::post('/shop/atualizar', [ShopController::class, 'update']); // para alterar o banner
 
 
 Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');

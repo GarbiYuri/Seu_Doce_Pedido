@@ -66,8 +66,8 @@ public function share(Request $request): array
         'bannerss' => Banner::all()->toArray(),
         'shop' => Shop::with('banner')->find(1),
         'lojaAberta' => Shop::find(1)->loja_aberta,
-        'products' => Product::all()->toArray(),
-        'categories' => Category::all()->toArray(),
+        'products' => Product::where('ativo', true)->get()->toArray(),
+        'categories' => Category::where('ativo', true)->get()->toArray(),
     ];
 }
 

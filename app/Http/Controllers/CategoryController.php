@@ -77,6 +77,7 @@ class CategoryController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'ativo' => 'nullable|boolean',
         ]);
         $categoria = Category::findOrFail($id);
         $imagemNome = null;
@@ -92,10 +93,12 @@ class CategoryController extends Controller
         $categoria->update([
             'name' => $request->name,
             'imagem' => $imagemNome,
+            'ativo' => $request->ativo,
         ]);
         }else{
              $categoria->update([
             'name' => $request->name,
+            'ativo' => $request->ativo,
         ]);
         }    
         

@@ -7,6 +7,8 @@ export default function CategoryEdit({ category }) {
   const [name, setName] = useState(category.name);
   const [imageFile, setImageFile] = useState(null);
   const [previewImage, setPreviewImage] = useState('');
+  const [ativo, setAtivo] = useState(category.ativo);
+
 
   // Carregar imagem atual ao iniciar
   useEffect(() => {
@@ -32,6 +34,8 @@ export default function CategoryEdit({ category }) {
     if (imageFile) {
       formData.append('imagem', imageFile);
     }
+    formData.append('ativo', ativo ? 1 : 0);
+
 
     router.post(`/categories/${category.id}?_method=PUT`, formData, {
       forceFormData: true,
@@ -120,6 +124,18 @@ export default function CategoryEdit({ category }) {
     onChange={handleImageChange}
     className="hidden"
   />
+</div>
+<div className="mb-4 flex items-center gap-2">
+  <input
+    id="ativo"
+    type="checkbox"
+    checked={ativo}
+    onChange={() => setAtivo(!ativo)}
+    className="w-5 h-5 rounded"
+  />
+  <label htmlFor="ativo" className="text-pink-700 font-semibold select-none">
+    Categoria ativa
+  </label>
 </div>
 
 
