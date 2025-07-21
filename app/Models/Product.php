@@ -15,6 +15,7 @@ class Product extends Model
         'name',
         'price',
         'descricao',
+        'ativo',
         'id_categoria',
         'imagem'
     ];

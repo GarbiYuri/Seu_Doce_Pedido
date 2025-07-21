@@ -104,6 +104,7 @@ public function update(Request $request, $id): RedirectResponse
         'id_categoria' => 'required|integer',
         'descricao' => 'nullable|string',
         'imagem' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+        'ativo' => 'nullable|boolean',
     ]);
 
     $product = Product::findOrFail($id);
@@ -113,6 +114,7 @@ public function update(Request $request, $id): RedirectResponse
         'price' => $request->price,
         'id_categoria' => $request->id_categoria,
         'descricao' => $request->descricao ?? $product->descricao,
+        'ativo' => $request->ativo ?? $product->ativo,
     ];
 
     if ($request->hasFile('imagem')) {

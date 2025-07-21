@@ -15,6 +15,7 @@ class Category extends Model
     // Defina os campos que podem ser preenchidos (Mass Assignment)
     protected $fillable = [
         'name',
-        'imagem'
+        'imagem',
+        'ativo'
     ];
 }

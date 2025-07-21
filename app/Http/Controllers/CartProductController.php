@@ -19,6 +19,18 @@ class CartProductController extends Controller
     {
         $userId = auth()->user()->id;  // Obtendo o id do usuário logado
       
+         DB::table('cart_product')
+    ->join('product', 'cart_product.Id_Product', '=', 'product.id')
+    ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id')
+    ->join('category', 'product.id_categoria', '=', 'category.id')
+    ->where('cart.Id_User', $userId)
+    ->where(function ($query) {
+        $query->where('product.ativo', 0)
+              ->orWhere('category.ativo', 0);
+    })
+    ->delete();
+
+
          // Realiza o INNER JOIN entre a tabela cart_product, cart e product
     $cartProducts = DB::table('cart_product')
     ->join('product', 'cart_product.Id_Product', '=', 'product.id')

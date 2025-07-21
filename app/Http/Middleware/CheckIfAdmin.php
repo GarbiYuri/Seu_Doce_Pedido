@@ -2,6 +2,8 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Product;
+use App\Models\Promocao;
 use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -22,13 +24,17 @@ class CheckIfAdmin
             return abort(403, 'Acesso negado.');
         }
         $categories = Category::all(); // Busca Todas as Categorias
+        $products = Product::all(); // Busca Todas as Categorias
+        $promocoes = Promocao::all();
         $usuarios = User::paginate(5); // Busca todos os usuários
         $shop = Shop::first();
         // Compartilha os dados com todas as páginas do Inertia
          Inertia::share([
+            'products' => $products,
             'categories' => $categories,
             'usuarios' => $usuarios,
-            'shops' => $shop
+            'shops' => $shop,
+            'promocoes' => $promocoes,
         ]);
         
     
