@@ -4,8 +4,13 @@ import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useState } from 'react';
 
 export default function DashboardAdmin() {
-  const { auth, usuarios } = usePage().props;
+  const { auth, usuarios, shops } = usePage().props;
   const user = auth.user;
+  
+  const [horaAbertura, setHoraAbertura] = useState(shops.hora_abertura );
+  const [horaFechamento, setHoraFechamento] = useState(shops.hora_fechamento );
+  const [lojaAberta, setLojaAberta] = useState(Boolean(shops.loja_aberta));
+
 
   const [search, setSearch] = useState('');
 
@@ -13,6 +18,37 @@ export default function DashboardAdmin() {
   const toggleAdmin = (id) => {
     router.post(`/admin/toggle/${id}`);
   };
+
+    // Função para alternar a loja aberta/fechada
+  const toggleLojaAberta = () => {
+    const novoStatus = !lojaAberta;
+    router.post('/shop/atualizar', { loja_aberta: novoStatus }, {
+      onSuccess: () => setLojaAberta(novoStatus)
+    });
+  };
+
+  // Função para atualizar horários de abertura e fechamento
+  const atualizarHorario = (tipo, valor) => {
+    if (tipo === 'abertura') setHoraAbertura(valor);
+    else if (tipo === 'fechamento') setHoraFechamento(valor);
+  };
+
+  const salvarHorarios = () => {
+  router.post('/shop/atualizar', {
+    hora_abertura: horaAbertura,
+    hora_fechamento: horaFechamento,
+  }, {
+    preserveScroll: true, // mantém rolagem da página
+    onSuccess: () => {
+      alert('Horários atualizados com sucesso!');
+      // ou use um toast bonito aqui, se tiver biblioteca
+    },
+    onError: (errors) => {
+      alert('Erro ao salvar. Verifique os campos.');
+      console.log(errors);
+    },
+  });
+};
 
   // Filtra os usuários da página atual baseado no input de pesquisa
   const filteredUsers = usuarios.data.filter((usuario) => {
@@ -23,13 +59,60 @@ export default function DashboardAdmin() {
     );
   });
 
-  return (
+   return (
     <AdminLayout>
       <Head title="Administração" />
 
-      <div className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-2xl">
+      <section className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-2xl space-y-8">
+        <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">Controle da Loja</h1>
+
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div>
+            <p><strong>Loja aberta?</strong> {lojaAberta ? 'Sim' : 'Não'}</p>
+            <button
+              onClick={toggleLojaAberta}
+              className={`mt-2 px-6 py-2 rounded-full font-semibold text-white ${
+                lojaAberta ? 'bg-red-600 hover:bg-red-700' : 'bg-green-600 hover:bg-green-700'
+              }`}
+            >
+              {lojaAberta ? 'Fechar Loja' : 'Abrir Loja'}
+            </button>
+          </div>
+
+          <div className="flex flex-col sm:flex-row gap-4 items-center">
+            <div>
+              <label className="block font-semibold mb-1">Hora de abertura:</label>
+              <input
+                type="time"
+                value={horaAbertura}
+                onChange={(e) => atualizarHorario('abertura', e.target.value)}
+                className="border px-3 py-2 rounded"
+              />
+            </div>
+
+            <div>
+              <label className="block font-semibold mb-1">Hora de fechamento:</label>
+              <input
+                type="time"
+                value={horaFechamento}
+                onChange={(e) => atualizarHorario('fechamento', e.target.value)}
+                className="border px-3 py-2 rounded"
+              />
+            </div>
+
+            <button
+              onClick={salvarHorarios}
+              className="bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-full font-semibold"
+            >
+              Salvar Horários
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <section className="max-w-5xl mx-auto mt-12 p-6 bg-white rounded-3xl shadow-2xl">
         <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">
-          Lista de Usuários
+          Administração de Usuários
         </h1>
 
         {/* Barra de pesquisa */}
@@ -135,7 +218,7 @@ export default function DashboardAdmin() {
             </a>
           )}
         </div>
-      </div>
+      </section>
     </AdminLayout>
-  );
+  ); 
 }

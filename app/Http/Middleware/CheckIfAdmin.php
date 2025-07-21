@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Category;
+use App\Models\Shop;
 
 // Isso é a MiddleWare do Admin, sempre que um Admin estiver em sua tela, passa por aqui
 //Confie em mim... É Seguro (Sem SQL Injection :/ )
@@ -22,10 +23,12 @@ class CheckIfAdmin
         }
         $categories = Category::all(); // Busca Todas as Categorias
         $usuarios = User::paginate(5); // Busca todos os usuários
+        $shop = Shop::first();
         // Compartilha os dados com todas as páginas do Inertia
          Inertia::share([
             'categories' => $categories,
-            'usuarios' => $usuarios
+            'usuarios' => $usuarios,
+            'shops' => $shop
         ]);
         
     

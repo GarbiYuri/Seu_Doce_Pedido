@@ -6,6 +6,7 @@ import { Trash2, Minus, Plus } from 'lucide-react';
 
 export default function Cart({ cartProducts }) {
   const informacoes = usePage().props.auth.informacoes;
+  const shop = usePage().props.shop; 
   const [updatedCart, setUpdatedCart] = useState(cartProducts);
   const [tipoPedido, setTipoPedido] = useState('retirada');
 
@@ -26,6 +27,7 @@ export default function Cart({ cartProducts }) {
     tipoPedido,
   });
 
+ 
 
 useEffect(() => {
   form.setData('products', updatedCart.map(p => ({
@@ -116,6 +118,7 @@ useEffect(() => {
     <AuthenticatedLayout>
       <Head title="Carrinho de Compras" />
 
+
       {updatedCart.length > 0 ? (
         <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
           {updatedCart.map((product) => (
@@ -183,14 +186,29 @@ useEffect(() => {
             <div>
            <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
 
-          <div className="flex flex-col gap-3 mt-6">
-            <button
-              type="submit"
-              className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
-            >
-              Continuar Compra
-            </button>
-          </div>
+         {shop.loja_aberta ? (
+  <div className="flex flex-col gap-3 mt-6">
+    <button
+      type="submit"
+      className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
+    >
+      Continuar Compra
+    </button>
+  </div>
+) : (
+  <div className="flex flex-col gap-3 mt-6">
+    <p className="text-red-600 font-semibold text-sm">
+      Loja fechada no momento. Não é possível continuar a compra.
+    </p>
+    <button
+      disabled
+      className="bg-gray-400 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 opacity-50 cursor-not-allowed"
+    >
+      Loja Fechada
+    </button>
+  </div>
+)}
+          
             
           </form>
             </div>
@@ -199,15 +217,20 @@ useEffect(() => {
                <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
 
           <div className="flex flex-col gap-3 mt-6">
+             
+      
             <button
   type="submit"
   disabled={botao} // Desativa quando "botao" é true
   className={`bg-pink-500 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 transition 
     ${botao ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-600'}
+  
   `}
+ 
 >
   Continuar Compra
 </button>
+     
           </div>
             
           </form>

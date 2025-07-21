@@ -7,11 +7,14 @@ import FinalizarPedidoWL from './FinalizarPedidoWL';
 export default function CartWL() {
     const { cart = {} } = usePage().props;
     const { products = [] } = usePage().props;
+    const shop = usePage().props.shop;
 
     const cartProducts = products.filter(product => cart[product.id]);
     const total = cartProducts.reduce((sum, product) => sum + (product.price * cart[product.id]), 0);
     const [updatedCart, setUpdatedCart] = useState(cartProducts);
     const [tipoPedido, setTipoPedido] = useState('retirada');
+
+     
 
       const [dadosEntrega, setDadosEntrega] = useState({
     nome: '',
@@ -177,7 +180,8 @@ export default function CartWL() {
               setDadosEntrega={setDadosEntrega}
             />
 
-            <div className="flex flex-col gap-3 mt-6">
+       {shop.loja_aberta ? (
+  <div className="flex flex-col gap-3 mt-6">
               <button
                 type="submit"
                 disabled={form.processing}
@@ -186,6 +190,20 @@ export default function CartWL() {
                 Continuar Compra
               </button>
             </div>
+) : (
+  <div className="flex flex-col gap-3 mt-6">
+    <p className="text-red-600 font-semibold text-sm">
+      Loja fechada no momento. Não é possível continuar a compra.
+    </p>
+    <button
+      disabled
+      className="bg-gray-400 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 opacity-50 cursor-not-allowed"
+    >
+      Loja Fechada
+    </button>
+  </div>
+)}
+           
           </form>
             </div>
 

@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('descricao');
             $table->string('imagem');
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
 
             $table->foreign('id_categoria')->references('id')->on('category')->onDelete('cascade');
