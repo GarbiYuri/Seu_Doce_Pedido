@@ -18,18 +18,19 @@ const abrirModalCancelar = (vendaId) => {
 };
 
 const cancelarComRetorno = () => {
-  router.post(`/meus-pedidos/${pedidoParaCancelar}/cancelar`, {
-    preserveScroll: true,
-    data: { retornar: true } // passa como payload
-  });
+  router.post(
+    `/meus-pedidos/${pedidoParaCancelar}/cancelar`,
+    { retornar: true }, 
+    { preserveScroll: true }
+  );
   setShowModal(false);
 };
 
 const cancelarSemRetorno = () => {
-  router.post(`/meus-pedidos/${pedidoParaCancelar}/cancelar`, {
-    preserveScroll: true,
-    data: { retornar: false }
-  });
+  router.post(`/meus-pedidos/${pedidoParaCancelar}/cancelar`, 
+    { retornar: false },
+    {preserveScroll: true}
+  );
   setShowModal(false);
 };
 

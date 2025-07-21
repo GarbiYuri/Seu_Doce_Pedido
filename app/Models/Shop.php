@@ -10,11 +10,14 @@ class Shop extends Model
 {
      use HasFactory;
 
-    protected $table = 'shop'; // Nome da tabela no banco de dados
+    protected $table = 'shop'; 
 
      protected $fillable = [
     
         'id_banner',
+        'hora_abertura',
+        'hora_fechamento',
+        'loja_aberta',
         
     ];
      /**

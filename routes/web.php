@@ -163,7 +163,8 @@ Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('bann
 //Rotas do Shop
 
 Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
-Route::post('/shop/banner', [ShopController::class, 'update']); // para alterar o banner
+Route::post('/shop/atualizar', [ShopController::class, 'update']); // para alterar o banner
+
 
 Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');
 Route::match(['get', 'post'], '/pagarWL', [MercadoPagoController::class, 'pagarWL'])->name('pagarWL');

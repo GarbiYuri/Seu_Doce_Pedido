@@ -65,6 +65,7 @@ public function share(Request $request): array
         'csrf_token' => csrf_token(),
         'bannerss' => Banner::all()->toArray(),
         'shop' => Shop::with('banner')->find(1),
+        'lojaAberta' => Shop::find(1)->loja_aberta,
         'products' => Product::all()->toArray(),
         'categories' => Category::all()->toArray(),
     ];

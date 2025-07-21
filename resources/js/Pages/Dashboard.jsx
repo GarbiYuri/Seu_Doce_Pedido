@@ -19,6 +19,7 @@ export default function Dashboard({ products, categories, bannerss }) {
   const [showFloatingMenu, setShowFloatingMenu] = useState(false);
   const [showFloating, setShowFloating] = useState(false);
   const [showCartNotification, setShowCartNotification] = useState(false);
+  
 const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
 
 
@@ -27,8 +28,6 @@ const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
   const banner = shop.banner;
   const Inertia = router;
   
-
-
 
 
 
@@ -74,7 +73,7 @@ const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
   const updateBanner = async () => {
     const formData = new FormData();
     formData.append('id_banner', selectedBannerId);
-    router.post('/shop/banner', formData, { forceFormData: true });
+    router.post('/shop/atualizar', formData, { forceFormData: true });
     Inertia.reload();
   };
 
@@ -127,6 +126,31 @@ const handleRightClick = (categoryId) => {
     <AuthenticatedLayout>
       <Head title="DashBoard" />
 
+      <div className="flex justify-center mt-6 mb-10">
+  <div className={`inline-flex items-center gap-3 px-5 py-3 rounded-full font-semibold text-white
+    ${shop.loja_aberta ? 'bg-green-600' : 'bg-red-600'}
+    shadow-lg transition-colors duration-300`}
+    title={`A loja está atualmente ${shop.loja_aberta ? 'ABERTA' : 'FECHADA'}`}
+  >
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      className="h-6 w-6" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor" 
+      strokeWidth={2}
+    >
+      {shop.loja_aberta ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /> // 
+      )}
+    </svg>
+    <span className="uppercase tracking-wide">
+      Loja {shop.loja_aberta ? 'Aberta' : 'Fechada'}
+    </span>
+  </div>
+</div>
       <div className="relative w-full mt-10">
         {banner ? (
           <>

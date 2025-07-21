@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('imagem');
+            $table->boolean('ativo')->default(true);
             $table->timestamps();
         });
     }

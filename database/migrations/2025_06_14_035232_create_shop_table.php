@@ -16,6 +16,10 @@ return new class extends Migration
             $table->unsignedBigInteger('id_banner');
             $table->timestamps();
 
+            $table->time('hora_abertura')->nullable();
+            $table->time('hora_fechamento')->nullable();
+
+            $table->boolean('loja_aberta')->default(false);
 
             $table->foreign('id_banner')->references('id')->on('banner')->onDelete('cascade');
         
