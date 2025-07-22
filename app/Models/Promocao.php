@@ -18,6 +18,7 @@ class Promocao extends Model
         'price',
         'quantidade',
         'estoque',
+        'ativo',
     ];
 
     // Relacionamento: promoção pertence a um produto

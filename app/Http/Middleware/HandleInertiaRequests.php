@@ -2,14 +2,14 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Promocao;
 use Illuminate\Http\Request;
 use Inertia\Middleware;
 use App\Models\Product;
 use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Banner;
-use Illuminate\Support\Facades\Crypt;
-use App\Models\Cart;
+
 
 class HandleInertiaRequests extends Middleware
 {
@@ -68,6 +68,7 @@ public function share(Request $request): array
         'lojaAberta' => Shop::find(1)->loja_aberta,
         'products' => Product::where('ativo', true)->get()->toArray(),
         'categories' => Category::where('ativo', true)->get()->toArray(),
+        'promocao' => Promocao::where('ativo', true)->get()->toArray(),
     ];
 }
 

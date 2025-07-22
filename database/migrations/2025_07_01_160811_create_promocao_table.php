@@ -20,6 +20,8 @@ return new class extends Migration
             $table->decimal('price');
             $table->integer('quantidade')->nullable();
             $table->integer('estoque')->nullable();
+            $table->boolean('ativo')->default(true);
+
 
 
             $table->foreign('Id_Product')->references('id')->on('product')->onDelete('cascade');
