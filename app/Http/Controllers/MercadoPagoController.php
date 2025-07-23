@@ -23,7 +23,12 @@ class MercadoPagoController extends Controller
  
             $user = auth()->user();
 
-            MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+            $accessToken = config('services.mercadopago.token');
+
+            if (!$accessToken) {
+            abort(500, 'Token do Mercado Pago não configurado.');
+            }
+            MercadoPagoConfig::setAccessToken($accessToken);
 
             $informacoes  = $request->input('informacoes');
             $products = $request->input('products');
@@ -185,7 +190,12 @@ class MercadoPagoController extends Controller
     if ($request->method() === "POST") {
         try {
 
-            MercadoPagoConfig::setAccessToken(env('MP_ACCESS_TOKEN'));
+            $accessToken = config('services.mercadopago.token');
+
+            if (!$accessToken) {
+            abort(500, 'Token do Mercado Pago não configurado.');
+            }
+            MercadoPagoConfig::setAccessToken($accessToken);
 
             $products = $request->input('products');
             $tipoPedido = $request->input('tipoPedido', 'retirada'); 
