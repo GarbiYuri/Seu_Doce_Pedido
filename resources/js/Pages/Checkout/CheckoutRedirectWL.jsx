@@ -27,7 +27,7 @@ export default function CheckoutRedirect() {
                 <li key={item.id} className="flex items-center justify-between border-b py-3">
                   
                   <div className="flex items-center gap-4">
-                    <img src={`/imagem/${item.imagem}`} alt={item.name} className="w-16 h-16 object-contain rounded" />
+                    <img src={`${item.imagem}`} alt={item.name} className="w-16 h-16 object-contain rounded" />
                     
                     <div>
                       <h2 className="font-semibold text-gray-800">{item.name}</h2>
