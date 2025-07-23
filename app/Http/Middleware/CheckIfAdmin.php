@@ -25,7 +25,7 @@ class CheckIfAdmin
         }
         $categories = Category::all(); // Busca Todas as Categorias
         $products = Product::all(); // Busca Todas as Categorias
-        $promocoes = Promocao::all();
+        $promocoes = Promocao::with('product')->get();
         $usuarios = User::paginate(5); // Busca todos os usuários
         $shop = Shop::first();
         // Compartilha os dados com todas as páginas do Inertia

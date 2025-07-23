@@ -94,7 +94,10 @@ useEffect(() => {
         });
     };
 
-    const total = updatedCart.reduce((sum, product) => sum + (product.price * product.quantity), 0);
+    const total = updatedCart.reduce((sum, product) => {
+  const price = product.promoPrice ?? product.price;
+  return sum + (price * product.quantity);
+}, 0);
    const updateQuantity = (productId, quantity) => {
         
         router.post("/updateC", {
@@ -137,8 +140,20 @@ useEffect(() => {
                 <div>
                   <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
                   <p className="text-xs text-gray-500">{product.descricao}</p>
-                  <p className="text-md font-bold text-gray-900">R$ {product.price}</p>
-            
+                  {product.isPromo ? (
+  <p className="text-md font-bold text-gray-900">
+    <span className="line-through text-gray-500 mr-2">
+      R$ {Number(product.price).toFixed(2).replace('.', ',')}
+    </span>
+    <span className="text-pink-600">
+      R$ {Number(product.promoPrice).toFixed(2).replace('.', ',')}
+    </span>
+  </p>
+) : (
+  <p className="text-md font-bold text-gray-900">
+    R$ {Number(product.price).toFixed(2).replace('.', ',')}
+  </p>
+)}
                 </div>
               </div>
 

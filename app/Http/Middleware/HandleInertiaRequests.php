@@ -68,7 +68,9 @@ public function share(Request $request): array
         'lojaAberta' => Shop::find(1)->loja_aberta,
         'products' => Product::where('ativo', true)->get()->toArray(),
         'categories' => Category::where('ativo', true)->get()->toArray(),
-        'promocao' => Promocao::where('ativo', true)->get()->toArray(),
+        'promocoes' => Promocao::with('product')->where('ativo', true)->get()->toArray(),
+
+       
     ];
 }
 

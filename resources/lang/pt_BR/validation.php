@@ -12,6 +12,7 @@ return [
     'letters' => 'A senha deve conter pelo menos uma letra.',
     'symbols' => 'A senha deve conter pelo menos um símbolo. Ex: (!, @, #, $)',
     'numbers' => 'A senha deve conter pelo menos um número.',
-    'uncompromised' => 'A senha fornecida apareceu em um vazamento de dados. Por favor, escolha outra.',
+    'uncompromised' => 'A senha fornecida apareceu em um vazamento de dados. Por favor, escolha outra.', 
 ],
+'required' => 'O Campo :attribute deve ser preenchido',
 ];

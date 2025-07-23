@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use App\Models\Promocao;
 use App\Models\Category;
 use Inertia\Inertia;
 use Inertia\Response;
@@ -140,6 +141,11 @@ public function update(Request $request, $id): RedirectResponse
         // (Opcional) apagar imagem antiga — só se for local. 
         // Se for R2, precisaria de Storage::disk('r2_produtos')->delete(...)
     }
+
+    if($request->ativo){
+        Promocao::where('Id_Product', $id)->update(['ativo' => false]);
+    }
+
 
     $product->update($data);
 

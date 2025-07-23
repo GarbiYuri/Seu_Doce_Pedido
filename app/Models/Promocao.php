@@ -12,6 +12,7 @@ class Promocao extends Model
     protected $table = 'promocao';
 
     protected $fillable = [
+        'nome',
         'Id_Product',
         'imagem',
         'descricao',

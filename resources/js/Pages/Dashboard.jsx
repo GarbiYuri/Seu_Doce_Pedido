@@ -6,7 +6,7 @@ import { ShoppingCart, ReceiptText, MessagesSquare, LogOut } from 'lucide-react'
 import CreateBannerForm from '@/Pages/Banner/CreateBanner'; 
 import { FiShoppingCart,FiEdit, FiPlus, FiTrash, FiFilter,  FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-export default function Dashboard({ products, categories, bannerss }) {
+export default function Dashboard({ products, categories, bannerss, promocoes }) {
   const [showSelectBannerModal, setShowSelectBannerModal] = useState(false);
   const [showCreateBannerModal, setShowCreateBannerModal] = useState(false);
   const [buttonTexts, setButtonTexts] = useState({});
@@ -48,8 +48,14 @@ const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addToCart = (Id_Product) => {
-    router.post("/cart/add", { Id_Product },  {
+  const addToCart = (Id_Product, isPromo, price, promoId, quantidade) => {
+    router.post("/cart/add", {
+    product_id: Id_Product,
+    is_promo: isPromo,
+    price: price,
+    promo_id: promoId,
+    quantidade: quantidade,
+    },  {
       preserveScroll: true,
       onSuccess: () => {
         setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionado!" }));
@@ -200,6 +206,117 @@ const handleRightClick = (categoryId) => {
           </div>
         )}
       </div>
+{promocoes.length > 0 && (
+  <div className="w-full px-4 md:px-10 mt-10">
+    <h2 className="text-center text-3xl font-bold text-pink-700 mb-8">
+      PROMOÇÕES
+    </h2>
+
+    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      {promocoes.map((promo) => {
+        const product = promo.product;
+        const precoOriginal = product?.price || null;
+        const precoPromo = parseFloat(promo.price);
+        const unidade = (precoPromo / promo.quantidade);
+        const porcentagem = precoOriginal
+          ? Math.round(((precoOriginal - precoPromo / promo.quantidade) / precoOriginal) * 100)
+          : null;
+
+        return (
+          <div
+            key={promo.id}
+            className="flex flex-col justify-between bg-white rounded-2xl shadow-md p-4 transition-transform hover:scale-[1.02] h-[480px]"
+          >
+            <div>
+              <div className="relative w-full h-40 mb-4">
+                <img
+                  src={product?.imagem || promo.imagem}
+                  alt="Promoção"
+                  className="w-full h-full object-contain rounded-md"
+                />
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow-md font-semibold">
+                  OFERTA
+                </div>
+              </div>
+
+              <h3 className="text-lg font-bold text-gray-800 mb-1 text-center truncate">
+                {product?.name || promo.nome}
+                
+              </h3>
+
+              <p className="text-sm text-gray-500 mb-2 text-center line-clamp-2 h-[2.8rem]">
+                {product?.descricao || promo.descricao}
+              </p>
+
+              <div className="text-center text-sm text-gray-700 mb-2">
+                {promo.quantidade} un. por:
+              </div>
+
+              <div className="flex justify-center items-baseline gap-2 mb-1">
+                {precoOriginal && (
+                  <span className="text-sm text-gray-400 line-through">
+                    R${precoOriginal.replace('.', ',')}
+                  </span>
+                )}
+                <span className="text-xl font-bold text-pink-600">
+                  R${precoPromo.toFixed(2).replace('.', ',')}
+                </span>
+                
+                 
+              </div>
+               <div className="flex flex-col items-center mb-2">
+  <p className="text-sm text-gray-600">Preço unitário</p>
+  <span className="text-xl font-extrabold text-pink-600 tracking-tight">
+    R$ {unidade.toFixed(2).replace('.', ',')}
+  </span>
+</div>
+
+              
+
+              {porcentagem && (
+                <div className="text-center text-xs text-green-600 font-semibold mb-2">
+                  ECONOMIZE {porcentagem}%
+                </div>
+              )}
+
+              {promo.estoque && (
+              <div className="text-sm text-gray-600 text-center mb-2">
+                Estoque: <span className="font-bold">{promo.estoque}</span>
+              </div>
+              )}
+             
+            </div>
+
+            <div className="mt-auto pt-3">
+              <button
+                className={`w-full py-2 rounded-full font-semibold text-white transition-colors duration-300 ${
+                  buttonTexts[promo.Id_Product] === 'Adicionado!'
+                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
+                    : 'bg-pink-600 hover:bg-pink-700'
+                }`}
+               onClick={() =>
+            addToCart(
+            promo.Id_Product,
+            true,
+            promo.price,
+            promo.id,
+            promo.quantidade,
+            )
+}
+                disabled={buttonTexts[promo.Id_Product] === 'Adicionado!'}
+              >
+                {buttonTexts[promo.Id_Product] || 'Adicionar ao carrinho'}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
+
   <div className="relative w-full">
       <h2 className="text-center text-xl font-bold text-gray-800 mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
 

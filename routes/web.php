@@ -76,9 +76,15 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
             return Inertia::render('Admin/DashboardAdmin');
         })->name('Administracao');
 
+        //Rota Promoção
+
         Route::get('/Promocao', function(){
             return Inertia::render('Admin/Promocao/Promocoes');
         })->name('Promocao');
+
+        Route::get('/promocoes/{id}/edit', [PromocaoController::class, 'edit'])
+        ->name('promocoes.edit');
+
  
 
         // Rota para os produtos

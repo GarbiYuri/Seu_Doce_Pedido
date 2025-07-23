@@ -13,7 +13,10 @@ class cart_product extends Model
     protected $fillable = [
         'Id_Cart',
         'Id_Product',
-        'quantity'
+        'quantity',
+        'promo',
+        'price',
+        'Id_Promo'
     ];
 
      // Relacionamento com a tabela de usuários (caso aplicável)
