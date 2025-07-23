@@ -3,6 +3,8 @@ import { router } from '@inertiajs/react';
 import { FiArrowLeft, FiFolderPlus } from 'react-icons/fi';
 
 export default function PromocaoEdit({ promocao, products }) {
+  const [ativo, setAtivo] = useState(false);
+  
   const [formData, setFormData] = useState({
     Id_Product: promocao.Id_Product || '',
     descricao: promocao.descricao || '',
@@ -15,8 +17,15 @@ export default function PromocaoEdit({ promocao, products }) {
   const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
+    if (promocao) {
+      
+      setAtivo(promocao.ativo);
+    }
+  }, [promocao]);
+
+  useEffect(() => {
     if (promocao.imagem) {
-      setPreviewImage(`/storage/${promocao.imagem}`);
+      setPreviewImage(`${promocao.imagem}`);
     }
   }, [promocao]);
 
@@ -38,6 +47,7 @@ export default function PromocaoEdit({ promocao, products }) {
 
     for (const key in formData) {
       if (formData[key] !== null) {
+        data.append('ativo', ativo ? 1 : 0);
         data.append(key, formData[key]);
       }
     }
@@ -152,6 +162,19 @@ export default function PromocaoEdit({ promocao, products }) {
               {formData.imagem?.name || 'Nenhuma imagem nova selecionada'}
             </span>
           </div>
+
+          <div className="flex items-center gap-2">
+    <input
+    id="ativo"
+    type="checkbox"
+    checked={ativo}
+    onChange={() => setAtivo(!ativo)}
+    className="w-5 h-5 rounded"
+    />
+    <label htmlFor="ativo" className="text-gray-700 font-medium">
+     Produto Ativo
+    </label>
+      </div>
 
           <input
             id="imagem"

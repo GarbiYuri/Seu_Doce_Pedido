@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('Id_Product')->nullable();
+            $table->string('nome')->nullable();
             $table->string('imagem')->nullable();
             $table->string('descricao')->nullable();
             $table->decimal('price');

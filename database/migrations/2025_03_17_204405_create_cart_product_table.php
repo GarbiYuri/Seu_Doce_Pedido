@@ -15,12 +15,16 @@ return new class extends Migration
             $table->id();
             $table->timestamps();
             $table->unsignedBigInteger('Id_Cart');
-            $table->unsignedBigInteger('Id_Product');
+            $table->unsignedBigInteger('Id_Product')->nullable();
+            $table->decimal('preco')->nullable();
+            $table->boolean('promo')->default(false);
+            $table->unsignedBigInteger('Id_Promo')->nullable();
             $table->integer('quantity');
 
 
             $table->foreign('Id_Cart')->references('id')->on('cart')->onDelete('cascade');
             $table->foreign('Id_Product')->references('id')->on('product')->onDelete('cascade');
+            $table->foreign('Id_Promo')->references('id')->on('promocao')->onDelete('cascade');
         });
     }
 

@@ -5,6 +5,7 @@ import { FiFolderPlus } from 'react-icons/fi';
 export default function PromocaoCreate({ products }) {
   const [formData, setFormData] = useState({
     Id_Product: '',
+    nome: '',
     descricao: '',
     price: '',
     quantidade: '',
@@ -35,6 +36,7 @@ export default function PromocaoCreate({ products }) {
       forceFormData: true,
       onSuccess: () => setFormData({
         Id_Product: '',
+        nome: '',
         descricao: '',
         price: '',
         quantidade: '',
@@ -69,6 +71,18 @@ export default function PromocaoCreate({ products }) {
         </select>
       </div>
 
+       <div>
+        <label className="block text-sm font-semibold text-pink-700 mb-1">Nome:</label>
+       <input
+          type="text"
+          name="nome"
+          value={formData.nome}
+          onChange={handleChange}
+          placeholder="Nome da Promoção"
+          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+        />
+      </div>
+
       <div>
         <label className="block text-sm font-semibold text-pink-700 mb-1">Descrição</label>
         <input
@@ -88,6 +102,7 @@ export default function PromocaoCreate({ products }) {
           name="price"
           value={formData.price}
           onChange={handleChange}
+          placeholder="Preço"
           step="0.01"
           required
           className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
@@ -95,42 +110,45 @@ export default function PromocaoCreate({ products }) {
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Quantidade</label>
+        <label className="block text-sm font-semibold text-pink-700 mb-1">Quantidade:</label>
         <input
           type="number"
           name="quantidade"
           value={formData.quantidade}
+          placeholder="Unidade por Compra"
           onChange={handleChange}
           className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Estoque</label>
+        <label className="block text-sm font-semibold text-pink-700 mb-1">Estoque(kit):</label>
         <input
           type="number"
           name="estoque"
           value={formData.estoque}
+          placeholder="Valor inteiro (quantidade)"
           onChange={handleChange}
           className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Imagem</label>
+        <label className="block text-sm font-semibold text-pink-700 mb-1">Imagem </label>
         <div className="flex items-center gap-4">
           <label
             htmlFor="imagem"
             className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
           >
             <FiFolderPlus className="mr-2" />
-            Selecionar imagem
+            Selecionar imagem 
           </label>
           <span className="text-sm text-gray-700 truncate max-w-[200px]">
             {formData.imagem?.name || 'Nenhuma imagem selecionada'}
           </span>
         </div>
         <input
+          
           id="imagem"
           name="imagem"
           type="file"
