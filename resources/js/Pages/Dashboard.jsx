@@ -66,7 +66,7 @@ const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
         }, 800);
       },
       onError: () => {
-        alert("Erro ao adicionar o produto ao carrinho.");
+        console.log("Erro ao adicionar o produto ao carrinho.");
       },
     });
   };
@@ -300,7 +300,7 @@ const handleRightClick = (categoryId) => {
             true,
             promo.price,
             promo.id,
-            promo.quantidade,
+            1,
             )
 }
                 disabled={buttonTexts[promo.Id_Product] === 'Adicionado!'}

@@ -103,7 +103,9 @@ public function meuspedidos()
             vp.nome as produto_nome,
             vp.preco as produto_preco,
             vp.quantity as produto_quantidade,
-            vp.descricao as produto_descricao
+            vp.descricao as produto_descricao,
+            vp.id_promocao as id_promocao,
+            vp.kitquantity as kitquantity
         FROM vendas v
         JOIN venda_products vp ON v.id = vp.id_venda
         JOIN users u ON u.id = v.id_user

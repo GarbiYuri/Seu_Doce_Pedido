@@ -2,13 +2,41 @@ import { Head, usePage } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CheckoutRedirect() {
-  const { init_point, cartItems, userAddress, isPickup, frete, dadosEntrega } = usePage().props;
+  const { init_point, cartItems, userAddress, isPickup, frete, dadosEntrega, shop } = usePage().props;
 
 
   const total = cartItems.reduce(
     (sum, item) => sum + item.price * item.quantity,
     0
   );
+const gerarMensagemWhatsApp = () => {
+  let mensagem = `Olá! Gostaria de confirmar meu pedido:\n\n`;
+
+  mensagem += ` Nome: ${dadosEntrega.nome}\n Telefone: ${dadosEntrega.telefone}\n\n`;
+
+  cartItems.forEach((item, index) => {
+    const nome = item.name;
+    const preco = item.price;
+    mensagem += `${index + 1}. ${nome} - ${item.quantity}x R$ ${preco}\n`;
+  });
+
+  mensagem += `\n Subtotal: R$ ${total}`;
+
+  if (!isPickup) {
+    mensagem += `\n Frete: R$ ${frete}`;
+  } else {
+    mensagem += `\n Frete: R$ 0,00 (Retirada na loja)`;
+  }
+
+  const totalGeral = total + (isPickup ? 0 : frete);
+  mensagem += `\n Total: R$ ${totalGeral}`;
+
+  if (!isPickup && userAddress) {
+    mensagem += `\n\n Endereço:\n${dadosEntrega.rua}, ${dadosEntrega.numero}\n${dadosEntrega.bairro} - ${dadosEntrega.cidade}/${dadosEntrega.estado}\nCEP: ${dadosEntrega.cep}`;
+  }
+
+  return encodeURIComponent(mensagem);
+};
 
   return (
     <>
@@ -107,6 +135,14 @@ export default function CheckoutRedirect() {
             <FiArrowLeft size={20} />
             Voltar para o Carrinho
           </a>
+            <a
+  href={`https://wa.me/${shop.telefone}?text=${gerarMensagemWhatsApp()}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 hover:bg-green-600 text-white px-6 py-2 text-center rounded-full"
+>
+  Enviar Pedido ao WhatsApp
+</a>
 
           <a
             href={init_point}

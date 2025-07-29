@@ -134,6 +134,7 @@ Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('bann
 
 Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
 Route::post('/shop/atualizar', [ShopController::class, 'update']); // para alterar o banner
+Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); // para alterar o telefone
 
         // Finaliza CheckifAdmin
     });

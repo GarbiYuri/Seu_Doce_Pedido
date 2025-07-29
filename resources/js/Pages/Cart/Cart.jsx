@@ -4,7 +4,7 @@ import { Head, router, usePage, useForm } from "@inertiajs/react";
 import { useState, useEffect } from 'react';
 import { Trash2, Minus, Plus } from 'lucide-react';
 
-export default function Cart({ cartProducts }) {
+export default function Cart({ cartProducts}) {
   const informacoes = usePage().props.auth.informacoes;
   const shop = usePage().props.shop; 
   const [updatedCart, setUpdatedCart] = useState(cartProducts);
@@ -13,34 +13,39 @@ export default function Cart({ cartProducts }) {
   const [botao, setBotao] = useState(false);
 
   const form = useForm({
-    products: updatedCart.map(p => ({
-      id: p.Id_Product,
-      name: p.name,
-      quantity: p.quantity,
-      price: p.price,
-      imagem: p.imagem,
-      description : p.descricao,
-      id_categoria : p.id_categoria,
-      
-    })),
-    informacoes,
-    tipoPedido,
-  });
+  products: updatedCart.map(p => ({
+    id_product: p.Id_Product,
+    name: p.product_name,
+    promo_name: p.promo_name,
+    quantity: p.quantity,
+    kitquantity: p.promo_quantity,
+    price: p.isPromo ? p.promo_price : p.product_price,
+    imagem: p.product_imagem,
+    description : p.product_description,
+    id_categoria : p.product_Id_Category,
+  })),
+  informacoes,
+  tipoPedido,
+});
 
- 
+
 
 useEffect(() => {
   form.setData('products', updatedCart.map(p => ({
-    id: p.Id_Product,
-    name: p.name,
+    id_product: p.Id_Product,
+    id_promo: p.Id_Promo,
+    name: p.product_name,
+    promo_name: p.promo_name,
     quantity: p.quantity,
-    price: p.price,
-    imagem: p.imagem,
-    description: p.descricao,
-    id_categoria: p.id_categoria,
+    kitquantity: p.promo_quantity,
+    price: p.isPromo ? p.promo_price : p.product_price,
+    imagem: p.product_imagem,
+    description: p.product_description,
+    id_categoria: p.product_Id_Category,
   })));
 }, [updatedCart]);
 
+console.log(updatedCart);
 
 useEffect(() => {
   form.setData('tipoPedido', tipoPedido);
@@ -94,10 +99,11 @@ useEffect(() => {
         });
     };
 
-    const total = updatedCart.reduce((sum, product) => {
-  const price = product.promoPrice ?? product.price;
+  const total = updatedCart.reduce((sum, product) => {
+  const price = product.isPromo ? product.promo_price : product.product_price;
   return sum + (price * product.quantity);
 }, 0);
+
    const updateQuantity = (productId, quantity) => {
         
         router.post("/updateC", {
@@ -117,43 +123,78 @@ useEffect(() => {
             }
         });
     };
+ 
+    
       return (
     <AuthenticatedLayout>
       <Head title="Carrinho de Compras" />
 
 
       {updatedCart.length > 0 ? (
+        
         <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
-          {updatedCart.map((product) => (
-              
+          {updatedCart.map((product) => {
+              const existe = product?.promo_Id_Product || null;
+            return (
             <div
               key={product.Id_Product}
               className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
             >
+   
               {/* Produto */}
               <div className="flex items-center gap-4">
-                <img
-                  src={`${product.imagem}`}
-                  alt={product.name}
+                {product.isPromo && !existe  ? (
+                   <img
+                  src={`${product.promo_image}`}
+                  alt={product.product_name}
                   className="w-20 h-20 rounded-xl object-cover"
                 />
+               
+                ) : (
+                   <img
+                  src={`${product.product_image}`}
+                  alt={product.product_name}
+                  className="w-20 h-20 rounded-xl object-cover"
+                />
+                )}
+               
                 <div>
-                  <h3 className="text-md font-semibold text-gray-800">{product.name}</h3>
-                  <p className="text-xs text-gray-500">{product.descricao}</p>
-                  {product.isPromo ? (
+                  
+                  <h3 className="text-md font-semibold text-gray-800">{product.product_name}</h3>
+                  <p className="text-xs text-gray-500">{product.product_description}</p>
+                {product.isPromo && existe? (
   <p className="text-md font-bold text-gray-900">
     <span className="line-through text-gray-500 mr-2">
-      R$ {Number(product.price).toFixed(2).replace('.', ',')}
+      R$ {Number(product.product_price).toFixed(2).replace('.', ',')}
     </span>
     <span className="text-pink-600">
-      R$ {Number(product.promoPrice).toFixed(2).replace('.', ',')}
+      R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
+    </span>
+    
+  </p>
+) : product.isPromo ?(
+  <div>
+    
+  <h3 className="text-md font-semibold text-gray-800">{product.promo_name}</h3>
+  <p className="text-xs text-gray-500">{product.promo_description}</p>
+  <p className="text-md font-bold text-gray-900">
+    
+    <span className="text-pink-600">
+      R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
     </span>
   </p>
+  
+  </div>
 ) : (
   <p className="text-md font-bold text-gray-900">
-    R$ {Number(product.price).toFixed(2).replace('.', ',')}
+    R$ {Number(product.product_price).toFixed(2).replace('.', ',')}
   </p>
 )}
+{product.promo_quantity > 1 && product.isPromo && (
+<span className="text-sm font-semibold px-2">{product.quantity} kit(s) de {product.promo_quantity}x</span>
+)}
+
+
                 </div>
               </div>
 
@@ -184,7 +225,8 @@ useEffect(() => {
                 </div>
               </div>
             </div>
-          ))}
+            );
+})}
 
           {/* Subtotal */}
           <div className="flex justify-between items-center pt-4 border-t border-pink-100 mt-4">

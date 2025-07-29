@@ -6,10 +6,11 @@ export default function CheckoutRedirect() {
   const informacoes = usePage().props.auth.informacoes;
   const user = usePage().props.auth.user;
 
-  const total = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity,
-    0
-  );
+const total = cartItems.reduce((sum, item) => {
+    const price = item.isPromo ? item.promo_price : item.product_price;
+    return sum + price * item.quantity;
+}, 0);
+
 
   return (
     <>
@@ -23,22 +24,66 @@ export default function CheckoutRedirect() {
             <p className="text-center text-gray-500">Seu carrinho está vazio.</p>
           ) : (
             <ul>
-              {cartItems.map((item) => (
-                <li key={item.id} className="flex items-center justify-between border-b py-3">
-                  <div className="flex items-center gap-4">
-                    <img src={`${item.imagem}`} alt={item.name} className="w-16 h-16 object-contain rounded" />
+              {cartItems.map((item) => {
+                const existe = item?.promo_Id_Product || null;
+               
+                return(
+                   <div
+              key={item.Id_Product}
+              className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
+            >
+                   {item.isPromo && existe ? (
+                <div className="flex items-center gap-4">
+                    <img src={`${item.product_image}`} alt={item.product_name} className="w-16 h-16 object-contain rounded" />
                     <div>
-                      <h2 className="font-semibold text-gray-800">{item.name}</h2>
+                      <h2 className="font-semibold text-gray-800">{item.product_name}</h2>
+                      <p className="text-sm text-gray-600">
+                        Quantidade: {item.quantity}
+                      </p>
+                      
+                    </div>
+                   
+                  </div>
+
+) : item.isPromo ? (
+<div className="flex items-center gap-4">
+                    <img src={`${item.promo_image}`} alt={item.product_name} className="w-16 h-16 object-contain rounded" />
+                    <div>
+                      <h2 className="font-semibold text-gray-800">{item.promo_name}</h2>
                       <p className="text-sm text-gray-600">
                         Quantidade: {item.quantity}
                       </p>
                     </div>
                   </div>
+) : (
+    <div className="flex items-center gap-4">
+                    <img src={`${item.product_image}`} alt={item.product_name} className="w-16 h-16 object-contain rounded" />
+                    <div>
+                      <h2 className="font-semibold text-gray-800">{item.product_name}</h2>
+                      <p className="text-sm text-gray-600">
+                        Quantidade: {item.quantity}
+                      </p>
+                    
+                    </div>
+                  </div>
+)}
+     <li key={item.id} className="flex items-center justify-between border-b py-3">
+                   
+                    {item.isPromo ? (
                   <p className="text-right font-bold text-pink-600">
-                    R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
+                     R$ {(item.promo_price * item.quantity).toFixed(2).replace('.', ',')}
                   </p>
+                    ):(
+                      <p className="text-right font-bold text-pink-600">
+                     R$ {(item.product_price * item.quantity).toFixed(2).replace('.', ',')}
+                  </p>
+                    )}
+                   
                 </li>
-              ))}
+                
+                </div>
+                );
+})}
             </ul>
           )}
         </div>
