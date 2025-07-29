@@ -47,25 +47,29 @@ export default function Welcome({ products, categories, promocoes }) {
   };
 
   // Função para adicionar produto ao carrinho (session / cache)
-  const addToCart = (productId) => {
+  const addToCart = (Id_Product, isPromo, price, promoId, quantidade, kitquantidade) => {
     router.post("/cartwl/add", { 
-      product_id: productId, 
-      quantity: 1 
+    product_id: Id_Product, 
+    is_promo: isPromo,
+    price: price,
+    promo_id: promoId,
+    quantity: quantidade ,
+    kitquantidade : kitquantidade,
     }, {
       preserveScroll: true,
       onSuccess: () => {
-        setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionado!" }));
+        setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionado!" }));
       },
       onError: (errors) => {
         console.error(errors);
         alert("Erro ao adicionar o produto ao carrinho.");
-        setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionar ao Carrinho" }));
+        setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
       },
     });
 
     // Volta ao texto original após 800ms
     setTimeout(() => {
-      setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionar ao Carrinho" }));
+      setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
     }, 800);
   };
 
@@ -258,6 +262,7 @@ export default function Welcome({ products, categories, promocoes }) {
             true,
             promo.price,
             promo.id,
+            1,
             promo.quantidade,
             )
 }

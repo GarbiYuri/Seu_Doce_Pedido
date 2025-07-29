@@ -20,6 +20,7 @@ class ShopSeeder extends Seeder
         Shop::updateOrCreate(
             ['id' => 1], // força o ID 1
             [
+                'telefone' => "00000-0000",
                  'id_banner' => $banner->id,
                 'hora_abertura' => '08:00:00',
                 'hora_fechamento' => '18:00:00',

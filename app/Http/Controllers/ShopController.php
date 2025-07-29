@@ -32,6 +32,7 @@ public function update(Request $request)
         'hora_abertura' => 'nullable',
         'hora_fechamento' => 'nullable',
         'loja_aberta' => 'nullable|boolean',
+        'telefone' => 'nullable'
     ]);
 
     // Busca ou cria o registro da loja
@@ -52,6 +53,9 @@ public function update(Request $request)
 
     if ($request->has('loja_aberta')) {
         $shop->loja_aberta = $request->loja_aberta;
+    }
+     if ($request->has('telefone')) {
+        $shop->telefone = $request->telefone;
     }
 
     $shop->save();

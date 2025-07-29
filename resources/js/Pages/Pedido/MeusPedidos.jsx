@@ -54,6 +54,8 @@ const cancelarSemRetorno = () => {
         nome: item.produto_nome,
         preco: item.produto_preco,
         quantidade: item.produto_quantidade,
+        id_promocao: item.id_promocao,
+        kitquantity: item.kitquantity
       });
 
       return acc;
@@ -67,6 +69,7 @@ const cancelarSemRetorno = () => {
 }, [vendas]);
 
 
+console.log(pedidoSelecionado);
 
     const coresStatus = {
         iniciado: 'bg-red-100 text-red-700',
@@ -116,9 +119,26 @@ const cancelarSemRetorno = () => {
                             <p className="font-semibold text-sm mt-4">Produtos:</p>
                             <ul className="list-disc list-inside text-sm text-gray-800">
                                {pedidoSelecionado?.produtos?.map((produto, index) => (
-  <li key={index}>
-    {produto.quantidade}x {produto.nome} — R$ {produto.preco}
-  </li>
+<li key={index} className="mb-3 p-3 rounded-lg bg-gray-50 border border-gray-200 shadow-sm">
+  <div className="flex justify-between items-center">
+    <span className="text-sm text-gray-700 font-medium">
+      {produto.quantidade}x {produto.nome}
+    </span>
+    <span className="text-sm font-semibold text-green-600">
+      R$ {Number(produto.preco)} à Unidade
+    </span>
+  </div>
+
+  {produto.id_promocao && produto.kitquantity > 1 && (
+    <div className="mt-1 text-xs text-blue-600 flex items-center gap-1">
+      <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-blue-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 7h18M3 12h18M3 17h18" />
+      </svg>
+      Kit promocional com {produto.kitquantity} itens
+    </div>
+  )}
+</li>
+
 ))}
 
                             </ul>

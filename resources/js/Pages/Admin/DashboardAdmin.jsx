@@ -1,5 +1,5 @@
 import AdminLayout from '@/Layouts/AdminLayout';
-import { Head, usePage, router } from '@inertiajs/react';
+import { Head, usePage, router, useForm  } from '@inertiajs/react';
 import { FiArrowLeft, FiArrowRight } from 'react-icons/fi';
 import { useState } from 'react';
 
@@ -10,6 +10,7 @@ export default function DashboardAdmin() {
   const [horaAbertura, setHoraAbertura] = useState(shops.hora_abertura );
   const [horaFechamento, setHoraFechamento] = useState(shops.hora_fechamento );
   const [lojaAberta, setLojaAberta] = useState(Boolean(shops.loja_aberta));
+  const [telefone, setTelefone] = useState(shops.telefone);
 
 
   const [search, setSearch] = useState('');
@@ -17,6 +18,15 @@ export default function DashboardAdmin() {
   // Função para alternar o status de Admin
   const toggleAdmin = (id) => {
     router.post(`/admin/toggle/${id}`);
+  };
+
+
+ const { data, setData, post, processing, errors } = useForm({
+  telefone: shops.telefone || '',
+});
+    const Deftelefone = (e) => {
+    e.preventDefault();
+    post('/shop/atualizar'); 
   };
 
     // Função para alternar a loja aberta/fechada
@@ -65,8 +75,39 @@ export default function DashboardAdmin() {
 
       <section className="max-w-5xl mx-auto mt-10 p-6 bg-white rounded-3xl shadow-2xl space-y-8">
         <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">Controle da Loja</h1>
+          <div>
+             <form onSubmit={Deftelefone} className="space-y-4">
 
+      <div>
+        <label htmlFor="telefone" className="block font-semibold text-gray-700">
+          Novo Telefone:
+        </label>
+        <input
+          id="telefone"
+          type="text"
+          value={data.telefone}
+          onChange={(e) => setData('telefone', e.target.value)}
+          className="border border-gray-300 p-2 rounded w-full"
+          placeholder="Ex: (19) 99620-6053"
+        />
+        {errors.telefone && (
+          <p className="text-red-500 text-sm">{errors.telefone}</p>
+        )}
+      </div>
+
+      <button
+        type="submit"
+        disabled={processing}
+        className="bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded"
+      >
+        Salvar
+      </button>
+    </form>
+
+
+          </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          
           <div>
             <p><strong>Loja aberta?</strong> {lojaAberta ? 'Sim' : 'Não'}</p>
             <button

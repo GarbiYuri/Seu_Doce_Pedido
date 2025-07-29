@@ -16,6 +16,8 @@ return new class extends Migration
             $table->unsignedBigInteger('id_banner');
             $table->timestamps();
 
+            $table->string('telefone');
+
             $table->time('hora_abertura')->nullable();
             $table->time('hora_fechamento')->nullable();
 

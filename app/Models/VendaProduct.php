@@ -17,12 +17,14 @@ class VendaProduct extends Model
         'id_venda',
         'id_product',
         'id_category',
+        'id_promocao',
         'nome',
         'preco',
         'descricao',
         'imagem',
         'categoria',
-        'quantity'
+        'quantity',
+        'kitquantity'
     ];
 
     // Relacionamento com Venda

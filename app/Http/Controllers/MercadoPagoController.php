@@ -43,7 +43,7 @@ class MercadoPagoController extends Controller
             // Adiciona produtos ao array de items
             foreach ($products as $product) {
                 $items[] = [
-                    "id" => $product['id'],
+                    "id" => $product['id_product'] ?? $product['id_promo'],
                     "title" => $product['name'],
                     "quantity" => (int) $product['quantity'],
                   /*  "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],*/ //usar quando hospedado
@@ -112,21 +112,24 @@ class MercadoPagoController extends Controller
         // 2. Salva os produtos da venda
     foreach ($products as $product) {
     $categoriaNome = null;
-    if (!empty($product['id_categoria'])) {
+    if (!empty($product['id_category'])) {
         $categoriaNome = DB::table('category')
-            ->where('id', $product['id_categoria'])
+            ->where('id', $product['id_category'])
             ->value('name'); 
     }
+
     VendaProduct::create([
         'id_venda' => $venda->id,
-        'id_product' => $product['id'],
-        'nome' => $product['name'],
+        'id_product' => $product['id'] ?? null, // se tiver
+        'nome' => $product['name'] ?? $product['promo_name'],
         'preco' => $product['price'],
         'descricao' => $product['description'] ?? '',
         'imagem' => $product['imagem'] ?? '',
-        'id_category' => $product['id_categoria'] ?? 0, // se tiver
+        'id_category' => $product['id_category'] ?? null, // se tiver
+        'id_promocao' => $product['id_promo'] ?? null, // se tiver
         'categoria' => $categoriaNome ?? 'Sem categoria',
         'quantity' => $product['quantity'],
+        'kitquantity' => $product['kitquantity'] ?? null,
     ]);
 }
 
@@ -152,17 +155,42 @@ class MercadoPagoController extends Controller
                 ->where('id_user', $userId)
                 ->first();
 
-            $products = DB::table('cart_product')
-                ->join('product', 'cart_product.Id_Product', '=', 'product.id')
-                ->where('Id_Cart', $cart->id)
-                ->select(
-                    'product.id',
-                    'product.name',
-                    'product.price',
-                    'product.imagem',
-                    'cart_product.quantity'
-                )
-                ->get();
+             // Realiza o INNER JOIN entre a tabela cart_product, cart, product e promocao
+
+   $Checkoutproducts = DB::table('cart_product as cp')
+    ->leftJoin('product as p', 'cp.Id_Product', '=', 'p.id')
+    ->leftJoin('promocao as pro', 'cp.Id_Promo', '=', 'pro.id')
+    ->leftJoin('product as promo_prod', 'pro.Id_Product', '=', 'promo_prod.id')
+    ->join('cart as c', 'cp.Id_Cart', '=', 'c.id')
+    ->select(
+        'cp.Id_Cart',
+        'cp.Id_Product',
+        'cp.Id_Promo',
+        'cp.quantity',
+        'cp.promo as isPromo',
+        
+        // Dados do produto direto (caso não seja promoção)
+        'p.name as product_name',
+        'p.imagem as product_image',
+        'p.descricao as product_description',
+        'p.price as product_price',
+        'p.id_categoria as product_Id_Category',
+        
+        // Dados da promoção
+        'pro.nome as promo_name',
+        'pro.price as promo_price',
+        'pro.quantidade as promo_quantity',
+        'pro.descricao as promo_description',
+        'pro.imagem as promo_image',
+        'pro.Id_Product as promo_Id_Product',
+        
+        
+        'c.Id_User'
+    )
+    ->where('c.Id_User', auth()->id())
+    ->get();
+
+
 
             DB::table('cart_product')
                 ->where('Id_Cart', $cart->id)
@@ -170,7 +198,7 @@ class MercadoPagoController extends Controller
 
             return Inertia::render('Checkout/CheckoutRedirect', [
                 'init_point' => $preference->init_point,
-                'cartItems' => $products,
+                'cartItems' => $Checkoutproducts,
                 'userAddress' => $tipoPedido === 'entrega' ? true : null,
                 'isPickup' => $tipoPedido === 'retirada',
                 'frete' => $frete,
@@ -273,29 +301,35 @@ class MercadoPagoController extends Controller
 
 
 
+
         // 2. Salva os produtos da venda
     foreach ($products as $product) {
     $categoriaNome = null;
-    if (!empty($product['id_categoria'])) {
+    if (!empty($product['id_category'])) {
         $categoriaNome = DB::table('category')
-            ->where('id', $product['id_categoria'])
+            ->where('id', $product['id_category'])
             ->value('name'); 
     }
+
     VendaProduct::create([
         'id_venda' => $venda->id,
-        'id_product' => $product['id'],
+        'id_product' => $product['id'] ?? null,
         'nome' => $product['name'],
         'preco' => $product['price'],
         'descricao' => $product['description'] ?? '',
         'imagem' => $product['imagem'] ?? '',
-        'id_category' => $product['id_categoria'] ?? null, // se tiver
+        'id_category' => $product['id_category'] ?? null, // se tiver
+        'id_promocao' => $product['id_promo'] ?? null, // se tiver
         'categoria' => $categoriaNome ?? 'Sem categoria',
         'quantity' => $product['quantity'],
+        'kitquantity' => $product['kitquantity'] ?? null,
     ]);
     }
 
 
 
+
+            session()->put('cart');
             // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => [

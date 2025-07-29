@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\cart_product;
 use App\Models\Cart;
+use App\Models\Promocao;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -19,37 +20,90 @@ class CartProductController extends Controller
     {
         $userId = auth()->user()->id;  // Obtendo o id do usuário logado
       
-         DB::table('cart_product')
+   /*  DB::table('cart_product')
     ->join('product', 'cart_product.Id_Product', '=', 'product.id')
     ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id')
+    ->join('promocao', 'cart_product.Id_Promo', '=', 'promocao.id')
     ->join('category', 'product.id_categoria', '=', 'category.id')
     ->where('cart.Id_User', $userId)
     ->where(function ($query) {
         $query->where('product.ativo', 0)
-              ->orWhere('category.ativo', 0);
+              ->orwhere('category.ativo', 0)
+              ->where('promocao.ativo', 0);
     })
     ->delete();
+*/
 
-
-         // Realiza o INNER JOIN entre a tabela cart_product, cart e product
-   $cartProducts = DB::table('cart_product')
-    ->join('product', 'cart_product.Id_Product', '=', 'product.id')
-    ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id')
-    ->where('cart.Id_User', $userId)
+$cartItems = DB::table('cart_product as cp')
+    ->leftJoin('promocao as pro', 'cp.Id_Promo', '=', 'pro.id')
+    ->leftJoin('cart as c', 'c.id', '=', 'cp.Id_Cart')
+    ->leftJoin('product as p', 'p.id', '=', 'cp.Id_Product')
+    ->where('c.id_user', $userId)
     ->select(
-        'cart_product.Id_Cart',
-        'cart_product.Id_Product',
-        'product.name',
-        'product.imagem',
-        'product.descricao',
-        'product.id_categoria',
-        'cart_product.quantity',
-        'cart_product.preco as promoPrice',      // preço que veio da promoção (se houver)
-        'cart_product.promo as isPromo',         // booleano
-        'cart_product.Id_Promo as promoId',      // id da promoção (se houver)
-        'product.price as price'         // apenas se quiser mostrar o valor original
-    )
+        'cp.*', 
+        'pro.ativo as promo_ativo',
+        'p.ativo as produto_ativo'
+        )
     ->get();
+
+foreach ($cartItems as $item) {
+    //Promoção Ativa e Item Inativo
+    if ($item->promo_ativo == 1 && $item->produto_ativo == 0) {
+        DB::table('cart_product')
+        ->where('id', $item->id)
+        ->where('promo', false)
+        ->delete();
+        
+        //Promoção Inativa e Produto ativo
+    } else if ($item->promo_ativo == 0 && $item->produto_ativo == 1) {
+        DB::table('cart_product')
+        ->where('id', $item->id)
+        ->where('promo', true)
+        ->delete();
+
+        //tudo inativo
+    }else{
+        DB::table('cart_product')->where('id', $item->id)->delete();
+    }
+}
+
+
+         // Realiza o INNER JOIN entre a tabela cart_product, cart, product e promocao
+
+   $cartProducts = DB::table('cart_product as cp')
+    ->leftJoin('product as p', 'cp.Id_Product', '=', 'p.id')
+    ->leftJoin('promocao as pro', 'cp.Id_Promo', '=', 'pro.id')
+    ->leftJoin('product as promo_prod', 'pro.Id_Product', '=', 'promo_prod.id')
+    ->join('cart as c', 'cp.Id_Cart', '=', 'c.id')
+    ->select(
+        'cp.Id_Cart',
+        'cp.Id_Product',
+        'cp.Id_Promo',
+        'cp.quantity',
+        'cp.promo as isPromo',
+        
+        // Dados do produto direto (caso não seja promoção)
+        'p.name as product_name',
+        'p.imagem as product_image',
+        'p.descricao as product_description',
+        'p.price as product_price',
+        'p.id_categoria as product_Id_Category',
+        
+        // Dados da promoção
+        'pro.nome as promo_name',
+        'pro.price as promo_price',
+        'pro.quantidade as promo_quantity',
+        'pro.descricao as promo_description',
+        'pro.imagem as promo_image',
+        'pro.Id_Product as promo_Id_Product',
+        
+        
+        'c.Id_User'
+    )
+    ->where('c.Id_User', auth()->id())
+    ->get();
+
+
     
        
         // Retorna os dados para a view
@@ -61,13 +115,14 @@ public function store(Request $request)
 {
     // Validação
     $request->validate([
-        'product_id' => 'required|exists:product,id',
+        'product_id' => 'nullable|exists:product,id',
         'is_promo' => 'nullable|boolean',
         'price' => 'nullable|numeric',
         'promo_id' => 'nullable|exists:promocao,id',
         'quantidade' => 'nullable|integer|min:1',
     ]);
-    
+
+
 
     // Obtem o carrinho do usuário logado
     $cart = Cart::where('id_user', Auth::id())->first();
