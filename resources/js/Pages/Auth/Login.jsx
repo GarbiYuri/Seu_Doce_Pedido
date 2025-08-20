@@ -38,7 +38,7 @@ export default function Login({ status, canResetPassword }) {
             <div className="relative w-full max-w-md font-poppins">
                 <Link
     href="/"
-    className=" top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+    className=" top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20]  transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
 >
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@ export default function Login({ status, canResetPassword }) {
                 
                
                 {/* Título LOGIN com fonte Lobster */}
-                <h2 className="login-title text-[#EF3167] text-center mb-6 tracking-widest animate-fadeIn">
+                <h2 className="login-title text-[#613d20] text-center mb-6 tracking-widest animate-fadeIn">
                     Login
                 </h2>
 
@@ -75,7 +75,7 @@ export default function Login({ status, canResetPassword }) {
                             type="email"
                             name="email"
                             value={data.email}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out"
                             autoComplete="username"
                             isFocused={true}
                             onChange={(e) => setData('email', e.target.value)}
@@ -91,7 +91,7 @@ export default function Login({ status, canResetPassword }) {
                             type="password"
                             name="password"
                             value={data.password}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out"
                             autoComplete="current-password"
                             onChange={(e) => setData('password', e.target.value)}
                             required
@@ -114,7 +114,7 @@ export default function Login({ status, canResetPassword }) {
                         {canResetPassword && (
                             <Link
                                 href={route('password.request')}
-                                className="text-sm text-[#EF3167] hover:underline"
+                                className="text-sm text-[#8a5a33] hover:underline"
                             >
                                 Esqueceu sua Senha?
                             </Link>
@@ -124,14 +124,14 @@ export default function Login({ status, canResetPassword }) {
                     <div className="flex flex-col items-center space-y-4 pt-6">
                         <Link
                             href={route('register')}
-                            className="text-sm text-[#EF3167] font-semibold hover:underline text-center w-full max-w-xs"
+                            className="text-sm text-[#613d20] font-semibold hover:underline text-center w-full max-w-xs"
                         >
                             Não possui uma conta? Cadastre-se
                         </Link>
 
                         <button
                             type="submit"
-                            className="w-full max-w-xs bg-[#EF3167] hover:bg-pink-700 text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
+                            className="w-full max-w-xs bg-[#613d20] text-white font-semibold py-3 rounded-lg transition-all duration-300 transform hover:scale-105 shadow-lg"
                             disabled={processing}
                         >
                             Entrar

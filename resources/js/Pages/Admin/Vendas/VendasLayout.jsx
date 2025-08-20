@@ -92,7 +92,16 @@ useEffect(() => {
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-      <h1 className="text-center text-pink-600 text-3xl font-bold mb-6">Gaby Guslafer</h1>
+      <div style="text-align: center;">
+  <img
+    src="imagens/Banner2 - Editado - Editado.png"
+    alt="Logo"
+    width="300"
+    height="300"
+  />
+</div>
+
+
 
       {/* Filtros */}
       <div className="max-w-6xl mx-auto px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">

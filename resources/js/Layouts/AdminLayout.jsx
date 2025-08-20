@@ -31,9 +31,9 @@ export default function AdminLayout({ children }) {
     if (!user.admin) return null;
 
     return (
-        <div className="min-h-screen bg-[#f8f8f8] font-sans">
+        <div className="min-h-screen bg-[#fffaf7] font-sans">
             {/* HEADER */}
-            <header className="bg-[#EF3167] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+            <header className="bg-[#8a5a33] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
                 {/* Botão hamburguer - visível só no mobile */}
                 <button
                     className="md:hidden flex items-center"
@@ -46,7 +46,7 @@ export default function AdminLayout({ children }) {
 
                 {/* Logo maior */}
                 <Link href="/dashboard" className="flex-shrink-0">
-                    <img src="/imagens/Logo_ADM.png" alt="Logo ADM" height="100" width="100" />
+                    <img src="imagens/Logo_Original - Editado.png" alt="Logo ADM" height="80" width="80" />
                 </Link>
 
                 {/* Frase centralizada */}
@@ -96,30 +96,30 @@ export default function AdminLayout({ children }) {
                         </button>
                     </div>
 
-                    <h2 className="text-2xl font-extrabold text-pink-600 mb-6">Painel</h2>
+                    <h2 className="text-2xl font-extrabold text-[#613d20] mb-6">Painel</h2>
 
-                    <Link href="/Administracao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Administracao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[#613d20]-100 transition">
                         <img src="/imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
                         <span className="font-semibold">Home</span>
                     </Link>
 
 
-                    <Link href="/Vendas" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Vendas" className="flex items-center gap-3 px-4 py-3 rounded-xl  text-[#613d20] hover:bg-[#613d20]-100 transition">
                         <img src="/imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
                         <span className="font-semibold">Vendas</span>
                     </Link>
 
-                    <Link href="/Promocao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Promocao" className="flex items-center gap-3 px-4 py-3 rounded-xl  text-[#613d20] hover:bg-[#613d20]-100 transition">
                         <img src="/imagens/prom.png" alt="Home" className="h-5 w-5" />
                         <span className="font-semibold">Promoção</span>
                     </Link>
 
-                    <Link href="/Categorias" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Categorias" className="flex items-center gap-3 px-4 py-3 rounded-xl  text-[#613d20] hover:bg-[#613d20]-100 transition">
                         <img src="/imagens/Icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
                         <span className="font-semibold">Categorias</span>
                     </Link>
 
-                    <Link href="/Produtos" className="flex items-center gap-3 px-4 py-3 rounded-xl text-pink-600 hover:bg-pink-100 transition">
+                    <Link href="/Produtos" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[#613d20]-100 transition">
                         <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
                         <span className="font-semibold">Produtos</span>
                     </Link>
