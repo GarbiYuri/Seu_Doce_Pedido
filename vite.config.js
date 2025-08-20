@@ -10,6 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+    /*
    server: {
   host: '0.0.0.0',
   port: 5173,
@@ -22,4 +23,5 @@ export default defineConfig({
   allowedHosts: ['192.168.15.13'],
   cors: true,
 },
+*/
 });
