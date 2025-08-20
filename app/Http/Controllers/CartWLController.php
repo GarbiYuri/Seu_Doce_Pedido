@@ -20,6 +20,7 @@ class CartWLController extends Controller
         return Inertia::render('Cart/CartWL', [
             'cart' => $cart
         ]);
+
     }
 
     /**
@@ -33,23 +34,37 @@ class CartWLController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        $cart = session()->get('cart', []);
+   public function store(Request $request)
+{
+    $cart = session()->get('cart', []);
 
-        $productId = $request->input('product_id');
-        $quantity = $request->input('quantity', 1);
+    $productId = $request->input('product_id');
+    $quantity = $request->input('quantity', 1);
+    $isPromo = $request->input('is_promo', false);
+    $promoId = $request->input('promo_id');
+    $price = $request->input('price');
+    $kitquantidade = $request->input('kitquantidade', 1);
 
-        if (isset($cart[$productId])) {
-            $cart[$productId] += $quantity;
-        } else {
-            $cart[$productId] = $quantity;
-        }
+    // Cria uma chave única para produto ou promoção
+    $itemKey = $isPromo ? "promo_{$promoId}" : "product_{$productId}";
 
-        session()->put('cart', $cart);
-
-        return Redirect::back()->with('success', 'Produto Adicionado Ao Carrinho!');
+    // Se já existe no carrinho, soma quantidade
+    if (isset($cart[$itemKey])) {
+        $cart[$itemKey]['quantity'] += $quantity;
+    } else {
+        $cart[$itemKey] = [
+            'product_id' => $productId,
+            'is_promo' => $isPromo,
+            'promo_id' => $promoId,
+            'quantity' => $quantity,
+            'kitquantidade' => $kitquantidade,
+        ];
     }
+
+    session()->put('cart', $cart);
+
+    return Redirect::back()->with('success', 'Produto adicionado ao carrinho!');
+}
 
     /**
      * Display the specified resource.
@@ -70,45 +85,46 @@ class CartWLController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request)
-    {
-        $productId = $request->input('product_id');
-        $quantity = $request->input('quantity');
-    
-        // Recupera o carrinho da sessão
-        $cart = session()->get('cart', []);
-    
-        // Verifica se o produto existe no carrinho e se a quantidade é válida
-        if (isset($cart[$productId])) {
-            // Atualiza a quantidade no carrinho
-            if ($quantity > 0) {
-                $cart[$productId] = $quantity;
-            } else {
-                // Caso a quantidade seja 0 ou negativa, remove o produto
-                unset($cart[$productId]);
-            }
-    
-            // Salva as alterações no carrinho
-            session()->put('cart', $cart);
-    
-            return Redirect::back()->with('success', 'Quantidade tirado do Carrinho!');
+   public function update(Request $request)
+{
+    $quantity = (int) $request->input('quantity');
+    $itemKey = $request->input('key');
+
+    // Recupera o carrinho da sessão
+    $cart = session()->get('cart', []);
+
+    // Verifica se o item existe no carrinho
+    if (isset($cart[$itemKey])) {
+        if ($quantity > 0) {
+            // Atribui a nova quantidade diretamente
+            $cart[$itemKey]['quantity'] = $quantity;
+        } else {
+            // Remove se quantidade for 0 ou negativa
+            unset($cart[$itemKey]);
         }
-    
-        return Redirect::back()->with('success', 'Produto não encontrado no carrinho.');
+
+        // Atualiza o carrinho na sessão
+        session()->put('cart', $cart);
+
+        return Redirect::back()->with('success', 'Carrinho atualizado com sucesso!');
     }
+
+    return Redirect::back()->with('error', 'Produto não encontrado no carrinho.');
+}
+
 
     /**
      * Remove the specified resource from storage.
      */
     public function destroy(Request $request)
     {
-        $productId = $request->input('product_id');
+         $itemKey = $request->input('key');
     
         // Aqui você deve implementar a lógica para remover o produto do carrinho (session ou banco de dados)
         // Por exemplo:
         $cart = session()->get('cart', []);
-        if (isset($cart[$productId])) {
-            unset($cart[$productId]);
+        if (isset($cart[$itemKey])) {
+            unset($cart[$itemKey]);
             session()->put('cart', $cart);
         }
         

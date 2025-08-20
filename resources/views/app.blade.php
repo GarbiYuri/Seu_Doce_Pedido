@@ -20,9 +20,15 @@
         <!-- Scripts -->
         @routes
          <!-- Tirar Na produção
+<<<<<<< HEAD
          
          -->
         @viteReactRefresh 
+=======
+          
+         -->
+         @viteReactRefresh 
+>>>>>>> 4b0a7648fcad568650352404e68c6f212fbca08b
         @vite(['resources/js/app.jsx', "resources/js/Pages/{$page['component']}.jsx"])
         @inertiaHead
     </head>

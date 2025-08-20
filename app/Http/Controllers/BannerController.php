@@ -11,26 +11,32 @@ class BannerController extends Controller
 {
 
 
-   public function store(Request $request)
+public function store(Request $request)
 {
     $request->validate([
         'nome' => 'required|string|max:255',
         'imagem' => 'required|file|image|mimes:jpg,jpeg,png|max:2048', // max 2MB
     ]);
 
-    // Upload da imagem
+    $urlImagem = null;
+
     if ($request->hasFile('imagem')) {
-        $ImagemName = time() . '.' . $request->imagem->extension();
-        $request->imagem->move(public_path('imagem'), $ImagemName);
+        $arquivo = $request->file('imagem');
+        $ImagemName = time() . '.' . $arquivo->getClientOriginalExtension();
+
+        // Upload para R2 (bucket configurado no filesystems.php)
+        Storage::disk('r2_produtos')->put('banner/' . $ImagemName, file_get_contents($arquivo));
+
+        // Monta URL pública CDN para salvar no banco
+        $urlImagem = 'https://cdn.seudocepedido.shop/banner/' . $ImagemName;
     }
 
-    // Salva no banco
     Banner::create([
         'nome' => $request->nome,
-        'imagem' => 'imagem/' . $ImagemName,
+        'imagem' => $urlImagem, // Salva a URL completa aqui
     ]);
-
 }
+
 
 
     public function edit(string $id)

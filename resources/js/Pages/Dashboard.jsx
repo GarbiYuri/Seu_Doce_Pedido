@@ -1,11 +1,12 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Link ,Head, router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from '@/Components/Modal'; 
+import { ShoppingCart, ReceiptText, MessagesSquare, LogOut } from 'lucide-react';
 import CreateBannerForm from '@/Pages/Banner/CreateBanner'; 
-import { FiEdit, FiPlus, FiTrash, FiFilter,  FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { FiShoppingCart,FiEdit, FiPlus, FiTrash, FiFilter,  FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-export default function Dashboard({ products, categories, bannerss }) {
+export default function Dashboard({ products, categories, bannerss, promocoes }) {
   const [showSelectBannerModal, setShowSelectBannerModal] = useState(false);
   const [showCreateBannerModal, setShowCreateBannerModal] = useState(false);
   const [buttonTexts, setButtonTexts] = useState({});
@@ -15,6 +16,12 @@ export default function Dashboard({ products, categories, bannerss }) {
   const [filterField, setFilterField] = useState('all');
   const [showFilterOptions, setShowFilterOptions] = useState(false);
   const [showScrollTop, setShowScrollTop] = useState(false);
+  const [showFloatingMenu, setShowFloatingMenu] = useState(false);
+  const [showFloating, setShowFloating] = useState(false);
+  const [showCartNotification, setShowCartNotification] = useState(false);
+  
+const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
+
 
   const user = usePage().props.auth.user;
   const shop = usePage().props.shop;  
@@ -24,31 +31,42 @@ export default function Dashboard({ products, categories, bannerss }) {
 
 
 
-
-
   useEffect(() => {
+    if (!showScrollTop) {
+    setShowCartNotification(false);
+  }
     const handleScroll = () => {
       setShowScrollTop(window.pageYOffset > 100);
+      setShowFloating(window.pageYOffset > 100);
+      
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [showScrollTop]);
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
-  const addToCart = (Id_Product) => {
-    router.post("/cart/add", { Id_Product },  {
+  const addToCart = (Id_Product, isPromo, price, promoId, quantidade) => {
+    router.post("/cart/add", {
+    product_id: Id_Product,
+    is_promo: isPromo,
+    price: price,
+    promo_id: promoId,
+    quantidade: quantidade,
+    },  {
       preserveScroll: true,
       onSuccess: () => {
         setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionado!" }));
+        setShowCartNotification(true);
         setTimeout(() => {
+          
           setButtonTexts(prev => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
         }, 800);
       },
       onError: () => {
-        alert("Erro ao adicionar o produto ao carrinho.");
+        console.log("Erro ao adicionar o produto ao carrinho.");
       },
     });
   };
@@ -61,7 +79,7 @@ export default function Dashboard({ products, categories, bannerss }) {
   const updateBanner = async () => {
     const formData = new FormData();
     formData.append('id_banner', selectedBannerId);
-    router.post('/shop/banner', formData, { forceFormData: true });
+    router.post('/shop/atualizar', formData, { forceFormData: true });
     Inertia.reload();
   };
 
@@ -86,30 +104,59 @@ export default function Dashboard({ products, categories, bannerss }) {
     }
   });
 
-  const carousel = useRef(null);
+  const carouselsRef = useRef({});
 
-   const handleLeftClick = (e) =>{
-    e.preventDefault();
-    carousel.current.scrollLeft -= carousel.current.offsetWidth;
-  }
-  const handleRightClick = (e) =>{
-    e.preventDefault();
-     carousel.current.scrollLeft += carousel.current.offsetWidth;
-  }
+ const handleLeftClick = (categoryId) => {
+  const el = carouselsRef.current[categoryId]?.current;
+  if (el) el.scrollLeft -= 200;
+};
+
+const handleRightClick = (categoryId) => {
+  const el = carouselsRef.current[categoryId]?.current;
+  if (el) el.scrollLeft += 200;
+};
+  
   const categoriaRef = useRef(null);
 
-  const scrollLeft = () => {
-    categoriaRef.current.scrollLeft -= 200;
+  const scrollLeft = (e) => {
+    e.preventDefault();
+    categoriaRef.current.scrollLeft -= categoriaRef.current.offsetWidth;
   };
 
-  const scrollRight = () => {
-    categoriaRef.current.scrollLeft += 200;
+  const scrollRight = (e) => {
+    e.preventDefault();
+    categoriaRef.current.scrollLeft += categoriaRef.current.offsetWidth;
   };
 
   return (
     <AuthenticatedLayout>
       <Head title="DashBoard" />
 
+      <div className="flex justify-center mt-6 mb-10">
+  <div className={`inline-flex items-center gap-3 px-5 py-3 rounded-full font-semibold text-white
+    ${shop.loja_aberta ? 'bg-green-600' : 'bg-red-600'}
+    shadow-lg transition-colors duration-300`}
+    title={`A loja está atualmente ${shop.loja_aberta ? 'ABERTA' : 'FECHADA'}`}
+  >
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      className="h-6 w-6" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor" 
+      strokeWidth={2}
+    >
+      {shop.loja_aberta ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" />
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /> // 
+      )}
+    </svg>
+    <span className="uppercase tracking-wide">
+      Loja {shop.loja_aberta ? 'Aberta' : 'Fechada'}
+    </span>
+  </div>
+</div>
       <div className="relative w-full mt-10">
         {banner ? (
           <>
@@ -159,6 +206,117 @@ export default function Dashboard({ products, categories, bannerss }) {
           </div>
         )}
       </div>
+{promocoes.length > 0 && (
+  <div className="w-full px-4 md:px-10 mt-10">
+    <h2 className="text-center text-3xl font-bold text-pink-700 mb-8">
+      PROMOÇÕES
+    </h2>
+
+    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      {promocoes.map((promo) => {
+        const product = promo.product;
+        const precoOriginal = product?.price || null;
+        const precoPromo = parseFloat(promo.price);
+        const unidade = (precoPromo / promo.quantidade);
+        const porcentagem = precoOriginal
+          ? Math.round(((precoOriginal - precoPromo / promo.quantidade) / precoOriginal) * 100)
+          : null;
+
+        return (
+          <div
+            key={promo.id}
+            className="flex flex-col justify-between bg-white rounded-2xl shadow-md p-4 transition-transform hover:scale-[1.02] h-[480px]"
+          >
+            <div>
+              <div className="relative w-full h-40 mb-4">
+                <img
+                  src={product?.imagem || promo.imagem}
+                  alt="Promoção"
+                  className="w-full h-full object-contain rounded-md"
+                />
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow-md font-semibold">
+                  OFERTA
+                </div>
+              </div>
+
+              <h3 className="text-lg font-bold text-gray-800 mb-1 text-center truncate">
+                {product?.name || promo.nome}
+                
+              </h3>
+
+              <p className="text-sm text-gray-500 mb-2 text-center line-clamp-2 h-[2.8rem]">
+                {product?.descricao || promo.descricao}
+              </p>
+
+              <div className="text-center text-sm text-gray-700 mb-2">
+                {promo.quantidade} un. por:
+              </div>
+
+              <div className="flex justify-center items-baseline gap-2 mb-1">
+                {precoOriginal && (
+                  <span className="text-sm text-gray-400 line-through">
+                    R${precoOriginal.replace('.', ',')}
+                  </span>
+                )}
+                <span className="text-xl font-bold text-pink-600">
+                  R${precoPromo.toFixed(2).replace('.', ',')}
+                </span>
+                
+                 
+              </div>
+               <div className="flex flex-col items-center mb-2">
+  <p className="text-sm text-gray-600">Preço unitário</p>
+  <span className="text-xl font-extrabold text-pink-600 tracking-tight">
+    R$ {unidade.toFixed(2).replace('.', ',')}
+  </span>
+</div>
+
+              
+
+              {porcentagem && (
+                <div className="text-center text-xs text-green-600 font-semibold mb-2">
+                  ECONOMIZE {porcentagem}%
+                </div>
+              )}
+
+              {promo.estoque && (
+              <div className="text-sm text-gray-600 text-center mb-2">
+                Estoque: <span className="font-bold">{promo.estoque}</span>
+              </div>
+              )}
+             
+            </div>
+
+            <div className="mt-auto pt-3">
+              <button
+                className={`w-full py-2 rounded-full font-semibold text-white transition-colors duration-300 ${
+                  buttonTexts[promo.Id_Product] === 'Adicionado!'
+                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
+                    : 'bg-pink-600 hover:bg-pink-700'
+                }`}
+               onClick={() =>
+            addToCart(
+            promo.Id_Product,
+            true,
+            promo.price,
+            promo.id,
+            1,
+            )
+}
+                disabled={buttonTexts[promo.Id_Product] === 'Adicionado!'}
+              >
+                {buttonTexts[promo.Id_Product] || 'Adicionar ao carrinho'}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
+
   <div className="relative w-full">
       <h2 className="text-center text-xl font-bold text-gray-800 mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
 
@@ -205,9 +363,26 @@ export default function Dashboard({ products, categories, bannerss }) {
               </div>
               <p className="mt-2 text-sm font-semibold text-gray-700">{category.name.toUpperCase()}</p>
             </div>
+            
          )
             
 })}
+{showCartNotification && (
+  <div className="fixed bottom-6 right-20 bg-pink-600 text-white rounded-full shadow-lg p-3 flex items-center justify-center z-50 animate-fade-in-out cursor-pointer"
+    title="Ver carrinho"
+  >
+    <Link href="/CarrinhoDeCompra" className="relative flex items-center justify-center">
+      <FiShoppingCart size={24} />
+      {cartTotal > 0 && (
+        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+          {cartTotal}
+        </span>
+      )}
+    </Link>
+  </div>
+)}
+
+
         </div>
 
         {/* Botão direito */}
@@ -237,6 +412,7 @@ export default function Dashboard({ products, categories, bannerss }) {
           </div>
         )}
       </div>
+      
      {categories.map((category, index) => {
   const filteredCategoryProducts = filteredProducts.filter(
     p => p.id_categoria === category.id
@@ -244,67 +420,84 @@ export default function Dashboard({ products, categories, bannerss }) {
 
   if (filteredCategoryProducts.length === 0) return null;
 
+ if (!carouselsRef.current[category.id]) {
+    carouselsRef.current[category.id] = React.createRef();
+  }
 
   return (
+    
     <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
+      
 
       <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
         {category.name.toUpperCase()}
       </h2>
-
+       {/* Botão Esquerdo */}
+    <button
+        onClick={() => handleLeftClick(category.id)}
+        className="lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <FiChevronLeft size={24} />
+      </button>
+    
       {/* Carrossel com drag */}
-      <div className="overflow-x-auto px-8 hide-scrollbar" ref={carousel}>
+      <div className="overflow-x-auto px-8 hide-scrollbar" ref={carouselsRef.current[category.id]}>
        <div
           key={category.id}
           className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
         >
-          {filteredCategoryProducts.map(product => (
-            <div
-              key={product.id}
-              className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex-shrink-0 flex flex-col items-center text-center shadow-md snap-center transition-transform hover:scale-[1.03]"
-            >
-              <img
-                src={`/imagem/${product.imagem}`}
-                alt={`Imagem de ${product.name}`}
-                className="w-44 h-44 object-contain rounded-md mb-4"
-              />
+   <div className="flex gap-4 overflow-x-auto snap-x p-4">
+  {filteredCategoryProducts.map(product => (
+    <div
+      key={product.id}
+      className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex flex-col justify-between shadow-md snap-center transition-transform hover:scale-[1.03] h-[400px]"
+    >
+      {/* Conteúdo central */}
+      <div className="flex-1 flex flex-col justify-between items-center text-center">
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <img
+            src={product.imagem}
+            alt={product.name}
+            className="w-44 h-44 object-contain rounded-md mb-2"
+          />
+          <h3 className="text-lg font-bold text-gray-900  truncate w-full">
+            {product.name}
+          </h3>
+          <p className="text-sm text-gray-500 ">{product.descricao}</p>
+        </div>
 
-              <h3 className="text-lg font-bold text-gray-900 mb-1 truncate w-full">
-                {product.name}
-              </h3>
+        {/* Preço acima do botão */}
+        <p className="text-xl font-extrabold text-gray-900 mb-2">
+          R${Number(product.price).toFixed(2).replace('.', ',')}
+        </p>
+      </div>
 
-              <p className="text-sm text-gray-500 mb-3 h-12">{product.descricao}</p>
+      {/* Botão sempre no bottom */}
+      <button
+        className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
+          buttonTexts[product.id] === 'Adicionado!'
+            ? 'bg-green-500 hover:bg-green-600 cursor-default'
+            : 'bg-pink-600 hover:bg-pink-700'
+        } text-white`}
+        onClick={() => addToCart(product.id)}
+        disabled={buttonTexts[product.id] === 'Adicionado!'}
+      >
+        {buttonTexts[product.id] || 'Adicionar ao carrinho'}
+      </button>
+    </div>
+  ))}
+</div>
 
-              <p className="text-xl font-extrabold text-gray-900 mb-4">
-                R${Number(product.price).toFixed(2).replace('.', ',')}
-              </p>
 
-              <button
-                className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
-                  buttonTexts[product.id] === 'Adicionado!'
-                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                    : 'bg-pink-600 hover:bg-pink-700'
-                } text-white`}
-                onClick={() => addToCart(product.id)}
-                disabled={buttonTexts[product.id] === 'Adicionado!'}
-              >
-                {buttonTexts[product.id] || 'Adicionar ao carrinho'}
-              </button>
-            </div>
-          ))}
+
         </div>
       </div>
-                 {/* Botões de navegação */}
-      <button
-        onClick={handleLeftClick}
-        className=" lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
-      >
-        <FiChevronLeft size={24} />
-      </button>
+                 {/* Botão Direito */}
       
-      <button
-        onClick={handleRightClick}
-        className=" lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+      
+     <button
+        onClick={() => handleRightClick(category.id)}
+        className="lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
       >
         <FiChevronRight size={24} />
       </button>
@@ -316,14 +509,79 @@ export default function Dashboard({ products, categories, bannerss }) {
       <Modal show={showCreateBannerModal} onClose={() => setShowCreateBannerModal(false)}>
         <CreateBannerForm closeModal={() => setShowCreateBannerModal(false)} />
       </Modal>
+ {showFloating && (
+  <div className="fixed bottom-20 right-6 z-50">
+    {/* Botão dos 3 pontinhos */}
+    <button
+      onClick={() => setShowFloatingMenu(prev => {
+        if(!prev) setShowCartNotification(false);
+        return !prev
+      })}
+      className="p-3 bg-white text-pink-600 border border-pink-600 rounded-full shadow-lg hover:bg-pink-100 transition"
+      title="Mais opções"
+    >
+      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10 6a1.5 1.5 0 110-3 1.5 1.5 0 010 3zm0 2a1.5 1.5 0 110 3 1.5 1.5 0 010-3zm0 5a1.5 1.5 0 110 3 1.5 1.5 0 010-3z" />
+      </svg>
+    </button>
+
+    {/* Menu horizontal de ícones */}
+    {showFloatingMenu && (
+      
+      <div className="absolute bottom-16 right-0 transform translate-x-0 bg-white border border-gray-200 rounded-full shadow-lg px-4 py-2 flex gap-4">
+        <Link
+  href="/CarrinhoDeCompra"
+  className="relative flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+  title="Carrinho"
+>
+ <ShoppingCart className="h-6 w-6" />
+  {cartTotal > 0 && (
+    <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+      {cartTotal}
+    </span>
+  )}
+</Link>
+
+
+        <Link
+          href="/MeusPedidos"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Meus Pedidos"
+        >
+          <ReceiptText className="h-6 w-6" />
+        </Link>
+
+        <Link
+          href="/contato"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Contato"
+        >
+        <MessagesSquare className="h-5 w-5" />
+        </Link>
+
+        <Link
+          method="post"
+          href={route('logout')}
+          as="button"
+          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          title="Sair"
+        >
+          <LogOut className="h-6 w-6" />
+        </Link>
+      </div>
+    )}
+  </div>
+)}
 
       {showScrollTop && (
+        
         <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
         </button>
       )}
+      
     </AuthenticatedLayout>
   );
 }

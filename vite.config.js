@@ -10,6 +10,7 @@ export default defineConfig({
         }),
         react(),
     ],
+<<<<<<< HEAD
     /*
    server: {
   host: '0.0.0.0',
@@ -24,4 +25,6 @@ export default defineConfig({
   cors: true,
 },
 */
+=======
+>>>>>>> 4b0a7648fcad568650352404e68c6f212fbca08b
 });

@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\cart_product;
 use App\Models\Cart;
+use App\Models\Promocao;
 use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Illuminate\Support\Facades\DB;
@@ -19,61 +20,143 @@ class CartProductController extends Controller
     {
         $userId = auth()->user()->id;  // Obtendo o id do usuário logado
       
-         // Realiza o INNER JOIN entre a tabela cart_product, cart e product
-    $cartProducts = DB::table('cart_product')
+   /*  DB::table('cart_product')
     ->join('product', 'cart_product.Id_Product', '=', 'product.id')
     ->join('cart', 'cart_product.Id_Cart', '=', 'cart.id')
+    ->join('promocao', 'cart_product.Id_Promo', '=', 'promocao.id')
+    ->join('category', 'product.id_categoria', '=', 'category.id')
     ->where('cart.Id_User', $userId)
+    ->where(function ($query) {
+        $query->where('product.ativo', 0)
+              ->orwhere('category.ativo', 0)
+              ->where('promocao.ativo', 0);
+    })
+    ->delete();
+*/
+
+$cartItems = DB::table('cart_product as cp')
+    ->leftJoin('promocao as pro', 'cp.Id_Promo', '=', 'pro.id')
+    ->leftJoin('cart as c', 'c.id', '=', 'cp.Id_Cart')
+    ->leftJoin('product as p', 'p.id', '=', 'cp.Id_Product')
+    ->where('c.id_user', $userId)
     ->select(
-        'cart_product.Id_Cart',
-        'cart_product.Id_Product',
-        'product.name',
-        'product.price',
-        'product.imagem',
-        'product.descricao',
-        'cart_product.quantity'
-    )
+        'cp.*', 
+        'pro.ativo as promo_ativo',
+        'p.ativo as produto_ativo'
+        )
     ->get();
 
+foreach ($cartItems as $item) {
+    //Promoção Ativa e Item Inativo
+    if ($item->promo_ativo == 1 && $item->produto_ativo == 0) {
+        DB::table('cart_product')
+        ->where('id', $item->id)
+        ->where('promo', false)
+        ->delete();
+        
+        //Promoção Inativa e Produto ativo
+    } else if ($item->promo_ativo == 0 && $item->produto_ativo == 1) {
+        DB::table('cart_product')
+        ->where('id', $item->id)
+        ->where('promo', true)
+        ->delete();
+
+        //tudo inativo
+    }else{
+        DB::table('cart_product')->where('id', $item->id)->delete();
+    }
+}
+
+
+         // Realiza o INNER JOIN entre a tabela cart_product, cart, product e promocao
+
+   $cartProducts = DB::table('cart_product as cp')
+    ->leftJoin('product as p', 'cp.Id_Product', '=', 'p.id')
+    ->leftJoin('promocao as pro', 'cp.Id_Promo', '=', 'pro.id')
+    ->leftJoin('product as promo_prod', 'pro.Id_Product', '=', 'promo_prod.id')
+    ->join('cart as c', 'cp.Id_Cart', '=', 'c.id')
+    ->select(
+        'cp.Id_Cart',
+        'cp.Id_Product',
+        'cp.Id_Promo',
+        'cp.quantity',
+        'cp.promo as isPromo',
+        
+        // Dados do produto direto (caso não seja promoção)
+        'p.name as product_name',
+        'p.imagem as product_image',
+        'p.descricao as product_description',
+        'p.price as product_price',
+        'p.id_categoria as product_Id_Category',
+        
+        // Dados da promoção
+        'pro.nome as promo_name',
+        'pro.price as promo_price',
+        'pro.quantidade as promo_quantity',
+        'pro.descricao as promo_description',
+        'pro.imagem as promo_image',
+        'pro.Id_Product as promo_Id_Product',
+        
+        
+        'c.Id_User'
+    )
+    ->where('c.Id_User', auth()->id())
+    ->get();
+
+
     
+       
         // Retorna os dados para a view
         return Inertia::render('Cart/Cart', [
             'cartProducts' => $cartProducts,
         ]);
     }
-   public function store(Request $request)
+public function store(Request $request)
 {
+    // Validação
     $request->validate([
-        'Id_Product' => 'required|exists:product,id',
+        'product_id' => 'nullable|exists:product,id',
+        'is_promo' => 'nullable|boolean',
+        'price' => 'nullable|numeric',
+        'promo_id' => 'nullable|exists:promocao,id',
+        'quantidade' => 'nullable|integer|min:1',
     ]);
 
-    // Obtém o carrinho do usuário autenticado
+
+
+    // Obtem o carrinho do usuário logado
     $cart = Cart::where('id_user', Auth::id())->first();
 
     if (!$cart) {
         return response()->json(['message' => 'Carrinho não encontrado.'], 404);
     }
 
-    // Verifica se o produto já está no carrinho
+    // Checar se o produto já está no carrinho
     $existingProduct = DB::table('cart_product')
         ->where('Id_Cart', $cart->id)
-        ->where('Id_Product', $request->Id_Product)
+        ->where('Id_Product', $request->product_id)
+        ->where('promo', $request->is_promo ?? false) // garante que não misture normal com promocional
+        ->where('Id_Promo', $request->promo_id)
         ->first();
 
     if ($existingProduct) {
-        // Já existe -> apenas incrementa a quantidade
+        // Produto já existe no carrinho: aumenta a quantidade
         DB::table('cart_product')
-            ->where('Id_Cart', $cart->id)
-            ->where('Id_Product', $request->Id_Product)
+            ->where('id', $existingProduct->id)
             ->update([
-                'quantity' => $existingProduct->quantity + 1,
+                'quantity' => $existingProduct->quantity + ($request->quantidade ?? 1),
             ]);
     } else {
-        // Ainda não existe -> cria um novo registro
+        // Produto novo: insere
         DB::table('cart_product')->insert([
             'Id_Cart' => $cart->id,
-            'Id_Product' => $request->Id_Product,
-            'quantity' => 1,
+            'Id_Product' => $request->product_id,
+            'quantity' => $request->quantidade ?? 1,
+            'preco' => $request->price ?? null,
+            'promo' => $request->is_promo ?? false,
+            'Id_Promo' => $request->promo_id,
+            'created_at' => now(),
+            'updated_at' => now(),
         ]);
     }
 

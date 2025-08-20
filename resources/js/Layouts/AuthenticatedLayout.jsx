@@ -31,12 +31,12 @@ export default function AuthenticatedLayout({ header, children }) {
         };
     }, []);
 
-    const pinkColor = '#EF3167';
+
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Faixa superior */}
-            <div className="bg-pink-600 text-white text-center text-xs py-1 font-bold" style={{ letterSpacing: '0.05em' }}>
+            <div className="bg-[#613d20] text-white text-center text-xs py-1 font-bold" style={{ letterSpacing: '0.05em' }}>
                 <strong style={{ fontWeight: '700', color: 'white' }}>
                     Sua felicidade começa com um doce &{' '}
                 </strong>
@@ -51,29 +51,26 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <Link href="/dashboard">
                             <img
-                                src="/imagens/Logo_GabyAtualizada.png"
-                                alt="Logo"
-                                width="80"
-                                height="80"
+                               src="imagens/Banner2 - Editado - Editado.png"
+                               alt="Logo"
+                               width="300"
+                               height="300"
                                 className="object-contain"
                             />
                         </Link>
                         ) : (
                             <Link href="/">
                             <img
-                                src="/imagens/Logo_GabyAtualizada.png"
+                                src="imagens/Banner2 - Editado - Editado.png"
                                 alt="Logo"
-                                width="80"
-                                height="80"
+                                width="300"
+                                height="300"
                                 className="object-contain"
                             />
                         </Link>
                         )}
                         
-                        <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet" />
-                        <h1 style={{ fontFamily: "'Lobster', cursive" }} className="text-3xl text-pink-600 select-none">
-                            Gaby Guslafer
-                        </h1>
+                
                     </div>
 
                     {/* Navegação - visível em telas grandes */}
@@ -81,20 +78,23 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <>
                             {user.admin === 1 && (
-                            <Link href="/Administracao" className="hover:text-pink-600 transition-colors duration-300">
+                            <Link href="/Administracao" className="hover:text-[#8a5a33] transition-colors duration-300">
                                 ADMINISTRAÇÃO
                             </Link>
                             )}
-                        <Link href="/dashboard" className="hover:text-pink-600 transition-colors duration-300">
+                        <Link href="/dashboard" className="hover:text-[#8a5a33] transition-colors duration-300">
                             CATÁLOGO
                         </Link>
-                        <Link href="/CarrinhoDeCompra" className="hover:text-pink-600 transition-colors duration-300">
+                        <Link href="/CarrinhoDeCompra" className="hover:text-[#8a5a33] transition-colors duration-300">
                             CARRINHO
-                        </Link>     
+                        </Link>   
+                           <Link href="/MeusPedidos" className="hover:text-[#8a5a33] transition-colors duration-300">
+                            MEUS PEDIDOS
+                        </Link> 
                             </>
                         ): (
                             <>
-                            <Link href="/" className="hover:text-pink-600 transition-colors duration-300">
+                            <Link href="/" className="hover:text-[#8a5a33]transition-colors duration-300">
                             CATÁLOGO
                         </Link>
                          <Link href="/CarrinhoWL" className="hover:text-pink-600 transition-colors duration-300">
@@ -103,20 +103,20 @@ export default function AuthenticatedLayout({ header, children }) {
                         </>
                         )}
                        
-                        <Link href="/contato" className="hover:text-pink-600 transition-colors duration-300">
+                        <Link href="/sobre" className="hover:text-[#8a5a33] transition-colors duration-300">
                             SOBRE
                         </Link>
                         {user ? (
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
-                                className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300 shadow-md"
+                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#df9c94] transition-colors duration-300 shadow-md"
                             >
                                 {user.name}
                             </button>
                         ) : (
                             <Link
                                 href="/login"
-                                className="bg-pink-600 text-white px-4 py-2 rounded-md hover:bg-pink-700 transition-colors duration-300 shadow-md"
+                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#df9c94] transition-colors duration-300 shadow-md"
                             >
                                 LOGIN
                             </Link>
@@ -171,7 +171,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                          <>
                      {user.admin === 1 && (
-                     <Link href="/Administracao" className="block text-gray-700 hover:text-pink-600">
+                     <Link href="/Administracao" className="block text-gray-700 hover:text-[#8a5a33]">
                         ADMINISTRAÇÃO
                      </Link>
                         )}
@@ -181,6 +181,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-pink-600">
                             CARRINHO
                         </Link>
+                           <Link href="/MeusPedidos" className="block text-gray-700 hover:text-pink-600">
+                            MEUS PEDIDOS
+                        </Link> 
                      </>
                     )  : (
                         <>
@@ -194,7 +197,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     )}
                      
                         
-                        <Link href="/contato" className="block text-gray-700 hover:text-pink-600">
+                        <Link href="/sobre" className="block text-gray-700 hover:text-pink-600">
                             SOBRE
                         </Link>
                         {user ? (

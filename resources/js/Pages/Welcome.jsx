@@ -1,12 +1,18 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, router, usePage } from '@inertiajs/react';
+import { Link, Head, router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect, useRef } from 'react';
-import { FiFilter, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { ShoppingCart, ReceiptText, MessagesSquare, LogOut } from 'lucide-react';
+import { FiShoppingCart,FiFilter, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 
-export default function Welcome({ products, categories }) {
+export default function Welcome({ products, categories, promocoes }) {
   const shop = usePage().props.shop;  
   const banner = shop.banner;
 
+
+  const [showFloating, setShowFloating] = useState(false);
+  const [showCartNotification, setShowCartNotification] = useState(false);
+
+  const cartTotal = usePage().props.auth?.cart?.totalItems || 0;
 
   // Estados para busca e filtro
   const [searchText, setSearchText] = useState('');
@@ -23,11 +29,8 @@ export default function Welcome({ products, categories }) {
   // Monitorar scroll para mostrar/ocultar botão voltar ao topo
   useEffect(() => {
     const handleScroll = () => {
-      if (window.pageYOffset > 100) {
-        setShowScrollTop(true);
-      } else {
-        setShowScrollTop(false);
-      }
+      setShowScrollTop(window.pageYOffset > 100);
+      setShowFloating(window.pageYOffset > 100);
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -44,22 +47,29 @@ export default function Welcome({ products, categories }) {
   };
 
   // Função para adicionar produto ao carrinho (session / cache)
-  const addToCart = (productId) => {
-    router.post("/cartwl/add", { product_id: productId, quantity: 1 }, {
+  const addToCart = (Id_Product, isPromo, price, promoId, quantidade, kitquantidade) => {
+    router.post("/cartwl/add", { 
+    product_id: Id_Product, 
+    is_promo: isPromo,
+    price: price,
+    promo_id: promoId,
+    quantity: quantidade ,
+    kitquantidade : kitquantidade,
+    }, {
       preserveScroll: true,
       onSuccess: () => {
-        setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionado!" }));
+        setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionado!" }));
       },
       onError: (errors) => {
         console.error(errors);
         alert("Erro ao adicionar o produto ao carrinho.");
-        setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionar ao Carrinho" }));
+        setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
       },
     });
 
     // Volta ao texto original após 800ms
     setTimeout(() => {
-      setButtonTexts((prev) => ({ ...prev, [productId]: "Adicionar ao Carrinho" }));
+      setButtonTexts((prev) => ({ ...prev, [Id_Product]: "Adicionar ao Carrinho" }));
     }, 800);
   };
 
@@ -92,18 +102,18 @@ export default function Welcome({ products, categories }) {
     }
   });
 
-  const carousel = useRef(null);
-
-  const handleLeftClick = (e) =>{
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);
-    carousel.current.scrollLeft -= carousel.current.offsetWidth;
-  }
-  const handleRightClick = (e) =>{
-    e.preventDefault();
-    console.log(carousel.current.offsetWidth);
-     carousel.current.scrollLeft += carousel.current.offsetWidth;
-  }
+   const carouselsRef = useRef({});
+ 
+  const handleLeftClick = (categoryId) => {
+   const el = carouselsRef.current[categoryId]?.current;
+   if (el) el.scrollLeft -= 200;
+ };
+ 
+ const handleRightClick = (categoryId) => {
+   const el = carouselsRef.current[categoryId]?.current;
+   if (el) el.scrollLeft += 200;
+ };
+   
 
     const categoriaRef = useRef(null);
   
@@ -119,6 +129,32 @@ export default function Welcome({ products, categories }) {
   return (
     <AuthenticatedLayout>
       <Head title="Bem-vindo" />
+      <div className="flex justify-center mt-6 mb-10">
+  <div className={`inline-flex items-center gap-3 px-5 py-3 rounded-full font-semibold text-white
+    ${shop.loja_aberta ? 'bg-green-600' : 'bg-red-600'}
+    shadow-lg transition-colors duration-300`}
+    title={`A loja está atualmente ${shop.loja_aberta ? 'ABERTA' : 'FECHADA'}`}
+  >
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      className="h-6 w-6" 
+      fill="none" 
+      viewBox="0 0 24 24" 
+      stroke="currentColor" 
+      strokeWidth={2}
+    >
+      {shop.loja_aberta ? (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4" /> // checkmark verde
+      ) : (
+        <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" /> // X vermelho
+      )}
+    </svg>
+    <span className="uppercase tracking-wide">
+      Loja {shop.loja_aberta ? 'Aberta' : 'Fechada'}
+    </span>
+  </div>
+</div>
+
 
       <div className="relative w-full mt-10">
         {banner ? (
@@ -131,6 +167,119 @@ export default function Welcome({ products, categories }) {
           <div></div>
         )}
       </div>
+
+{promocoes.length > 0 && (
+  <div className="w-full px-4 md:px-10 mt-10">
+    <h2 className="text-center text-3xl font-bold text-pink-700 mb-8">
+      PROMOÇÕES
+    </h2>
+
+    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+      {promocoes.map((promo) => {
+        const product = promo.product;
+        const precoOriginal = product?.price || null;
+        const precoPromo = parseFloat(promo.price);
+        const unidade = (precoPromo / promo.quantidade);
+        const porcentagem = precoOriginal
+          ? Math.round(((precoOriginal - precoPromo / promo.quantidade) / precoOriginal) * 100)
+          : null;
+
+        return (
+          <div
+            key={promo.id}
+            className="flex flex-col justify-between bg-white rounded-2xl shadow-md p-4 transition-transform hover:scale-[1.02] h-[480px]"
+          >
+            <div>
+              <div className="relative w-full h-40 mb-4">
+                <img
+                  src={product?.imagem || promo.imagem}
+                  alt="Promoção"
+                  className="w-full h-full object-contain rounded-md"
+                />
+                <div className="absolute top-2 left-2 bg-red-600 text-white text-xs px-3 py-1 rounded-full shadow-md font-semibold">
+                  OFERTA
+                </div>
+              </div>
+
+              <h3 className="text-lg font-bold text-gray-800 mb-1 text-center truncate">
+                {product?.name || promo.nome}
+                
+              </h3>
+
+              <p className="text-sm text-gray-500 mb-2 text-center line-clamp-2 h-[2.8rem]">
+                {product?.descricao || promo.descricao}
+              </p>
+
+              <div className="text-center text-sm text-gray-700 mb-2">
+                {promo.quantidade} un. por:
+              </div>
+
+              <div className="flex justify-center items-baseline gap-2 mb-1">
+                {precoOriginal && (
+                  <span className="text-sm text-gray-400 line-through">
+                    R${precoOriginal.replace('.', ',')}
+                  </span>
+                )}
+                <span className="text-xl font-bold text-pink-600">
+                  R${precoPromo.toFixed(2).replace('.', ',')}
+                </span>
+                
+                 
+              </div>
+               <div className="flex flex-col items-center mb-2">
+  <p className="text-sm text-gray-600">Preço unitário</p>
+  <span className="text-xl font-extrabold text-pink-600 tracking-tight">
+    R$ {unidade.toFixed(2).replace('.', ',')}
+  </span>
+</div>
+
+              
+
+              {porcentagem && (
+                <div className="text-center text-xs text-green-600 font-semibold mb-2">
+                  ECONOMIZE {porcentagem}%
+                </div>
+              )}
+
+              {promo.estoque && (
+              <div className="text-sm text-gray-600 text-center mb-2">
+                Estoque: <span className="font-bold">{promo.estoque}</span>
+              </div>
+              )}
+             
+            </div>
+
+            <div className="mt-auto pt-3">
+              <button
+                className={`w-full py-2 rounded-full font-semibold text-white transition-colors duration-300 ${
+                  buttonTexts[promo.Id_Product] === 'Adicionado!'
+                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
+                    : 'bg-pink-600 hover:bg-pink-700'
+                }`}
+               onClick={() =>
+            addToCart(
+            promo.Id_Product,
+            true,
+            promo.price,
+            promo.id,
+            1,
+            promo.quantidade,
+            )
+}
+                disabled={buttonTexts[promo.Id_Product] === 'Adicionado!'}
+              >
+                {buttonTexts[promo.Id_Product] || 'Adicionar ao carrinho'}
+              </button>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+)}
+
+
+
 
 <div className="relative w-full">
       <h2 className="text-center text-xl font-bold text-gray-800 mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
@@ -247,27 +396,37 @@ export default function Welcome({ products, categories }) {
      
        if (filteredCategoryProducts.length === 0) return null;
      
+      if (!carouselsRef.current[category.id]) {
+         carouselsRef.current[category.id] = React.createRef();
+       }
      
        return (
          <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
+     
            <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
              {category.name.toUpperCase()}
            </h2>
-     
+            {/* Botão Esquerdo */}
+         <button
+             onClick={() => handleLeftClick(category.id)}
+             className="lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+           >
+             <FiChevronLeft size={24} />
+           </button>
+         
            {/* Carrossel com drag */}
-           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carousel}>
-  <div
-
-    className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
-
-  >
+           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carouselsRef.current[category.id]}>
+            <div
+               key={category.id}
+               className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
+             >
                {filteredCategoryProducts.map(product => (
                  <div
                    key={product.id}
                    className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex-shrink-0 flex flex-col items-center text-center shadow-md snap-center transition-transform hover:scale-[1.03]"
                  >
                    <img
-                     src={`/imagem/${product.imagem}`}
+                     src={`${product.imagem}`}
                      alt={`Imagem de ${product.name}`}
                      className="w-44 h-44 object-contain rounded-md mb-4"
                    />
@@ -276,7 +435,7 @@ export default function Welcome({ products, categories }) {
                      {product.name}
                    </h3>
      
-                   <p className="text-sm text-gray-500 mb-3 h-12">{product.descricao}</p>
+                   <p className="text-sm text-gray-500 mb-3">{product.descricao}</p>
      
                    <p className="text-xl font-extrabold text-gray-900 mb-4">
                      R${Number(product.price).toFixed(2).replace('.', ',')}
@@ -297,43 +456,47 @@ export default function Welcome({ products, categories }) {
                ))}
              </div>
            </div>
-            {/* Botões de navegação */}
-<button
-  onClick={handleLeftClick}
-  className=" lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
->
-  <FiChevronLeft size={24} />
-</button>
-
-<button
-  onClick={handleRightClick}
-  className=" lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
->
-  <FiChevronRight size={24} />
-</button>
+                      {/* Botão Direito */}
+           
+           
+          <button
+             onClick={() => handleRightClick(category.id)}
+             className="lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+           >
+             <FiChevronRight size={24} />
+           </button>
          </div>
        );
      })}
    
-      {/* Botão voltar ao topo */}
+  {showFloating && (
+  <div className="fixed bottom-20 right-6 z-50">
+    <Link
+      href="/CarrinhoWL"
+      className="relative flex items-center justify-center w-12 h-12 bg-white text-pink-600 border border-pink-600 rounded-full shadow-lg hover:bg-gray-100 transition"
+      title="Carrinho"
+    >
+      <ShoppingCart className="h-6 w-6" />
+      {cartTotal > 0 && (
+        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+          {cartTotal}
+        </span>
+      )}
+    </Link>
+  </div>
+)}
+
+
       {showScrollTop && (
-        <button
-          onClick={scrollToTop}
-          className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition"
-          title="Voltar ao topo"
-          style={{ zIndex: 1000 }}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="h-6 w-6"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-          >
+        
+        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
         </button>
       )}
+      
+      
     </AuthenticatedLayout>
   );
 }

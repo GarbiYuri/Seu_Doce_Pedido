@@ -24,25 +24,45 @@ class ShopController extends Controller
     /**
      * Atualiza o banner da loja com o ID 1.
      */
-    public function update(Request $request)
+public function update(Request $request)
 {
+    // Validação flexível: só valida se o campo foi enviado
     $request->validate([
-        'id_banner' => 'required|exists:banner,id', // valida se o banner existe
+        'id_banner' => 'nullable|exists:banner,id',
+        'hora_abertura' => 'nullable',
+        'hora_fechamento' => 'nullable',
+        'loja_aberta' => 'nullable|boolean',
+        'telefone' => 'nullable'
     ]);
 
-    // Busca ou cria o registro com id = 1, se criar já seta o id_banner
-    $shop = Shop::firstOrCreate(
-        ['id' => 1],
-        ['id_banner' => $request->id_banner]
-    );
+    // Busca ou cria o registro da loja
+    $shop = Shop::firstOrNew(['id' => 1]);
 
-    // Se o banner enviado for diferente do que já está salvo, atualiza
-    if ($shop->id_banner !== $request->id_banner) {
+    // Atualiza apenas os campos que vieram no request
+    if ($request->has('id_banner')) {
         $shop->id_banner = $request->id_banner;
-        $shop->save();
     }
 
+    if ($request->has('hora_abertura')) {
+        $shop->hora_abertura = $request->hora_abertura;
+    }
 
+    if ($request->has('hora_fechamento')) {
+        $shop->hora_fechamento = $request->hora_fechamento;
+    }
+
+    if ($request->has('loja_aberta')) {
+        $shop->loja_aberta = $request->loja_aberta;
+    }
+     if ($request->has('telefone')) {
+        $shop->telefone = $request->telefone;
+    }
+
+    $shop->save();
+
+    return redirect()->back();
 }
+
+
 
 }

@@ -14,6 +14,8 @@ use App\Http\Controllers\ShopController;
 use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\InformacoesPessoaisController;
 use App\Http\Controllers\CheckoutController;
+use App\Http\Controllers\VendaController;
+use App\Http\Controllers\PromocaoController;
 
 
 // Area de Testes 
@@ -27,6 +29,11 @@ Route::post('/update', [CartWLController::class, 'update']);
 Route::post('/remove', [CartWLController::class, 'destroy']);
 
 //Rotas do Checkout
+
+
+Route::get('/Vendas',  
+[CheckoutController::class, 'index'])
+->name('vendas.index');
 
 Route::get('/success', 
 [CheckoutController::class, 'success'])
@@ -59,6 +66,10 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('informacoes', InformacoesPessoaisController::class);
 
+Route::get('/sobre', function(){
+    return Inertia::render('Sobre/Sobre');
+})->name('sobre');
+
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 //Route::middleware(EmailVerifiedAt::class)->group(function () {
@@ -68,6 +79,17 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::get('/Administracao', function () {
             return Inertia::render('Admin/DashboardAdmin');
         })->name('Administracao');
+
+        //Rota Promoção
+
+        Route::get('/Promocao', function(){
+            return Inertia::render('Admin/Promocao/Promocoes');
+        })->name('Promocao');
+
+        Route::get('/promocoes/{id}/edit', [PromocaoController::class, 'edit'])
+        ->name('promocoes.edit');
+
+ 
 
         // Rota para os produtos
         Route::get('/Produtos', function () {
@@ -91,9 +113,32 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::resource('products', ProductController::class);
 
 
-        Route::get('/Vendas', function(){
-            return Inertia::render('Admin/Vendas/Vendas');
-        })->name('Vendas');
+        Route::get('/VendasLayout', function(){
+            return Inertia::render('Admin/Vendas/VendasLayout');
+        })->name('VendasLayout');
+
+        Route::post('/admin/vendas/{id}/status', [VendaController::class, 'atualizarStatus'
+    ])->name('vendas.atualizarStatus');
+
+    Route::post('/admin/vendas/{id}/cancelar', [VendaController::class, 'cancelar'
+    ])->name('vendas.cancelar');
+
+    
+// Rotas de Promoção
+
+Route::resource('promocoes', PromocaoController::class);
+
+//Rotas do Banner
+
+
+Route::resource('banners', BannerController::class);
+Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('banners.destroy');
+
+//Rotas do Shop
+
+Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
+Route::post('/shop/atualizar', [ShopController::class, 'update']); // para alterar o banner
+Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); // para alterar o telefone
 
         // Finaliza CheckifAdmin
     });
@@ -115,6 +160,18 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
     Route::post('/updateC', [CartProductController::class, 'update']);
     Route::post('/deleteC', [CartProductController::class, 'destroy']);
     
+    // Rota Pedido
+      Route::get('/MeusPedidos', function () {
+        return Inertia::render('Pedido/MeusPedidos');
+    })->name('MeusPedidos');
+
+    // Rota Pedido PHP
+      Route::get('/MeusPedidos', [CheckoutController::class, 'meuspedidos']);
+
+     
+    Route::post('/meus-pedidos/{id}/cancelar', [CheckoutController::class, 'cancelarPedido']);
+
+
 
     // Rotas de perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -126,16 +183,7 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
 // Finaliza EmailVerifiedAt
 });
 
-//Rotas do Banner
 
-
-Route::resource('banners', BannerController::class);
-Route::delete('/banners/{id}', [BannerController::class, 'destroy'])->name('banners.destroy');
-
-//Rotas do Shop
-
-Route::get('/shop/banner', [ShopController::class, 'index']); // para carregar os banners
-Route::post('/shop/banner', [ShopController::class, 'update']); // para alterar o banner
 
 Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');
 Route::match(['get', 'post'], '/pagarWL', [MercadoPagoController::class, 'pagarWL'])->name('pagarWL');
