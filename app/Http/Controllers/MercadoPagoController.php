@@ -92,10 +92,25 @@ class MercadoPagoController extends Controller
             $client = new PreferenceClient();
 
 
+                // Cria a preferência Mercado Pago
+            $preference = $client->create([
+                "back_urls" => array(
+                    "success" => "https://www.seudocepedido.shop/success",
+                    "failure" => "https://www.seudocepedido.shop/failure",
+                    "pending" => "https://www.seudocepedido.shop/pending"
+                ),
+                "auto_return" => "all",
+                "items" => $items,
+                "payer" => $payer,
+                "binary_mode" => true,
+    
+            ]);
+
                 // 1. Cria a venda no banco
         $venda = Venda::create([
          'id_user' => $user->id,
          'status' => 'iniciado', // ou 'pendente'
+          'payment_url' => $preference->init_point ?? null,
         'valor' => $total,
         'tipo' => $tipoPedido, // retirada ou entrega
         'nome' => $user->name,
@@ -120,12 +135,12 @@ class MercadoPagoController extends Controller
 
     VendaProduct::create([
         'id_venda' => $venda->id,
-        'id_product' => $product['id'] ?? null, // se tiver
+        'id_product' => $product['id_product'] ?? null, // se tiver
         'nome' => $product['name'] ?? $product['promo_name'],
         'preco' => $product['price'],
         'descricao' => $product['description'] ?? '',
         'imagem' => $product['imagem'] ?? '',
-        'id_category' => $product['id_category'] ?? null, // se tiver
+        'id_category' => $product['id_categoria'] ?? null, // se tiver
         'id_promocao' => $product['id_promo'] ?? null, // se tiver
         'categoria' => $categoriaNome ?? 'Sem categoria',
         'quantity' => $product['quantity'],
@@ -133,20 +148,7 @@ class MercadoPagoController extends Controller
     ]);
 }
 
-            // Cria a preferência Mercado Pago
-            $preference = $client->create([
-                "back_urls" => array(
-                    "success" => "https://www.seudocepedido.shop/success",
-                    "failure" => "https://www.seudocepedido.shop/failure",
-                    "pending" => "https://www.seudocepedido.shop/pending"
-                ),
-                "auto_return" => "all",
-                "items" => $items,
-                "payer" => $payer,
-                "binary_mode" => true,
-                "external_reference" => (string) $venda->id,
-    
-            ]);
+        
 
             // Busca os produtos do carrinho para mostrar no retorno
             $userId = auth()->id();
@@ -311,14 +313,14 @@ class MercadoPagoController extends Controller
             ->value('name'); 
     }
 
-    VendaProduct::create([
+     VendaProduct::create([
         'id_venda' => $venda->id,
-        'id_product' => $product['id'] ?? null,
+        'id_product' => $product['id_product'] ?? null,
         'nome' => $product['name'],
         'preco' => $product['price'],
         'descricao' => $product['description'] ?? '',
         'imagem' => $product['imagem'] ?? '',
-        'id_category' => $product['id_category'] ?? null, // se tiver
+        'id_category' => $product['id_categoria'] ?? null, // se tiver
         'id_promocao' => $product['id_promo'] ?? null, // se tiver
         'categoria' => $categoriaNome ?? 'Sem categoria',
         'quantity' => $product['quantity'],

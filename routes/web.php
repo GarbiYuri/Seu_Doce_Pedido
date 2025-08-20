@@ -66,6 +66,10 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('informacoes', InformacoesPessoaisController::class);
 
+Route::get('/sobre', function(){
+    return Inertia::render('Sobre/Sobre');
+})->name('sobre');
+
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
 //Route::middleware(EmailVerifiedAt::class)->group(function () {

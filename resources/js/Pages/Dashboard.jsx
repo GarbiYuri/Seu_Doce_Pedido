@@ -446,40 +446,50 @@ const handleRightClick = (categoryId) => {
           key={category.id}
           className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
         >
-          {filteredCategoryProducts.map(product => (
-            <div
-              key={product.id}
-              className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex-shrink-0 flex flex-col items-center text-center shadow-md snap-center transition-transform hover:scale-[1.03]"
-            >
-              <img
-                src={`${product.imagem}`}
-                alt={`Imagem de ${product.name}`}
-                className="w-44 h-44 object-contain rounded-md mb-4"
-              />
+   <div className="flex gap-4 overflow-x-auto snap-x p-4">
+  {filteredCategoryProducts.map(product => (
+    <div
+      key={product.id}
+      className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex flex-col justify-between shadow-md snap-center transition-transform hover:scale-[1.03] h-[400px]"
+    >
+      {/* Conteúdo central */}
+      <div className="flex-1 flex flex-col justify-between items-center text-center">
+        <div className="flex-1 flex flex-col justify-center items-center">
+          <img
+            src={product.imagem}
+            alt={product.name}
+            className="w-44 h-44 object-contain rounded-md mb-2"
+          />
+          <h3 className="text-lg font-bold text-gray-900  truncate w-full">
+            {product.name}
+          </h3>
+          <p className="text-sm text-gray-500 ">{product.descricao}</p>
+        </div>
 
-              <h3 className="text-lg font-bold text-gray-900 mb-1 truncate w-full">
-                {product.name}
-              </h3>
+        {/* Preço acima do botão */}
+        <p className="text-xl font-extrabold text-gray-900 mb-2">
+          R${Number(product.price).toFixed(2).replace('.', ',')}
+        </p>
+      </div>
 
-              <p className="text-sm text-gray-500 mb-3">{product.descricao}</p>
+      {/* Botão sempre no bottom */}
+      <button
+        className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
+          buttonTexts[product.id] === 'Adicionado!'
+            ? 'bg-green-500 hover:bg-green-600 cursor-default'
+            : 'bg-pink-600 hover:bg-pink-700'
+        } text-white`}
+        onClick={() => addToCart(product.id)}
+        disabled={buttonTexts[product.id] === 'Adicionado!'}
+      >
+        {buttonTexts[product.id] || 'Adicionar ao carrinho'}
+      </button>
+    </div>
+  ))}
+</div>
 
-              <p className="text-xl font-extrabold text-gray-900 mb-4">
-                R${Number(product.price).toFixed(2).replace('.', ',')}
-              </p>
 
-              <button
-                className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
-                  buttonTexts[product.id] === 'Adicionado!'
-                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                    : 'bg-pink-600 hover:bg-pink-700'
-                } text-white`}
-                onClick={() => addToCart(product.id)}
-                disabled={buttonTexts[product.id] === 'Adicionado!'}
-              >
-                {buttonTexts[product.id] || 'Adicionar ao carrinho'}
-              </button>
-            </div>
-          ))}
+
         </div>
       </div>
                  {/* Botão Direito */}

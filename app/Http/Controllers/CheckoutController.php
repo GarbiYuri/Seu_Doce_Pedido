@@ -18,6 +18,7 @@ class CheckoutController extends Controller
         ->select(
             'vendas.id as venda_id',
             'vendas.status',
+            'vendas.payment_url',
             'vendas.valor',
             'vendas.tipo',
             'vendas.created_at',
@@ -79,6 +80,7 @@ class CheckoutController extends Controller
     // Reindexa como array sequencial para o Inertia/Vue
     $vendas = array_values($vendas);
 
+
     return Inertia::render('Admin/Vendas/VendasLayout', [
         'vendas' => $vendas,
     ]);
@@ -95,6 +97,7 @@ public function meuspedidos()
         SELECT 
             v.id as venda_id,
             v.status,
+            v.payment_url,
             v.valor,
             v.tipo,
             v.created_at,
@@ -113,6 +116,7 @@ public function meuspedidos()
         ORDER BY v.created_at DESC
     ", [$user->id]);
 
+
     return Inertia::render('Pedido/MeusPedidos', [
         'vendas' => $vendas,
     ]);
@@ -122,13 +126,15 @@ public function cancelarPedido(Request $request, $id)
     $userId = Auth::id();
     $retornar = $request->input('retornar', false);
     
+    
+
     DB::transaction(function () use ($id, $userId, $retornar) {
         if($retornar){
         // Busca os produtos da venda
         $produtosDaVenda = DB::table('venda_products')
             ->where('id_venda', $id)
             ->get();
-
+        
         // Busca ou cria o carrinho do usuário
         $cart = Cart::firstOrCreate(['id_user' => $userId]);
 
@@ -138,6 +144,8 @@ public function cancelarPedido(Request $request, $id)
                 ->where('Id_Cart', $cart->id)
                 ->where('Id_Product', $produto->id_product)
                 ->first();
+        
+        
 
             if ($produtoNoCarrinho) {
                 // Incrementa quantidade
@@ -149,11 +157,12 @@ public function cancelarPedido(Request $request, $id)
                     ]);
             } else {
                 // Insere novo produto no carrinho
-                DB::table('cart_product')->insert([
+               DB::table('cart_product')->insert([
                     'Id_Cart' => $cart->id,
                     'Id_Product' => $produto->id_product,
                     'quantity' => $produto->quantity,
                 ]);
+
             }
         }
     }

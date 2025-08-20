@@ -12,6 +12,7 @@ const [showModal, setShowModal] = useState(false);
 const [pedidoParaCancelar, setPedidoParaCancelar] = useState(null);
 const [pedidos, setPedidos] = useState([]);
 
+
 const abrirModalCancelar = (vendaId) => {
   setPedidoParaCancelar(vendaId);
   setShowModal(true);
@@ -43,6 +44,7 @@ const cancelarSemRetorno = () => {
         acc[id] = {
           venda_id: id,
           status: item.status,
+          payment_url: item.payment_url,
           tipo: item.tipo,
           valor: item.valor,
           created_at: item.created_at,
@@ -143,15 +145,28 @@ console.log(pedidoSelecionado);
 
                             </ul>
 
-                                {pedidoSelecionado.status === 'iniciado' && (
-<button
-    onClick={() => abrirModalCancelar(pedidoSelecionado.venda_id)}
-    className="mt-6 flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded shadow"
->
-    Cancelar Pedido
-    <FiX />
-</button>
+                        {pedidoSelecionado.status === 'iniciado' && (
+                          
+  <div className="mt-6 flex gap-2">
+    <button
+      onClick={() => abrirModalCancelar(pedidoSelecionado.venda_id)}
+      className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded shadow"
+    >
+      Cancelar Pedido
+      <FiX />
+    </button>
+
+    <a
+      href={pedidoSelecionado.payment_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="flex-1 flex items-center justify-center gap-2 bg-green-600 hover:bg-green-700 text-white text-sm px-4 py-2 rounded shadow"
+    >
+      Realizar Pagamento
+    </a>
+  </div>
 )}
+
                         </>
                     ) : (
                         <p className="text-gray-500">Selecione um pedido para ver os detalhes.</p>

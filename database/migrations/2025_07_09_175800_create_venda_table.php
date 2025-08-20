@@ -16,6 +16,7 @@ return new class extends Migration
             $table->timestamps();
             $table->unsignedBigInteger('id_user')->nullable();
             $table->string('status');
+            $table->string('payment_url')->nullable();
             $table->decimal('valor', 10,2);
             $table->string('tipo');
             $table->string('nome');
@@ -25,8 +26,7 @@ return new class extends Migration
             $table->string('rua')->nullable();
             $table->string('numero')->nullable();
             $table->string('telefone')->nullable();
-
-
+            
              $table->foreign('id_user')->references('id')->on('users')->onDelete('cascade');
         });
     }
