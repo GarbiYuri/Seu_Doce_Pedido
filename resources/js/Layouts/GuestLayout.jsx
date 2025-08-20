@@ -3,20 +3,20 @@ export default function GuestLayout({ children }) {
         <div className="min-h-screen flex">
             {/* Lado esquerdo - escondido em telas pequenas */}
             <div
-                className="hidden md:flex md:w-1/2 bg-[#EF3167] flex-col items-center justify-center relative overflow-hidden"
+                className="hidden md:flex md:w-1/2 bg-[#8a5a33] flex-col items-center justify-center relative overflow-hidden"
                 style={{ perspective: '800px' }}
             >
-                <div className="absolute w-96 h-96 bg-white rounded-full blur-3xl opacity-40 z-10 animate-pop" />
+                <div className="absolute w-80 h-80 bg-white rounded-full blur-3xl opacity-40 z-20 animate-pop" />
 
                 <img
-                    src="imagens/Logo_GabyAtualizada.png"
+                    src="imagens/Logo_Original - Editado.png"
                     alt="Logo"
                     className="w-48 h-48 z-20 relative object-contain animate-pop"
-                    width="400"
-                    height="400"
+                    width="600"
+                    height="600"
                 />
 
-                <p className="mt-6 text-white font-poppins text-lg max-w-xs text-center">
+                <p className="mt-10 text-white font-poppins text-lg max-w-xs text-center">
                     Doces momentos por aqui!
                 </p>
 

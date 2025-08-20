@@ -36,12 +36,12 @@ export default function CategoryCreate() {
             {/* Formulário */}
             <form
                 onSubmit={handleSubmit}
-                className="bg-white border border-pink-200 rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
+                className="bg-white border border-[#8a5a33]  rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
             >
                 <div className="flex items-center gap-3 justify-center">
-                    <FiFolderPlus className="text-pink-600 w-8 h-8" />
+                    <FiFolderPlus className="text-[#613d20] w-8 h-8" />
                     <h2
-                        className="text-3xl font-extrabold text-pink-600 text-center"
+                        className="text-3xl font-extrabold text-[#613d20] text-center"
                         style={{ fontFamily: "'Candice', cursive" }}
                     >
                         Criar Categoria
@@ -51,14 +51,14 @@ export default function CategoryCreate() {
                 <div>
                     <label
                         htmlFor="name"
-                        className="block text-sm font-semibold text-pink-700 mb-1"
+                        className="block text-sm font-semibold text-[#613d20] mb-1"
                     >
                         Nome da categoria
                     </label>
                     <input
                         type="text"
                         id="name"
-                        className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+                        className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8a5a33] focus:border-[#8a5a33] transition text-sm"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
@@ -66,14 +66,14 @@ export default function CategoryCreate() {
                     />
                 </div>
        <div>
-  <label className="block text-sm font-semibold text-pink-700 mb-1">
+  <label className="block text-sm font-semibold text-[#613d20] mb-1">
     Imagem da Categoria
   </label>
 
   <div className="flex items-center gap-4">
     <label
       htmlFor="imagem"
-      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+      className="inline-flex items-center px-4 py-2 bg-[#613d20] text-white text-sm font-medium rounded-xl shadow hover:bg-p-[#8a5a33] cursor-pointer transition"
     >
       <FiFolderPlus className="mr-2" />
       Selecionar imagem
@@ -97,7 +97,7 @@ export default function CategoryCreate() {
 
                 <button
                     type="submit"
-                    className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"
+                    className="w-full py-2 bg-[#613d20] text-white text-base font-bold rounded-xl hover:bg-[#8a5a33] transition hover:scale-105 shadow-md"
                 >
                     Salvar Categoria
                 </button>
@@ -108,16 +108,16 @@ export default function CategoryCreate() {
                 {categories?.map((category) => (
                     <div
                         key={category.id}
-                        className="flex items-center justify-between bg-white border border-pink-200 rounded-xl p-4 shadow-sm hover:shadow-md transition"
+                        className="flex items-center justify-between bg-white border border-[#8a5a33] rounded-xl p-4 shadow-sm hover:shadow-md transition"
                     >
                         <div className="flex items-center gap-3">
-                            <FiFolder className="text-pink-500 w-6 h-6" />
-                            <span className="text-sm font-semibold text-pink-700">{category.name}</span>
+                            <FiFolder className="text-[#8a5a33]  w-6 h-6" />
+                            <span className="text-sm font-semibold text-[#613d20] ">{category.name}</span>
                         </div>
                         <div className="flex gap-2">
                             <button
                                 onClick={() => router.get(`/categories/${category.id}`)}
-                                className="text-pink-500 hover:text-pink-700 transition"
+                                className="text-[#613d20]  transition"
                                 title="Ver"
                             >
                                 <FiEye className="w-5 h-5" />
