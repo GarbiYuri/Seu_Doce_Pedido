@@ -92,7 +92,7 @@ useEffect(() => {
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-      <div style="text-align: center;">
+     <div style={{ textAlign: "center" }}>
   <img
     src="imagens/Banner2 - Editado - Editado.png"
     alt="Logo"

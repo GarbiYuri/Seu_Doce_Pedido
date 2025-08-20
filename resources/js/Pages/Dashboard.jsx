@@ -461,7 +461,7 @@ const handleRightClick = (categoryId) => {
                 {product.name}
               </h3>
 
-              <p className="text-sm text-gray-500 mb-3 h-12">{product.descricao}</p>
+              <p className="text-sm text-gray-500 mb-3">{product.descricao}</p>
 
               <p className="text-xl font-extrabold text-gray-900 mb-4">
                 R${Number(product.price).toFixed(2).replace('.', ',')}
