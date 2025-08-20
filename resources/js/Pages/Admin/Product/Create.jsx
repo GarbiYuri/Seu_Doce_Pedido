@@ -175,6 +175,7 @@ export default function ProductCreate({ categories }) {
 
   {/* Input real oculto */}
   <input
+    required
     id="imagem"
     type="file"
     accept="image/*"
