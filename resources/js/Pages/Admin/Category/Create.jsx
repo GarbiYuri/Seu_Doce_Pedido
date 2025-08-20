@@ -87,6 +87,7 @@ export default function CategoryCreate() {
 
   {/* Input real oculto */}
   <input
+    required 
     id="imagem"
     type="file"
     accept="image/*"
