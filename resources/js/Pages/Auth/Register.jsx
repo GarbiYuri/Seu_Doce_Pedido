@@ -32,7 +32,7 @@ export default function Register() {
                 <div className="relative w-full max-w-md font-poppins">
                      <Link
     href="/"
-    className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+    className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
 >
     <svg
         xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export default function Register() {
 </Link>
                 </div>
 
-                <h2 className="text-4xl text-[#EF3167] text-center mb-8 tracking-wider font-lobster">
+                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-lobster">
                     Cadastro
                 </h2>
 
@@ -59,7 +59,7 @@ export default function Register() {
                             id="name"
                             name="name"
                             value={data.name}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
                             autoComplete="name"
                             isFocused={true}
                             onChange={(e) => setData('name', e.target.value)}
@@ -75,7 +75,7 @@ export default function Register() {
                             type="email"
                             name="email"
                             value={data.email}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
                             autoComplete="username"
                             onChange={(e) => setData('email', e.target.value)}
                             required
@@ -90,7 +90,7 @@ export default function Register() {
                             type="password"
                             name="password"
                             value={data.password}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
                             autoComplete="new-password"
                             onChange={(e) => setData('password', e.target.value)}
                             required
@@ -105,7 +105,7 @@ export default function Register() {
                             type="password"
                             name="password_confirmation"
                             value={data.password_confirmation}
-                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
+                            className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
                             autoComplete="new-password"
                             onChange={(e) => setData('password_confirmation', e.target.value)}
                             required
@@ -116,14 +116,14 @@ export default function Register() {
                     <div className="flex flex-col items-center justify-center pt-4 space-y-4">
                         <Link
                             href={route('login')}
-                            className="text-sm text-[#EF3167] hover:underline text-center"
+                            className="text-sm text-[#613d20] hover:underline text-center"
                         >
                             Já está cadastrado?
                         </Link>
 
                         <button
                             type="submit"
-                            className="w-3/4 bg-[#EF3167] hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
+                            className="w-3/4 bg-[#613d20]  text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200"
                             disabled={processing}
                         >
                             Registrar
