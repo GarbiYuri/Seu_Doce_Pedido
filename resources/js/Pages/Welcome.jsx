@@ -390,84 +390,85 @@ export default function Welcome({ products, categories, promocoes }) {
 
       {/* Produtos filtrados agrupados por categoria */}
       {categories.map((category, index) => {
-       const filteredCategoryProducts = filteredProducts.filter(
-         p => p.id_categoria === category.id
-       );
-     
-       if (filteredCategoryProducts.length === 0) return null;
-     
-      if (!carouselsRef.current[category.id]) {
-         carouselsRef.current[category.id] = React.createRef();
-       }
-     
-       return (
-         <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-     
-           <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
-             {category.name.toUpperCase()}
-           </h2>
-            {/* Botão Esquerdo */}
-         <button
-             onClick={() => handleLeftClick(category.id)}
-             className="lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
-           >
-             <FiChevronLeft size={24} />
-           </button>
-         
-           {/* Carrossel com drag */}
-           <div className="overflow-x-auto px-8 hide-scrollbar" ref={carouselsRef.current[category.id]}>
+  const filteredCategoryProducts = filteredProducts.filter(
+    p => p.id_categoria === category.id
+  );
+
+  if (filteredCategoryProducts.length === 0) return null;
+
+  if (!carouselsRef.current[category.id]) {
+    carouselsRef.current[category.id] = React.createRef();
+  }
+
+  return (
+    <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
+      <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
+        {category.name.toUpperCase()}
+      </h2>
+
+      {/* Botão Esquerdo */}
+      <button
+        onClick={() => handleLeftClick(category.id)}
+        className="lg:flex items-center justify-center absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <FiChevronLeft size={24} />
+      </button>
+
+      {/* Carrossel com estilo padronizado */}
+      <div className="px-8">
+        <div
+          ref={carouselsRef.current[category.id]}
+          className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth overflow-x-auto hide-scrollbar cursor-grab active:cursor-grabbing"
+        >
+          {filteredCategoryProducts.map(product => (
             <div
-               key={category.id}
-               className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth cursor-grab active:cursor-grabbing"
-             >
-               {filteredCategoryProducts.map(product => (
-                 <div
-                   key={product.id}
-                   className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex-shrink-0 flex flex-col items-center text-center shadow-md snap-center transition-transform hover:scale-[1.03]"
-                 >
-                   <img
-                     src={`${product.imagem}`}
-                     alt={`Imagem de ${product.name}`}
-                     className="w-44 h-44 object-contain rounded-md mb-4"
-                   />
-     
-                   <h3 className="text-lg font-bold text-gray-900 mb-1 truncate w-full">
-                     {product.name}
-                   </h3>
-     
-                   <p className="text-sm text-gray-500 mb-3">{product.descricao}</p>
-     
-                   <p className="text-xl font-extrabold text-gray-900 mb-4">
-                     R${Number(product.price).toFixed(2).replace('.', ',')}
-                   </p>
-     
-                   <button
-                     className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
-                       buttonTexts[product.id] === 'Adicionado!'
-                         ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                         : 'bg-pink-600 hover:bg-pink-700'
-                     } text-white`}
-                     onClick={() => addToCart(product.id)}
-                     disabled={buttonTexts[product.id] === 'Adicionado!'}
-                   >
-                     {buttonTexts[product.id] || 'Adicionar ao carrinho'}
-                   </button>
-                 </div>
-               ))}
-             </div>
-           </div>
-                      {/* Botão Direito */}
-           
-           
-          <button
-             onClick={() => handleRightClick(category.id)}
-             className="lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
-           >
-             <FiChevronRight size={24} />
-           </button>
-         </div>
-       );
-     })}
+              key={product.id}
+              className="w-[300px] flex-shrink-0 bg-white rounded-xl p-4 flex flex-col justify-between items-center text-center shadow-md snap-start transition-transform hover:scale-[1.03] h-[400px]"
+            >
+              <div className="flex-1 flex flex-col justify-between items-center">
+                <div className="flex-1 flex flex-col justify-center items-center">
+                  <img
+                    src={product.imagem}
+                    alt={`Imagem de ${product.name}`}
+                    className="w-44 h-44 object-contain rounded-md mb-2"
+                  />
+                  <h3 className="text-lg font-bold text-gray-900 truncate w-full">
+                    {product.name}
+                  </h3>
+                  <p className="text-sm text-gray-500">{product.descricao}</p>
+                </div>
+                <p className="text-xl font-extrabold text-gray-900 mt-3">
+                  R${Number(product.price).toFixed(2).replace('.', ',')}
+                </p>
+              </div>
+
+              <button
+                className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
+                  buttonTexts[product.id] === 'Adicionado!'
+                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
+                    : 'bg-pink-600 hover:bg-pink-700'
+                } text-white`}
+                onClick={() => addToCart(product.id)}
+                disabled={buttonTexts[product.id] === 'Adicionado!'}
+              >
+                {buttonTexts[product.id] || 'Adicionar ao carrinho'}
+              </button>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Botão Direito */}
+      <button
+        onClick={() => handleRightClick(category.id)}
+        className="lg:flex items-center justify-center absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-white border border-gray-300 shadow-md rounded-full p-2 hover:bg-gray-100"
+      >
+        <FiChevronRight size={24} />
+      </button>
+    </div>
+  );
+})}
+
    
   {showFloating && (
   <div className="fixed bottom-20 right-6 z-50">
