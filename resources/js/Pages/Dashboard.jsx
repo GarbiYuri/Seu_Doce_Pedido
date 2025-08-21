@@ -450,7 +450,7 @@ const handleRightClick = (categoryId) => {
   {filteredCategoryProducts.map(product => (
     <div
       key={product.id}
-      className="min-w-[260px] max-w-[280px] bg-white rounded-xl p-4 flex flex-col justify-between shadow-md snap-center transition-transform hover:scale-[1.03] h-[400px]"
+      className="min-w-[300px] max-w-[280px] bg-white rounded-xl p-4 flex flex-col justify-between shadow-md snap-center transition-transform hover:scale-[1.03] h-[400px]"
     >
       {/* Conteúdo central */}
       <div className="flex-1 flex flex-col justify-between items-center text-center">
