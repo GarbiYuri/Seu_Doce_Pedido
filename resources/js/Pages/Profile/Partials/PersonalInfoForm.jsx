@@ -60,7 +60,7 @@ export default function PersonalInfoForm() {
   return (
     <section className="mt-6">
       <header>
-        <h2 className="text-lg font-bold text-pink-600">Informações Pessoais</h2>
+        <h2 className="text-lg font-bold text-[#613d20]">Informações Pessoais</h2>
         <p className="mt-1 text-sm text-gray-600">
           Adicione seu endereço, telefone e CPF para facilitar o processo de entrega.
         </p>
@@ -131,7 +131,7 @@ export default function PersonalInfoForm() {
         <button
           type="submit"
           disabled={processing}
-          className="bg-pink-600 text-white px-4 py-2 rounded hover:bg-pink-700"
+          className="bg-[#613d20] text-white px-4 py-2 rounded hover:bg-[#8a5a33]"
         >
           Salvar
         </button>

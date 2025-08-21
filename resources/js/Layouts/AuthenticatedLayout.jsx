@@ -127,7 +127,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     {/* Botão hamburguer - visível em telas pequenas */}
                     <button
                         onClick={() => setShowingNavigationDropdown(!showingNavigationDropdown)}
+
                         className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-white hover:bg-[#613d20] focus:outline-none transition"
+
                     >
                         <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             {showingNavigationDropdown ? (
@@ -149,7 +151,9 @@ export default function AuthenticatedLayout({ header, children }) {
                         <div className="flex flex-col items-center py-2">
                             <ResponsiveNavLink
                                 href={route('profile.edit')}
+
                                 className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
+
                             >
                                 Perfil
                             </ResponsiveNavLink>
@@ -157,7 +161,9 @@ export default function AuthenticatedLayout({ header, children }) {
                                 method="post"
                                 href={route('logout')}
                                 as="button"
+
                                 className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
+
                             >
                                 Sair
                             </ResponsiveNavLink>
@@ -190,7 +196,9 @@ export default function AuthenticatedLayout({ header, children }) {
                     <Link href="/" className="block text-gray-700 hover:text-[#8a5a33]">
                      CATÁLOGO
                     </Link>
+
                     <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-[#8a5a33]">
+
                     CARRINHO
                     </Link>
                         </>

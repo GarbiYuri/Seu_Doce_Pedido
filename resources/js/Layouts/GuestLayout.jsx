@@ -16,9 +16,10 @@ export default function GuestLayout({ children }) {
                     height="600"
                 />
 
-                <p className="mt-10 text-white font-poppins text-lg max-w-xs text-center">
+                <p className="mt-10 text-white font-poppins text-lg max-w-xs text-center animate-typing overflow-hidden whitespace-nowrap border-r-2 border-white pr-2">
                     Doces momentos por aqui!
                 </p>
+
 
                 <style>{`
                     @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');

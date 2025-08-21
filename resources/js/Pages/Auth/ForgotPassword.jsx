@@ -20,7 +20,7 @@ export default function ForgotPassword({ status }) {
             <Head title="Recuperar Senha" />
   <Link
                     href="http://127.0.0.1:8000/"
-                    className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#EF3167] hover:text-pink-700 transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+                    className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#8a5a33] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +57,7 @@ export default function ForgotPassword({ status }) {
                         type="email"
                         name="email"
                         value={data.email}
-                        className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#EF3167] focus:ring focus:ring-[#EF3167] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
+                        className="mt-1 block w-full rounded-lg border border-gray-300 shadow-sm focus:outline-none focus:border-[#613d20] focus:ring focus:ring-[#613d20] focus:ring-opacity-50 transition duration-300 ease-in-out pl-3"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
                         required
@@ -70,7 +70,7 @@ export default function ForgotPassword({ status }) {
 
                 <div className="flex flex-col items-center justify-center pt-4 space-y-4">
                     <PrimaryButton
-                        className="w-3/4 bg-[#EF3167] hover:bg-pink-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex justify-center"
+                        className="w-3/4 bg-[#EF3167] hover:bg-[#613d20] text-white font-semibold py-2 px-4 rounded-lg transition-colors duration-200 flex justify-center"
                         disabled={processing}
                     >
                         Enviar link de recuperação

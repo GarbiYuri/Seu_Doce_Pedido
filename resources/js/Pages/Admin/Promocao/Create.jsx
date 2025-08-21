@@ -49,20 +49,20 @@ export default function PromocaoCreate({ products }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="bg-white border border-pink-200 rounded-3xl shadow-lg p-6 sm:p-10 space-y-6 mb-10 max-w-4xl mx-auto"
+      className="bg-white border border-[#8a5a33] rounded-3xl shadow-lg p-6 sm:p-10 space-y-6 mb-10 max-w-4xl mx-auto"
       encType="multipart/form-data"
     >
-      <h2 className="text-3xl font-extrabold text-pink-600 text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
+      <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
         Criar Promoção
       </h2>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Produto (opcional)</label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Produto (opcional)</label>
         <select
           name="Id_Product"
           value={formData.Id_Product}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20]transition text-sm"
         >
           <option value="">Selecione um produto</option>
           {products.map(prod => (
@@ -72,31 +72,31 @@ export default function PromocaoCreate({ products }) {
       </div>
 
        <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Nome:</label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Nome:</label>
        <input
           type="text"
           name="nome"
           value={formData.nome}
           onChange={handleChange}
           placeholder="Nome da Promoção"
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Descrição</label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Descrição</label>
         <input
           type="text"
           name="descricao"
           value={formData.descricao}
           onChange={handleChange}
           placeholder="Descrição da promoção"
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20]transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Preço *</label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Preço *</label>
         <input
           type="number"
           name="price"
@@ -105,40 +105,40 @@ export default function PromocaoCreate({ products }) {
           placeholder="Preço"
           step="0.01"
           required
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20]transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Quantidade:</label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Quantidade:</label>
         <input
           type="number"
           name="quantidade"
           value={formData.quantidade}
           placeholder="Unidade por Compra"
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Estoque(kit):</label>
+        <label className="block text-sm font-semibold text-[#613d20]  mb-1">Estoque(kit):</label>
         <input
           type="number"
           name="estoque"
           value={formData.estoque}
           placeholder="Valor inteiro (quantidade)"
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33]rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
         />
       </div>
 
       <div>
-        <label className="block text-sm font-semibold text-pink-700 mb-1">Imagem </label>
+        <label className="block text-sm font-semibold text-[#613d20] mb-1">Imagem </label>
         <div className="flex items-center gap-4">
           <label
             htmlFor="imagem"
-            className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+            className="inline-flex items-center px-4 py-2 bg-[#8a5a33] text-white text-sm font-medium rounded-xl shadow hover:bg-[#613d20] cursor-pointer transition"
           >
             <FiFolderPlus className="mr-2" />
             Selecionar imagem 
@@ -160,7 +160,7 @@ export default function PromocaoCreate({ products }) {
 
       <button
         type="submit"
-        className="w-full py-3 bg-pink-600 text-white font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"
+        className="w-full py-3 bg-[#8a5a33] text-white font-bold rounded-xl hover:bg--[#613d20] transition hover:scale-105 shadow-md"
       >
         Criar Promoção
       </button>
