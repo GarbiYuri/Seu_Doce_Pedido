@@ -103,11 +103,11 @@ const id = cartItems?.length && cartItems.find(item => !item.isPromo)?.product?.
       <Head title="Carrinho de Compras" />
 
       { cartItems?.length > 0 ? (
-        <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md">
+        <div className="bg-white border border-[#8a5a33] rounded-3xl p-6 shadow-md">
           {cartItems.map(item => (
             <div
               key={item.key}
-              className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
+              className="flex items-center justify-between border-b border-[#8a5a33] pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
             >
               {/* Produto ou Promoção */}
               <div className="flex items-center gap-4">
@@ -127,11 +127,11 @@ const id = cartItems?.length && cartItems.find(item => !item.isPromo)?.product?.
                     R${ item.product.price}
                   </p>
                   {item.isPromo && item.product?.quantidade > 1 ? (
-                    <span className="text-xs text-pink-600 font-semibold">
+                    <span className="text-xs text-[#613d20] font-semibold">
                       Promoção (kit com {item.product?.quantidade} itens)
                     </span>
                   ) : item.isPromo && (
-                     <span className="text-xs text-pink-600 font-semibold">
+                     <span className="text-xs text-[#613d20] font-semibold">
                       Promoção
                     </span>
                   )}
@@ -151,14 +151,14 @@ const id = cartItems?.length && cartItems.find(item => !item.isPromo)?.product?.
                 <div className="flex items-center border border-gray-300 rounded-full px-3 py-1 bg-gray-50">
                   <button
                     onClick={() => updateQuantity(item.key, item.quantity - 1)}
-                    className="text-gray-700 hover:text-pink-600"
+                    className="text-gray-700 hover:text-[#613d20]"
                   >
                     <Minus size={16} />
                   </button>
                   <span className="text-sm font-semibold px-2">{item.quantity}</span>
                   <button
                     onClick={() => updateQuantity(item.key, item.quantity + 1)}
-                    className="text-gray-700 hover:text-pink-600"
+                    className="text-gray-700 hover:text-[#613d20]"
                   >
                     <Plus size={16} />
                   </button>
@@ -189,7 +189,7 @@ const id = cartItems?.length && cartItems.find(item => !item.isPromo)?.product?.
                 <button
                   type="submit"
                   disabled={form.processing}
-                  className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
+                  className="bg-[#613d20] hover:bg-[#613d20] text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
                 >
                   Continuar Compra
                 </button>

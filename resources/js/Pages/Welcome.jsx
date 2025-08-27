@@ -170,7 +170,7 @@ export default function Welcome({ products, categories, promocoes }) {
 
 {promocoes.length > 0 && (
   <div className="w-full px-4 md:px-10 mt-10">
-    <h2 className="text-center text-3xl font-bold text-pink-700 mb-8">
+    <h2 className="text-center text-3xl font-bold text-[#613d20] mb-8">
       PROMOÇÕES
     </h2>
 
@@ -220,7 +220,7 @@ export default function Welcome({ products, categories, promocoes }) {
                     R${precoOriginal.replace('.', ',')}
                   </span>
                 )}
-                <span className="text-xl font-bold text-pink-600">
+                <span className="text-xl font-bold text-[#613d20]">
                   R${precoPromo.toFixed(2).replace('.', ',')}
                 </span>
                 
@@ -228,7 +228,7 @@ export default function Welcome({ products, categories, promocoes }) {
               </div>
                <div className="flex flex-col items-center mb-2">
   <p className="text-sm text-gray-600">Preço unitário</p>
-  <span className="text-xl font-extrabold text-pink-600 tracking-tight">
+  <span className="text-xl font-extrabold text-[#613d20] tracking-tight">
     R$ {unidade.toFixed(2).replace('.', ',')}
   </span>
 </div>
@@ -254,7 +254,7 @@ export default function Welcome({ products, categories, promocoes }) {
                 className={`w-full py-2 rounded-full font-semibold text-white transition-colors duration-300 ${
                   buttonTexts[promo.Id_Product] === 'Adicionado!'
                     ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                    : 'bg-pink-600 hover:bg-pink-700'
+                    : 'bg-[#613d20] hover:bg-[#613d20]'
                 }`}
                onClick={() =>
             addToCart(
@@ -290,7 +290,7 @@ export default function Welcome({ products, categories, promocoes }) {
           onClick={scrollLeft}
           className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
         >
-          <FiChevronLeft className="text-pink-600" size={24} />
+          <FiChevronLeft className="text-[#613d20]" size={24} />
         </button>
 
         {/* Carrossel */}
@@ -315,7 +315,7 @@ export default function Welcome({ products, categories, promocoes }) {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              <div className="w-24 h-24 rounded-full border-2 border-pink-500 overflow-hidden flex items-center justify-center bg-white shadow">
+              <div className="w-24 h-24 rounded-full border-2 border-[#613d20]overflow-hidden flex items-center justify-center bg-white shadow">
                 {category.imagem ? (
                   <img
                     src={`/imagens/categorias/${category.imagem}`}
@@ -338,7 +338,7 @@ export default function Welcome({ products, categories, promocoes }) {
           onClick={scrollRight}
           className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
         >
-          <FiChevronRight className="text-pink-600" size={24} />
+          <FiChevronRight className="text-[#613d20]" size={24} />
         </button>
       </div>
     </div>
@@ -348,13 +348,13 @@ export default function Welcome({ products, categories, promocoes }) {
         <input
           type="text"
           placeholder="Pesquisar produtos..."
-          className="flex-grow border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500"
+          className="flex-grow border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#613d20]"
           value={searchText}
           onChange={e => setSearchText(e.target.value)}
         />
         <button
           onClick={() => setShowFilterOptions(!showFilterOptions)}
-          className="bg-pink-500 text-white p-2 rounded-md hover:bg-pink-600"
+          className="bg-[#613d20] text-white p-2 rounded-md hover:bg-[#613d20]"
           title="Filtrar por"
         >
           <FiFilter size={20} />
@@ -376,8 +376,8 @@ export default function Welcome({ products, categories, promocoes }) {
                     setFilterField(option.value);
                     setShowFilterOptions(false);
                   }}
-                  className={`cursor-pointer px-4 py-2 hover:bg-pink-100 ${
-                    filterField === option.value ? 'font-bold bg-pink-200' : ''
+                  className={`cursor-pointer px-4 py-2 hover:bg-[#8a5a33] ${
+                    filterField === option.value ? 'font-bold bg-[#8a5a33]' : ''
                   }`}
                 >
                   {option.label}
@@ -402,7 +402,7 @@ export default function Welcome({ products, categories, promocoes }) {
 
   return (
     <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-      <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
+      <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4">
         {category.name.toUpperCase()}
       </h2>
 
@@ -474,12 +474,12 @@ export default function Welcome({ products, categories, promocoes }) {
   <div className="fixed bottom-20 right-6 z-50">
     <Link
       href="/CarrinhoWL"
-      className="relative flex items-center justify-center w-12 h-12 bg-white text-pink-600 border border-pink-600 rounded-full shadow-lg hover:bg-gray-100 transition"
+      className="relative flex items-center justify-center w-12 h-12 bg-white text-pink-600 border border-[#613d20] rounded-full shadow-lg hover:bg-gray-100 transition"
       title="Carrinho"
     >
       <ShoppingCart className="h-6 w-6" />
       {cartTotal > 0 && (
-        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-[#613d20] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           {cartTotal}
         </span>
       )}
@@ -490,7 +490,7 @@ export default function Welcome({ products, categories, promocoes }) {
 
       {showScrollTop && (
         
-        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
+        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-[#613d20] text-white rounded-full shadow-lg hover:bg-[#613d20] transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>

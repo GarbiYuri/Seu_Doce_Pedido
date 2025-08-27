@@ -132,13 +132,13 @@ useEffect(() => {
 
       {updatedCart.length > 0 ? (
         
-        <div className="bg-white border border-pink-200 rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
+        <div className="bg-white border border-[#8a5a33] rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
           {updatedCart.map((product) => {
               const existe = product?.promo_Id_Product || null;
             return (
             <div
               key={product.Id_Product}
-              className="flex items-center justify-between border-b border-pink-100 pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
+              className="flex items-center justify-between border-b border-[#8a5a33] pb-4 mb-4 last:border-0 last:pb-0 last:mb-0"
             >
    
               {/* Produto */}
@@ -211,14 +211,14 @@ useEffect(() => {
                 <div className="flex items-center border border-gray-300 rounded-full px-3 py-1 bg-gray-50">
                   <button
                     onClick={() => decreaseQuantity(product.Id_Product)}
-                    className="text-gray-700 hover:text-pink-600"
+                    className="text-gray-700 hover:text-[#613d20]"
                   >
                     <Minus size={16} />
                   </button>
                   <span className="text-sm font-semibold px-2">{product.quantity}</span>
                   <button
                     onClick={() => increaseQuantity(product.Id_Product)}
-                    className="text-gray-700 hover:text-pink-600"
+                    className="text-gray-700 hover:text-[#613d20]"
                   >
                     <Plus size={16} />
                   </button>
@@ -229,8 +229,8 @@ useEffect(() => {
 })}
 
           {/* Subtotal */}
-          <div className="flex justify-between items-center pt-4 border-t border-pink-100 mt-4">
-            <span className="text-pink-500 font-bold text-base">SubTotal</span>
+          <div className="flex justify-between items-center pt-4 border-t border-[#8a5a33] mt-4">
+            <span className="text-[##613d20] font-bold text-base">SubTotal</span>
             <span className="text-lg font-bold text-gray-900">
               R$ {total.toFixed(2).replace('.', ',')}
             </span>
@@ -247,7 +247,7 @@ useEffect(() => {
   <div className="flex flex-col gap-3 mt-6">
     <button
       type="submit"
-      className="bg-pink-500 hover:bg-pink-600 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
+      className="bg-[#613d20] hover:bg-[#613d20] text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4"
     >
       Continuar Compra
     </button>
@@ -279,8 +279,8 @@ useEffect(() => {
             <button
   type="submit"
   disabled={botao} // Desativa quando "botao" é true
-  className={`bg-pink-500 text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 transition 
-    ${botao ? 'opacity-50 cursor-not-allowed' : 'hover:bg-pink-600'}
+  className={`bg-[#613d20] text-white py-2 px-5 rounded-full text-sm font-medium shadow-md mt-4 transition 
+    ${botao ? 'opacity-50 cursor-not-allowed' : 'hover:bg-[#613d20]'}
   
   `}
  

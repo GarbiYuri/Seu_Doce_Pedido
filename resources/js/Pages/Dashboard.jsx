@@ -326,7 +326,7 @@ const handleRightClick = (categoryId) => {
           onClick={scrollLeft}
           className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
         >
-          <FiChevronLeft className="text-pink-600" size={24} />
+          <FiChevronLeft className="text-[#613d20]" size={24} />
         </button>
 
         {/* Carrossel */}
@@ -350,7 +350,7 @@ const handleRightClick = (categoryId) => {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              <div className="w-24 h-24 rounded-full border-2 border-pink-500 overflow-hidden flex items-center justify-center bg-white shadow">
+              <div className="w-24 h-24 rounded-full border-2 border-[#613d20] overflow-hidden flex items-center justify-center bg-white shadow">
                 {category.imagem ? (
                   <img
                     src={`/imagens/categorias/${category.imagem}`}
@@ -374,7 +374,7 @@ const handleRightClick = (categoryId) => {
     <Link href="/CarrinhoDeCompra" className="relative flex items-center justify-center">
       <FiShoppingCart size={24} />
       {cartTotal > 0 && (
-        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-pink-600 text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 bg-white text-[#613d20] border border-[#613d20] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           {cartTotal}
         </span>
       )}
@@ -390,21 +390,21 @@ const handleRightClick = (categoryId) => {
           onClick={scrollRight}
           className="p-2 bg-white rounded-full shadow-md border border-gray-300 hover:bg-gray-100 transition"
         >
-          <FiChevronRight className="text-pink-600" size={24} />
+          <FiChevronRight className="text-[#613d20]" size={24} />
         </button>
       </div>
     </div>
 
       <div className="flex items-center gap-2 my-6 max-w-md mx-auto relative">
-        <input type="text" placeholder="Pesquisar produtos..." className="flex-grow border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-pink-500" value={searchText} onChange={e => setSearchText(e.target.value)} />
-        <button onClick={() => setShowFilterOptions(!showFilterOptions)} className="bg-pink-500 text-white p-2 rounded-md hover:bg-pink-600">
+        <input type="text" placeholder="Pesquisar produtos..." className="flex-grow border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#613d20]" value={searchText} onChange={e => setSearchText(e.target.value)} />
+        <button onClick={() => setShowFilterOptions(!showFilterOptions)} className="bg-[#613d20] text-white p-2 rounded-md hover:bg-[#613d20]">
           <FiFilter size={20} />
         </button>
         {showFilterOptions && (
           <div className="absolute top-full right-0 mt-1 bg-white border border-gray-300 rounded shadow-md z-50 w-40">
             <ul>
               {[{ label: 'Todos', value: 'all' }, { label: 'Categoria', value: 'category' }, { label: 'Nome', value: 'name' }, { label: 'Descrição', value: 'description' }, { label: 'Preço', value: 'price' }].map(option => (
-                <li key={option.value} onClick={() => { setFilterField(option.value); setShowFilterOptions(false); }} className={`cursor-pointer px-4 py-2 hover:bg-pink-100 ${filterField === option.value ? 'font-bold bg-pink-200' : ''}`}>
+                <li key={option.value} onClick={() => { setFilterField(option.value); setShowFilterOptions(false); }} className={`cursor-pointer px-4 py-2 hover:bg-[rgba(188,132,91,0.3)] ${filterField === option.value ? 'font-bold bg-[rgba(188,132,91,0.3)]' : ''}`}>
                   {option.label}
                 </li>
               ))}
@@ -425,7 +425,7 @@ const handleRightClick = (categoryId) => {
 
   return (
     <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-      <h2 className="text-2xl font-semibold text-pink-700 mb-6 pb-2 px-4">
+      <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4">
         {category.name.toUpperCase()}
       </h2>
 
@@ -469,7 +469,7 @@ const handleRightClick = (categoryId) => {
                 className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
                   buttonTexts[product.id] === 'Adicionado!'
                     ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                    : 'bg-pink-600 hover:bg-pink-700'
+                    : 'bg-[#613d20] hover:bg-pink-700'
                 } text-white`}
                 onClick={() => addToCart(product.id)}
                 disabled={buttonTexts[product.id] === 'Adicionado!'}
@@ -505,7 +505,7 @@ const handleRightClick = (categoryId) => {
         if(!prev) setShowCartNotification(false);
         return !prev
       })}
-      className="p-3 bg-white text-pink-600 border border-pink-600 rounded-full shadow-lg hover:bg-pink-100 transition"
+      className="p-3 bg-white text-[#613d20] border border-[#613d20]rounded-full shadow-lg hover:bg-[#613d20] transition"
       title="Mais opções"
     >
       <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
@@ -533,7 +533,7 @@ const handleRightClick = (categoryId) => {
 
         <Link
           href="/MeusPedidos"
-          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          className="flex items-center justify-center w-10 h-10 text-[#613d20] hover:text-[#613d20] transition"
           title="Meus Pedidos"
         >
           <ReceiptText className="h-6 w-6" />
@@ -541,7 +541,7 @@ const handleRightClick = (categoryId) => {
 
         <Link
           href="/contato"
-          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          className="flex items-center justify-center w-10 h-10 text-[#613d20] hover:text-[#613d20] transition"
           title="Contato"
         >
         <MessagesSquare className="h-5 w-5" />
@@ -551,7 +551,7 @@ const handleRightClick = (categoryId) => {
           method="post"
           href={route('logout')}
           as="button"
-          className="flex items-center justify-center w-10 h-10 text-pink-600 hover:text-pink-700 transition"
+          className="flex items-center justify-center w-10 h-10 text-[#613d20] hover:text-[#613d20] transition"
           title="Sair"
         >
           <LogOut className="h-6 w-6" />
@@ -563,7 +563,7 @@ const handleRightClick = (categoryId) => {
 
       {showScrollTop && (
         
-        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-pink-600 text-white rounded-full shadow-lg hover:bg-pink-700 transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
+        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg- [#613d20] text-white rounded-full shadow-lg hover:bg-[#613d20] transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>
