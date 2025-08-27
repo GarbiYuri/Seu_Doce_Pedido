@@ -94,10 +94,10 @@ export default function AuthenticatedLayout({ header, children }) {
                             </>
                         ): (
                             <>
-                            <Link href="/" className="hover:text-[#8a5a33]transition-colors duration-300">
+                            <Link href="/" className="hover:text-[#8a5a33] transition-colors duration-300">
                             CATÁLOGO
                         </Link>
-                         <Link href="/CarrinhoWL" className="hover:text-pink-600 transition-colors duration-300">
+                         <Link href="/CarrinhoWL" className="hover:text-[#8a5a33] transition-colors duration-300">
                             CARRINHO
                         </Link>
                         </>
@@ -109,14 +109,14 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
-                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#df9c94] transition-colors duration-300 shadow-md"
+                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#8a5a33] transition-colors duration-300 shadow-md"
                             >
                                 {user.name}
                             </button>
                         ) : (
                             <Link
                                 href="/login"
-                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#df9c94] transition-colors duration-300 shadow-md"
+                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#8a5a33] transition-colors duration-300 shadow-md"
                             >
                                 LOGIN
                             </Link>
@@ -127,7 +127,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     {/* Botão hamburguer - visível em telas pequenas */}
                     <button
                         onClick={() => setShowingNavigationDropdown(!showingNavigationDropdown)}
-                        className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-white hover:bg-pink-600 focus:outline-none transition"
+                        className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-white hover:bg-[#613d20] focus:outline-none transition"
                     >
                         <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
                             {showingNavigationDropdown ? (
@@ -143,13 +143,13 @@ export default function AuthenticatedLayout({ header, children }) {
                 {showMenu && (
                     <div className="absolute right-4 top-[90px] w-56 bg-white rounded-xl shadow-xl border border-gray-200 z-50 overflow-hidden">
                         <div className="px-4 py-3 border-b border-gray-100 text-center">
-                            <div className="text-lg font-semibold text-pink-700">{user.name}</div>
+                            <div className="text-lg font-semibold text-[#613d20]">{user.name}</div>
                             <div className="text-sm text-gray-500">{user.email}</div>
                         </div>
                         <div className="flex flex-col items-center py-2">
                             <ResponsiveNavLink
                                 href={route('profile.edit')}
-                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition rounded"
+                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
                             >
                                 Perfil
                             </ResponsiveNavLink>
@@ -157,7 +157,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 method="post"
                                 href={route('logout')}
                                 as="button"
-                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-pink-50 hover:text-pink-600 transition rounded"
+                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
                             >
                                 Sair
                             </ResponsiveNavLink>
@@ -175,47 +175,47 @@ export default function AuthenticatedLayout({ header, children }) {
                         ADMINISTRAÇÃO
                      </Link>
                         )}
-                    <Link href="/dashboard" className="block text-gray-700 hover:text-pink-600">
+                    <Link href="/dashboard" className="block text-gray-700 hover:text-[#8a5a33]">
                      CATÁLOGO
                     </Link>
-                    <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-pink-600">
+                    <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-[#8a5a33]">
                             CARRINHO
                         </Link>
-                           <Link href="/MeusPedidos" className="block text-gray-700 hover:text-pink-600">
+                           <Link href="/MeusPedidos" className="block text-gray-700 hover:text-[#8a5a33]">
                             MEUS PEDIDOS
                         </Link> 
                      </>
                     )  : (
                         <>
-                    <Link href="/" className="block text-gray-700 hover:text-pink-600">
+                    <Link href="/" className="block text-gray-700 hover:text-[#8a5a33]">
                      CATÁLOGO
                     </Link>
-                    <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-pink-600">
+                    <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-[#8a5a33]">
                     CARRINHO
                     </Link>
                         </>
                     )}
                      
                         
-                        <Link href="/sobre" className="block text-gray-700 hover:text-pink-600">
+                        <Link href="/sobre" className="block text-gray-700 hover:text-[#8a5a33]">
                             SOBRE
                         </Link>
                         {user ? (
                             <>
-                                <Link href={route('profile.edit')} className="block text-gray-700 hover:text-pink-600">
+                                <Link href={route('profile.edit')} className="block text-gray-700 hover:text-[#8a5a33]">
                                     PERFIL
                                 </Link>
                                 <Link
                                     method="post"
                                     href={route('logout')}
                                     as="button"
-                                    className="block w-full text-left text-gray-700 hover:text-pink-600"
+                                    className="block w-full text-left text-gray-700 hover:text-[#8a5a33]"
                                 >
                                     SAIR
                                 </Link>
                             </>
                         ):(
-                         <Link href="/login" className="block text-gray-700 hover:text-pink-600">
+                         <Link href="/login" className="block text-gray-700 hover:text-[#8a5a33]">
                                     LOGIN
                                 </Link>
                         )}

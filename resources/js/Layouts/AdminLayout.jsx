@@ -83,47 +83,51 @@ export default function AdminLayout({ children }) {
                     className={`
                         fixed z-30 inset-y-0 left-0 transform md:relative md:translate-x-0
                         transition-transform duration-300 ease-in-out
-                        w-64 max-w-full bg-white/80 backdrop-blur-md border-r border-pink-100 p-4 sm:p-6 shadow-lg
+                        w-64 max-w-full bg-[##fffaf7] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
                         ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                     `}
                 >
                     {/* Botão fechar mobile */}
                     <div className="md:hidden flex justify-end mb-4">
-                        <button onClick={() => setShowSidebar(false)} className="text-pink-600 hover:text-pink-800 text-2xl font-bold">
+                        <button onClick={() => setShowSidebar(false)} className="text-[#613d20] hover:text-[#613d20] text-2xl font-bold">
                             ✕
                         </button>
                     </div>
 
-                    <h2 className="text-2xl font-extrabold text-[#613d20] mb-6">Painel</h2>
+                    <h2 className="text-2xl font-extrabold text-[#613d20] mb-6 ml-4">Painel</h2>
 
-                    <Link href="/Administracao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-pink-100 transition">
+                    <Link href="/Administracao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition">
                         <img src="/imagens/Icon_Home.png" alt="Home" className="h-5 w-5" />
                         <span className="font-semibold">Home</span>
                     </Link>
 
-                    <Link href="/Vendas" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-pink-100 transition">
+                    <Link href="/Vendas" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition">
                         <img src="/imagens/Icon_Vendas.png" alt="Vendas" className="h-5 w-5" />
                         <span className="font-semibold">Vendas</span>
                     </Link>
 
-                    <Link href="/Promocao" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-pink-100 transition">
+                    <Link
+                        href="/Promocao"
+                        className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition"
+                    >
                         <img src="/imagens/prom.png" alt="Promoção" className="h-5 w-5" />
                         <span className="font-semibold">Promoção</span>
                     </Link>
 
-                    <Link href="/Categorias" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-pink-100 transition">
+
+                    <Link href="/Categorias" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition">
                         <img src="/imagens/Icon_Categoria.png" alt="Categorias" className="h-5 w-5" />
                         <span className="font-semibold">Categorias</span>
                     </Link>
 
-                    <Link href="/Produtos" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-pink-100 transition">
+                    <Link href="/Produtos" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition">
                         <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
                         <span className="font-semibold">Produtos</span>
                     </Link>
                 </aside>
 
                 {/* CONTEÚDO PRINCIPAL */}
-                <main className="flex-1 p-4 sm:p-6 bg-pink-50 min-h-screen">
+                <main className="flex-1 p-4 sm:p-6 bg-[#bc845b] min-h-screen">
                     <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 transition duration-200">
                         {children}
                     </div>
