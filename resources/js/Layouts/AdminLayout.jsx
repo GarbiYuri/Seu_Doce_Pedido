@@ -29,30 +29,35 @@ export default function AdminLayout({ children }) {
     if (!user.admin) return null;
 
     return (
-        <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
-            {/* HEADER */}
-            <header className="bg-[#8a5a33] text-white px-4 sm:px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
-                {/* Botão hamburguer - visível só no mobile */}
-                <button
-                    className="md:hidden flex items-center"
-                    onClick={() => setShowSidebar(true)}
-                >
-                    <svg className="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
+       <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
+  {/* HEADER */}
+  <header className="bg-[#bc845b] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+    
+    {/* Botão hamburguer - visível só no mobile */}
+    <button
+      className="md:hidden flex items-center p-2 rounded hover:bg-white/10 transition"
+      onClick={() => setShowSidebar(true)}
+    >
+      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+      </svg>
+    </button>
 
-                {/* Logo */}
-                <Link href="/dashboard" className="flex-shrink-0">
-                    <img src="imagens/Logo_Original - Editado.png" alt="Logo ADM" className="w-16 h-16 sm:w-20 sm:h-20" />
-                </Link>
+    {/* Logo */}
+    <Link href="/dashboard" className="flex-shrink-0">
+      <img 
+        src="imagens/Simbolo.png" 
+        alt="Logo ADM" 
+        className="w-14 h-14 sm:w-16 sm:h-16" 
+      />
+    </Link>
 
-                {/* Frase centralizada - apenas desktop */}
-                <div className="flex-1 text-center hidden md:block">
-                    <span className="text-lg font-medium italic leading-snug block">
-                        A cada novo dia, você tem a chance de fazer diferente e melhor!
-                    </span>
-                </div>
+    {/* Frase centralizada - apenas desktop */}
+    <div className="flex-1 text-center hidden md:block">
+      <span className="text-lg sm:text-xl font-medium italic leading-snug">
+        A cada novo dia, você tem a chance de fazer diferente e melhor!
+      </span>
+    </div>
 
                 {/* Menu de usuário */}
                 <div className="relative">
@@ -127,7 +132,7 @@ export default function AdminLayout({ children }) {
                 </aside>
 
                 {/* CONTEÚDO PRINCIPAL */}
-                <main className="flex-1 p-4 sm:p-6 bg-[#bc845b] min-h-screen">
+                <main className="flex-1 p-4 sm:p-6 bg-[#8a5a33] min-h-screen">
                     <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 transition duration-200">
                         {children}
                     </div>

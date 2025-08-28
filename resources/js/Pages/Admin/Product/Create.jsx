@@ -72,15 +72,15 @@ export default function ProductCreate({ categories }) {
       {/* Formulário de criação */}
       <form
         onSubmit={handleSubmit}
-        className="bg-white border border-pink-200 rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
+        className="bg-white border border-[#8a5a33] rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
         encType="multipart/form-data"
       >
-        <h2 className="text-3xl font-extrabold text-pink-600 text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
+        <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
           Cadastrar Produto
         </h2>
 
         <div>
-          <label htmlFor="name" className="block text-sm font-semibold text-pink-700 mb-1">
+          <label htmlFor="name" className="block text-sm font-semibold text-[#613d20] mb-1">
             Nome
           </label>
           <input
@@ -89,13 +89,13 @@ export default function ProductCreate({ categories }) {
             value={name}
             onChange={e => setName(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] focus:border-[#613d20] transition text-sm"
             placeholder="Nome do produto"
           />
         </div>
 
         <div>
-          <label htmlFor="descricao" className="block text-sm font-semibold text-pink-700 mb-1">
+          <label htmlFor="descricao" className="block text-sm font-semibold text-[#8a5a33] mb-1">
             Descrição
           </label>
           <textarea
@@ -103,13 +103,13 @@ export default function ProductCreate({ categories }) {
             value={descricao}
             onChange={e => setDescricao(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] focus:border-[#613d20] transition text-sm"
             placeholder="Descrição do produto"
           />
         </div>
 
         <div>
-          <label htmlFor="price" className="block text-sm font-semibold text-pink-700 mb-1">
+          <label htmlFor="price" className="block text-sm font-semibold text-[#613d20] mb-1">
             Preço
           </label>
           <input
@@ -120,13 +120,13 @@ export default function ProductCreate({ categories }) {
             value={price}
             onChange={e => setPrice(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] focus:border-[#613d20] transition text-sm"
             placeholder="Preço do produto"
           />
         </div>
 
         <div>
-          <label htmlFor="id_categoria" className="block text-sm font-semibold text-pink-700 mb-1">
+          <label htmlFor="id_categoria" className="block text-sm font-semibold text-[#613d20] mb-1">
             Categoria
           </label>
           <select
@@ -134,7 +134,7 @@ export default function ProductCreate({ categories }) {
             value={id_categoria}
             onChange={e => setIdCategoria(e.target.value)}
             required
-            className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] focus:border-[#613d20] transition text-sm"
           >
             {categories.map(cat => (
               <option key={cat.id} value={cat.id}>
@@ -145,7 +145,7 @@ export default function ProductCreate({ categories }) {
         </div>
 
       <div>
-  <label className="block text-sm font-semibold text-pink-700 mb-1">
+  <label className="block text-sm font-semibold text-[#613d20] mb-1">
     Imagem da Categoria
   </label>
 
@@ -162,7 +162,7 @@ export default function ProductCreate({ categories }) {
   <div className="flex items-center gap-4">
     <label
       htmlFor="imagem"
-      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+      className="inline-flex items-center px-4 py-2 bg-[#8a5a33] text-white text-sm font-medium rounded-xl shadow hover:bg-[#613d20] cursor-pointer transition"
     >
       <FiFolderPlus className="mr-2" />
       Selecionar imagem
@@ -187,7 +187,7 @@ export default function ProductCreate({ categories }) {
 
         <button
           type="submit"
-          className="w-full py-2 bg-pink-600 text-white text-base font-bold rounded-xl hover:bg-pink-700 transition hover:scale-105 shadow-md"
+          className="w-full py-2 bg-[#8a5a33] text-white text-base font-bold rounded-xl hover:bg-[#613d20] transition hover:scale-105 shadow-md"
         >
           Salvar Produto
         </button>
@@ -195,13 +195,13 @@ export default function ProductCreate({ categories }) {
 
       {/* Barra de pesquisa */}
       <div className="mt-10 mb-6 max-w-md mx-auto flex items-center gap-3">
-        <FiSearch className="text-pink-500 w-6 h-6" />
+        <FiSearch className="text-[#8a5a33] w-6 h-6" />
         <input
           type="text"
           placeholder="Pesquisar produto..."
           value={searchTerm}
           onChange={e => setSearchTerm(e.target.value)}
-          className="w-full px-4 py-2 border border-pink-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 focus:border-pink-500 transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] focus:border-[#613d20] transition text-sm"
         />
       </div>
 
@@ -211,16 +211,16 @@ export default function ProductCreate({ categories }) {
           filteredProducts.map(product => (
             <div
               key={product.id}
-              className="bg-white border border-pink-200 rounded-xl p-4 shadow hover:shadow-md transition"
+              className="bg-white border border-[#8a5a33] rounded-xl p-4 shadow hover:shadow-md transition"
             >
               <img
                 src={`${product.imagem}`}
                 alt={product.name}
                 className="w-full h-40 object-cover rounded-md mb-3"
               />
-              <h4 className="text-pink-700 font-semibold text-lg">{product.name}</h4>
+              <h4 className="text-[#613d20] font-semibold text-lg">{product.name}</h4>
               <p className="text-gray-500 text-sm">{product.descricao}</p>
-              <p className="text-pink-600 font-bold mt-1">R$ {parseFloat(product.price).toFixed(2)}</p>
+              <p className="text-[#613d20] font-bold mt-1">R$ {parseFloat(product.price).toFixed(2)}</p>
 
               <div className="flex gap-3 mt-4">
                 <button
@@ -246,7 +246,7 @@ export default function ProductCreate({ categories }) {
             </div>
           ))
         ) : (
-          <p className="text-center text-pink-600 font-semibold">Nenhum produto encontrado.</p>
+          <p className="text-center text-[#613d20] font-semibold">Nenhum produto encontrado.</p>
         )}
       </div>
 

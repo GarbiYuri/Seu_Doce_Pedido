@@ -282,7 +282,7 @@ export default function Welcome({ products, categories, promocoes }) {
 
 
 <div className="relative w-full">
-      <h2 className="text-center text-xl font-bold text-gray-800 mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
+      <h2 className="text-center text-xl font-bold text-[#613d20] mb-6 mt-10">ESCOLHA POR CATEGORIA</h2>
 
       <div className="flex items-center justify-between px-4">
         {/* Botão esquerdo */}
@@ -474,12 +474,12 @@ export default function Welcome({ products, categories, promocoes }) {
   <div className="fixed bottom-20 right-6 z-50">
     <Link
       href="/CarrinhoWL"
-      className="relative flex items-center justify-center w-12 h-12 bg-white text-pink-600 border border-[#613d20] rounded-full shadow-lg hover:bg-gray-100 transition"
+      className="relative flex items-center justify-center w-12 h-12 bg-white text-[#8a5a33] border border-[#613d20] rounded-full shadow-lg hover:bg-gray-100 transition"
       title="Carrinho"
     >
       <ShoppingCart className="h-6 w-6" />
       {cartTotal > 0 && (
-        <span className="absolute -top-1 -right-1 bg-white text-pink-600 border border-[#613d20] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
+        <span className="absolute -top-1 -right-1 bg-white text-[#8a5a33] border border-[#613d20] text-[10px] font-bold rounded-full w-4 h-4 flex items-center justify-center">
           {cartTotal}
         </span>
       )}

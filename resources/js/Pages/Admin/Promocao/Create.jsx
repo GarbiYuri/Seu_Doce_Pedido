@@ -62,7 +62,7 @@ export default function PromocaoCreate({ products }) {
           name="Id_Product"
           value={formData.Id_Product}
           onChange={handleChange}
-          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20]transition text-sm"
+          className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
         >
           <option value="">Selecione um produto</option>
           {products.map(prod => (
