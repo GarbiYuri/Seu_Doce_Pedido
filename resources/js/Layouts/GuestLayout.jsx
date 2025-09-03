@@ -4,7 +4,6 @@ export default function GuestLayout({ children }) {
     // Frases rotativas
     const frases = [
         "Doces momentos por aqui!",
-        "Sinta o sabor da felicidade",
         "Feito com amor",
         "Um pedacinho de doçura pra você"
     ];
@@ -37,19 +36,23 @@ export default function GuestLayout({ children }) {
                 />
 
                 {/* Texto com animação de digitação */}
-                <p
-                    key={fraseAtual} // re-render a cada troca
-                    className="mt-10 text-white font-poppins text-lg max-w-xs text-center animate-typing overflow-hidden whitespace-nowrap border-r-2 border-white pr-2"
-                >
-                    {frases[fraseAtual]}
-                </p>
+               <p
+  key={fraseAtual}
+  className="mt-8 text-white font-montserrat text-3xl tracking-wide text-center animate-fadeInUp"
+>
+  {frases[fraseAtual]}
+</p>
+
+
+
 
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Poppins&display=swap');
+                @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-                    .font-poppins {
-                        font-family: 'Poppins', sans-serif;
-                    }
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+}
+
 
                     /* Gradiente animado */
                     @keyframes gradient {

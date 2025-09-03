@@ -29,42 +29,43 @@ export default function AdminLayout({ children }) {
     if (!user.admin) return null;
 
     return (
-       <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
-  {/* HEADER */}
-  <header className="bg-[#bc845b] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
-    
-    {/* Botão hamburguer - visível só no mobile */}
-    <button
-      className="md:hidden flex items-center p-2 rounded hover:bg-white/10 transition"
-      onClick={() => setShowSidebar(true)}
-    >
-      <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-      </svg>
-    </button>
+        <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
+            {/* HEADER */}
+            <header className="bg-[#e2b9a1] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
 
-    {/* Logo */}
-    <Link href="/dashboard" className="flex-shrink-0">
-      <img 
-        src="imagens/Simbolo.png" 
-        alt="Logo ADM" 
-        className="w-14 h-14 sm:w-16 sm:h-16" 
-      />
-    </Link>
+                {/* Botão hamburguer - visível só no mobile */}
+                <button
+                    className="md:hidden flex items-center p-2 rounded hover:bg-white/10 transition"
+                    onClick={() => setShowSidebar(true)}
+                >
+                    <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                </button>
 
-    {/* Frase centralizada - apenas desktop */}
-    <div className="flex-1 text-center hidden md:block">
-      <span className="text-lg sm:text-xl font-medium italic leading-snug">
-        A cada novo dia, você tem a chance de fazer diferente e melhor!
-      </span>
-    </div>
+                {/* Logo */}
+                <Link href="/dashboard" className="flex-shrink-0">
+                    <img
+                        src="imagens/Simbolo.png"
+                        alt="Logo ADM"
+                        className="w-14 h-14 sm:w-16 sm:h-16"
+                    />
+                </Link>
+
+                {/* Frase centralizada - apenas desktop */}
+                <div className="flex-1 text-center hidden md:block">
+                    <span className="text-lg sm:text-xl font-medium italic leading-snug font-poppins text-[#613d20]">
+                        A cada novo dia, você tem a chance de fazer diferente e melhor!
+                    </span>
+
+                </div>
 
                 {/* Menu de usuário */}
                 <div className="relative">
                     <Dropdown>
                         <Dropdown.Trigger>
                             <span className="inline-flex rounded-md items-center">
-                                <img src="/imagens/icone-sobre.png" alt="Ícone Sobre" className="h-6 w-6" />
+                                <img src="/imagens/icone-sobre-marrom.png" alt="Ícone Sobre" className="h-6 w-6" />
                                 <button type="button" className="ml-2 text-white flex items-center">
                                     {user.name}
                                     <svg className="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
@@ -88,7 +89,7 @@ export default function AdminLayout({ children }) {
                     className={`
                         fixed z-30 inset-y-0 left-0 transform md:relative md:translate-x-0
                         transition-transform duration-300 ease-in-out
-                        w-64 max-w-full bg-[##fffaf7] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
+                        w-64 max-w-full bg-[#fffaf7] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
                         ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                     `}
                 >
@@ -132,7 +133,7 @@ export default function AdminLayout({ children }) {
                 </aside>
 
                 {/* CONTEÚDO PRINCIPAL */}
-                <main className="flex-1 p-4 sm:p-6 bg-[#8a5a33] min-h-screen">
+                <main className="flex-1 p-4 sm:p-6  bg-gradient-to-b from-[#8a5a33] to-[#613d20] min-h-screen">
                     <div className="bg-white rounded-3xl shadow-xl p-4 sm:p-8 transition duration-200">
                         {children}
                     </div>
