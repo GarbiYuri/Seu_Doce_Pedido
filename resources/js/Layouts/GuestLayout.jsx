@@ -27,21 +27,25 @@ export default function GuestLayout({ children }) {
                 <div className="absolute w-80 h-80 bg-white rounded-full blur-3xl opacity-40 z-10 animate-pulse" />
 
                 {/* Logo com efeito hover */}
-                <img
-                    src="imagens/Logo_Original - Editado.png"
-                    alt="Logo"
-                    className="w-60 h-60 z-20 relative object-contain transition-transform duration-700 ease-in-out hover:rotate-12 hover:scale-110"
-                    width="600"
-                    height="600"
-                />
+              <img
+  src="imagens/Logo_Original - Editado.png"
+  alt="Logo"
+  className="w-60 h-60 z-20 relative object-contain animate-float"
+  width="600"
+  height="600"
+/>
+
+
+
 
                 {/* Texto com animação de digitação */}
-               <p
-  key={fraseAtual}
-  className="mt-8 text-white font-montserrat text-2x1 tracking-wide text-center animate-fadeInUp"
->
-  {frases[fraseAtual]}
-</p>
+                <p
+                    key={fraseAtual}
+                    className="mt-8 text-white font-montserrat text-2x1 tracking-wide text-center animate-fadeInUp"
+                >
+                    {frases[fraseAtual]}
+                </p>
+
 
 
 
@@ -52,6 +56,8 @@ export default function GuestLayout({ children }) {
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
 }
+
+
 
 
                     /* Gradiente animado */
