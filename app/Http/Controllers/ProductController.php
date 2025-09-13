@@ -59,7 +59,7 @@ public function store(Request $request): RedirectResponse
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // Montar URL pública para salvar no banco
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
     }
 
     // Criar o produto com a URL completa da imagem

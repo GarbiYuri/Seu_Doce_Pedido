@@ -95,9 +95,9 @@ class MercadoPagoController extends Controller
                 // Cria a preferência Mercado Pago
             $preference = $client->create([
                 "back_urls" => array(
-                    "success" => "https://www.seudocepedido.shop/success",
-                    "failure" => "https://www.seudocepedido.shop/failure",
-                    "pending" => "https://www.seudocepedido.shop/pending"
+                    "success" => "https://www.amorcomrecheio.shop/success",
+                    "failure" => "https://www.amorcomrecheio.shop/failure",
+                    "pending" => "https://www.amorcomrecheio.shop/pending"
                 ),
                 "auto_return" => "all",
                 "items" => $items,

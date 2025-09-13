@@ -133,7 +133,7 @@ class PromocaoController extends Controller
     // Deleta imagem antiga no R2 se existir
     if ($promocao->imagem) {
         // Extrai o nome do arquivo antigo da URL
-        $caminhoAntigo = str_replace('https://cdn.seudocepedido.shop/imagens/', '', $promocao->imagem);
+        $caminhoAntigo = str_replace('https://cdn.amorcomrecheio.shop/imagens/', '', $promocao->imagem);
 
         // Deleta do R2
         Storage::disk('r2_produtos')->delete('imagens/' . $caminhoAntigo);
