@@ -35,6 +35,7 @@ export default function ResetPassword({ token, email }) {
                         name="email"
                         value={data.email}
                         className="mt-1 block w-full"
+                        readOnly
                         autoComplete="username"
                         onChange={(e) => setData('email', e.target.value)}
                     />
