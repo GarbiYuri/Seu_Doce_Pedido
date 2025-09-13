@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('informacoes_pessoais', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
+            $table->string('nome')->nullable();
             $table->string('rua')->nullable();
             $table->string('numero')->nullable();
             $table->string('bairro')->nullable();
