@@ -6,7 +6,7 @@
 
         <title inertia>{{ config('app.name', 'Seu Doce Pedido') }}</title>
 
-        <link rel="shortcut icon" href="imagens/Logo_Gaby.png" type="image/x-icon">
+        <link rel="shortcut icon" href="imagens/Logo_Original - Editado.png" type="image/x-icon">
 
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.bunny.net">
