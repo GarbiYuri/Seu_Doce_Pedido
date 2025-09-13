@@ -14,12 +14,14 @@ class ResetPasswordNotification extends Notification
     use Queueable;
 
     public $token;
+    public $email;
     /**
      * Create a new notification instance.
      */
-    public function __construct($token)
+    public function __construct($token, $email)
     {
           $this->token = $token;
+           $this->email = $email;
     }
 
     /**
@@ -41,7 +43,11 @@ class ResetPasswordNotification extends Notification
             ->subject('Recuperação de Senha - AmorComRecheio')
             ->greeting('Olá!')
             ->line('Você está recebendo este e-mail porque recebemos uma solicitação de redefinição de senha para sua conta.')
-            ->action('Redefinir Senha', url(config('app.url').route('password.reset', $this->token, false)))
+            ->action(
+             'Redefinir Senha',
+            url(config('app.url') . '/reset-password/' . $this->token . '?email=' . urlencode($this->email))
+                )
+
             ->line('Este link irá expirar em '.config('auth.passwords.'.config('auth.defaults.passwords').'.expire').' minutos.')
             ->line('Se você não solicitou a redefinição de senha, nenhuma ação adicional é necessária.')
             ->salutation('Atenciosamente, '.config('app.name'));
