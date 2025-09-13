@@ -70,7 +70,7 @@ class PromocaoController extends Controller
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // URL pública
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
         $data['imagem'] = $urlImagem;
 
         // (Opcional) apagar imagem antiga — só se for local. 
@@ -143,7 +143,7 @@ class PromocaoController extends Controller
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // URL pública
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
         $data['imagem'] = $urlImagem;
 
         // (Opcional) apagar imagem antiga — só se for local. 
