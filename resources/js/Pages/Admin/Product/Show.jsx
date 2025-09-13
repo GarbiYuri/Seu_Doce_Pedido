@@ -53,7 +53,7 @@ const [ativo, setAtivo] = useState(false);
 
   return (
     <div className="bg-white rounded-2xl p-8 shadow-xl w-full max-w-xl mx-auto">
-      <h2 className="text-3xl font-bold text-center text-pink-600 mb-6">Editar Produto</h2>
+      <h2 className="text-3xl font-bold text-center text-[#613d20] mb-6">Editar Produto</h2>
       <form onSubmit={handleSubmit} className="space-y-5" encType="multipart/form-data">
         
         {/* Nome */}
@@ -63,7 +63,7 @@ const [ativo, setAtivo] = useState(false);
             type="text"
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8a5a33] transition"
             required
           />
         </div>
@@ -76,7 +76,7 @@ const [ativo, setAtivo] = useState(false);
             step="0.01"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8a5a33] transition"
             required
           />
         </div>
@@ -87,7 +87,7 @@ const [ativo, setAtivo] = useState(false);
           <textarea
             value={description}
             onChange={(e) => setDescription(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8a5a33] transition"
             rows={4}
             placeholder="Detalhes do produto..."
           />
@@ -99,7 +99,7 @@ const [ativo, setAtivo] = useState(false);
           <select
             value={selectedCategoryId}
             onChange={(e) => setSelectedCategoryId(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition"
+            className="w-full px-4 py-2 border border-gray-300 rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#8a5a33] transition"
             required
           >
             <option value="">Selecione uma categoria</option>
@@ -111,7 +111,7 @@ const [ativo, setAtivo] = useState(false);
 
         {/* Imagem */}
         <div>
-  <label className="block text-sm font-semibold text-pink-700 mb-1">
+  <label className="block text-sm font-semibold text-[#613d20] mb-1">
     Imagem do Produto
   </label>
 
@@ -128,7 +128,7 @@ const [ativo, setAtivo] = useState(false);
   <div className="flex items-center gap-4">
     <label
       htmlFor="imagemProduto"
-      className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg-pink-700 cursor-pointer transition"
+      className="inline-flex items-center px-4 py-2 bg-[#8a5a33] text-white text-sm font-medium rounded-xl shadow hover:bg-[#613d20] cursor-pointer transition"
     >
       <FiFolderPlus className="mr-2" />
       Selecionar imagem
@@ -165,7 +165,7 @@ const [ativo, setAtivo] = useState(false);
         {/* Botão */}
         <button
           type="submit"
-          className="w-full py-3 bg-pink-600 hover:bg-pink-700 text-white font-semibold rounded-xl shadow-lg transition"
+          className="w-full py-3 bg-pink-600 hover:bg-[#613d20] text-white font-semibold rounded-xl shadow-lg transition"
         >
           Salvar Alterações
         </button>

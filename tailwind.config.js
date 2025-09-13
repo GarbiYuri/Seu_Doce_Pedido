@@ -12,18 +12,29 @@ export default {
 
     theme: {
   extend: {
+    
+  keyframes: {
+    float: {
+      '0%,100%': { transform: 'translateY(0)' },
+      '50%': { transform: 'translateY(-10px)' },
+    },
+  },
+  animation: {
+    float: 'float 5s ease-in-out infinite',
+  },
+
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
     },
     colors: {
-      primary: '#EF3167'
+      primary: '#613d20'
     }
-  }
+
 },
 
     plugins: [forms],
    
-  
+}
 };
 
   

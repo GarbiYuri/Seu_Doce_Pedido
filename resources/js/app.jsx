@@ -8,7 +8,7 @@ import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { createRoot } from 'react-dom/client';
 import '@fontsource/poppins';
 
-const appName = import.meta.env.VITE_APP_NAME || 'Seu Doce Pedido';
+const appName = import.meta.env.VITE_APP_NAME || 'Amor com Recheio';
 
 
 createInertiaApp({

@@ -41,7 +41,7 @@ export default function PromocaoIndex({ promocoes, products }) {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-3xl font-extrabold text-pink-600 mb-6 text-center" style={{ fontFamily: "'Candice', cursive" }}>
+      <h2 className="text-3xl font-extrabold text-[#613d20] mb-6 text-center" style={{ fontFamily: "'Candice', cursive" }}>
         Promoções Atuais
       </h2>
 
@@ -53,7 +53,7 @@ export default function PromocaoIndex({ promocoes, products }) {
             placeholder="Buscar por nome, categoria ou preço"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
+            className="w-full px-4 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-[#8a5a33] focus:border-[#8a5a33]"
           />
         </div>
         <div className="flex gap-2 items-center w-full md:w-1/3">
@@ -61,7 +61,7 @@ export default function PromocaoIndex({ promocoes, products }) {
           <select
             value={filterAtivo}
             onChange={(e) => setFilterAtivo(e.target.value)}
-            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-pink-500 focus:border-pink-500"
+            className="w-full px-3 py-2 border rounded-lg shadow-sm focus:outline-none focus:ring-[#8a5a33] focus:border-[#8a5a33]"
           >
             <option value="todos">Todos</option>
             <option value="ativo">Ativo</option>
@@ -74,14 +74,14 @@ export default function PromocaoIndex({ promocoes, products }) {
         {filteredPromocoes.map((promo) => (
           <div
             key={promo.id}
-            className="bg-white border border-pink-200 rounded-3xl shadow-md p-5 flex flex-col justify-between"
+            className="bg-white border border-[#8a5a33] rounded-3xl shadow-md p-5 flex flex-col justify-between"
           >
             <div>
               <p className="text-sm font-semibold text-pink-700">
                 Produto: {promo.Id_Product ? promo.product.name : promo.nome}
               </p>
               <p className="text-sm text-gray-600 mb-2">{promo.descricao || '-'}</p>
-              <p className="text-lg font-bold text-pink-600">R$ {Number(promo.price).toFixed(2).replace('.', ',')}</p>
+              <p className="text-lg font-bold text-[#613d20]">R$ {Number(promo.price).toFixed(2).replace('.', ',')}</p>
               <p className="text-sm text-gray-600">Qtd: {promo.quantidade ?? '-'}</p>
               <p className="text-sm text-gray-600">Estoque: {promo.estoque ?? '-'}</p>
             </div>
@@ -110,7 +110,7 @@ export default function PromocaoIndex({ promocoes, products }) {
             <div className="flex justify-end gap-4 mt-4">
               <button
                 onClick={() => router.get(`/promocoes/${promo.id}/edit`)}
-                className="text-pink-600 hover:text-pink-800 transition"
+                className="text-[#613d20] hover:text-[#613d20] transition"
                 title="Editar"
               >
                 <FiEdit size={22} />
@@ -150,7 +150,8 @@ export default function PromocaoIndex({ promocoes, products }) {
             <div className="mt-6 text-right">
               <button
                 onClick={() => setShowModal(false)}
-                className="px-5 py-2 rounded-xl bg-pink-600 hover:bg-pink-700 text-white font-medium transition"
+                className="px-5 py-2 rounded-xl bg-[#613d20] hover:bg-[
+                #613d20] text-white font-medium transition"
               >
                 Entendi
               </button>

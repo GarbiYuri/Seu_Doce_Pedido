@@ -11,27 +11,27 @@ export default function VendasLayout() {
   const [dataSelecionada, setDataSelecionada] = useState('');
 
   const avancarStatus = (vendaId, novoStatus) => {
-  router.post(
-    `/admin/vendas/${vendaId}/status`,
-    { status: novoStatus },
-    {
-      preserveScroll: true,
-      preserveState: true,
-      only: ['vendas'], 
-    }
-  );
-};
+    router.post(
+      `/admin/vendas/${vendaId}/status`,
+      { status: novoStatus },
+      {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['vendas'],
+      }
+    );
+  };
 
-const cancelarPedido = (pedidoId) => {
-  router.post(
-    `/admin/vendas/${pedidoId}/cancelar`,
-    {
-      preserveScroll: true,
-      preserveState: true,
-       only: ['vendas'],
-    }
-  );
-}
+  const cancelarPedido = (pedidoId) => {
+    router.post(
+      `/admin/vendas/${pedidoId}/cancelar`,
+      {
+        preserveScroll: true,
+        preserveState: true,
+        only: ['vendas'],
+      }
+    );
+  }
 
   const coresStatus = {
     iniciado: 'bg-red-100 text-red-700',
@@ -47,7 +47,7 @@ const cancelarPedido = (pedidoId) => {
 
     return vendas.filter((venda) => {
       const dataVenda = new Date(venda.created_at);
-//      if (venda.status === 'iniciado') return false;
+      //      if (venda.status === 'iniciado') return false;
 
       if (dataSelecionada) {
         const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
@@ -73,46 +73,44 @@ const cancelarPedido = (pedidoId) => {
     });
   }, [vendas, filtroData, buscaNome, dataSelecionada]);
 
-useEffect(() => {
-  if (pedidoSelecionado) {
-    localStorage.setItem('pedidoSelecionadoId', pedidoSelecionado.id);
-  }
-}, [pedidoSelecionado]);
+  useEffect(() => {
+    if (pedidoSelecionado) {
+      localStorage.setItem('pedidoSelecionadoId', pedidoSelecionado.id);
+    }
+  }, [pedidoSelecionado]);
 
-useEffect(() => {
-  const idSalvo = localStorage.getItem('pedidoSelecionadoId');
-  if (vendasFiltradas.length > 0) {
-    const vendaSalva = vendasFiltradas.find(v => String(v.id) === idSalvo);
-    setPedidoSelecionado(vendaSalva || vendasFiltradas[0]);
-  } else {
-    setPedidoSelecionado(null);
-  }
-}, [vendasFiltradas]);
+  useEffect(() => {
+    const idSalvo = localStorage.getItem('pedidoSelecionadoId');
+    if (vendasFiltradas.length > 0) {
+      const vendaSalva = vendasFiltradas.find(v => String(v.id) === idSalvo);
+      setPedidoSelecionado(vendaSalva || vendasFiltradas[0]);
+    } else {
+      setPedidoSelecionado(null);
+    }
+  }, [vendasFiltradas]);
 
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-     <div style={{ textAlign: "center" }}>
-  <img
-    src="imagens/Banner2 - Editado - Editado.png"
-    alt="Logo"
-    width="300"
-    height="300"
-  />
-</div>
 
-
+      <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
+        <img
+          src="imagens/Banner2 - Editado - Editado.png"
+          alt="Logo"
+          style={{ width: "350px", height: "auto" }}
+        />
+        
+      </div>
 
       {/* Filtros */}
-      <div className="max-w-6xl mx-auto px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+      <div className="max-w-6xl mx-auto mt-2 px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
         <div className="flex gap-2">
           {['todos', 'hoje', '7dias'].map((tipo) => (
             <button
               key={tipo}
               onClick={() => setFiltroData(tipo)}
-              className={`px-4 py-2 rounded-full font-semibold ${
-                filtroData === tipo ? 'bg-pink-600 text-white' : 'bg-gray-200'
-              }`}
+              className={`px-4 py-2 rounded-full font-semibold ${filtroData === tipo ? 'bg-[#613d20] text-white' : 'bg-gray-200'
+                }`}
             >
               {tipo === 'todos' ? 'Todos' : tipo === 'hoje' ? 'Hoje' : 'Últimos 7 dias'}
             </button>
@@ -143,9 +141,8 @@ useEffect(() => {
               <div
                 key={venda.id}
                 onClick={() => setPedidoSelecionado(venda)}
-                className={`p-4 rounded-xl shadow cursor-pointer border border-pink-100 hover:bg-pink-50 transition ${
-                  pedidoSelecionado?.id === venda.id ? 'bg-pink-50 ring-2 ring-pink-400' : ''
-                }`}
+                className={`p-4 rounded-xl shadow cursor-pointer border border-[#613d20]hover:bg-[#8a5a33] transition ${pedidoSelecionado?.id === venda.id ? 'bg-pink-50 ring-2 ring-pink-400' : ''
+                  }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-bold text-gray-800">{venda.nome}</span>
@@ -171,7 +168,7 @@ useEffect(() => {
         <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[70vh] overflow-y-auto">
           {pedidoSelecionado ? (
             <>
-              <h2 className="text-xl font-bold mb-2 text-pink-600">Pedido #{pedidoSelecionado.id}</h2>
+              <h2 className="text-xl font-bold mb-2 text-[#613d20]">Pedido #{pedidoSelecionado.id}</h2>
               <p className="text-sm text-gray-700">
                 Horário:{' '}
                 {new Date(pedidoSelecionado.created_at).toLocaleTimeString([], {
@@ -210,35 +207,35 @@ useEffect(() => {
                 <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
 
-              
-                <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                 <div className="flex gap-4 items-center mt-4">
-  <select
-    value={pedidoSelecionado.status}
-    onChange={(e) =>
-      avancarStatus(pedidoSelecionado.id, e.target.value)
-    }
-    className="border px-4 py-2 rounded"
-  >
-    <option value="iniciado">Iniciado</option>
-    <option value="em_preparo">Em Preparo</option>
-    <option value="em_entrega">Em Entrega</option>
-    <option value="entregue">Entregue</option>
-  </select>
 
-  
-</div>
+              <div className="flex flex-col sm:flex-row gap-4 mt-4">
+                <div className="flex gap-4 items-center mt-4">
+                  <select
+                    value={pedidoSelecionado.status}
+                    onChange={(e) =>
+                      avancarStatus(pedidoSelecionado.id, e.target.value)
+                    }
+                    className="border px-4 py-2 rounded"
+                  >
+                    <option value="iniciado">Iniciado</option>
+                    <option value="em_preparo">Em Preparo</option>
+                    <option value="em_entrega">Em Entrega</option>
+                    <option value="entregue">Entregue</option>
+                  </select>
 
-                 {pedidoSelecionado.status !== 'pago' && (
-                    <button
-                      onClick={(e) => cancelarPedido(pedidoSelecionado.id, e.target.value)}
-                      className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
-                    >
-                      DESCARTAR
-                    </button>
-                  )}
+
                 </div>
-      
+
+                {pedidoSelecionado.status !== 'pago' && (
+                  <button
+                    onClick={(e) => cancelarPedido(pedidoSelecionado.id, e.target.value)}
+                    className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
+                  >
+                    DESCARTAR
+                  </button>
+                )}
+              </div>
+
             </>
           ) : (
             <p className="text-gray-500">Selecione um pedido para ver os detalhes</p>

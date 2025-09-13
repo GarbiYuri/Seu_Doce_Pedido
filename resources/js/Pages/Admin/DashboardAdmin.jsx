@@ -66,7 +66,7 @@ export default function DashboardAdmin() {
 
       {/* Seção de Controle da Loja */}
       <section className="max-w-5xl w-full mx-auto mt-10 p-4 sm:p-6 bg-white rounded-3xl shadow-2xl space-y-8">
-        <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">Controle da Loja</h1>
+        <h1 className="text-3xl font-extrabold text-center text-[#613d20] mb-6">Controle da Loja</h1>
 
         {/* Form de telefone */}
         <form onSubmit={Deftelefone} className="space-y-4">
@@ -89,7 +89,7 @@ export default function DashboardAdmin() {
           <button
             type="submit"
             disabled={processing}
-            className="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white font-bold py-2 px-4 rounded"
+            className="w-full sm:w-auto bg-[#8a5a33] hover:bg-[#613d20] text-white font-bold py-2 px-4 rounded"
           >
             Salvar
           </button>
@@ -132,7 +132,7 @@ export default function DashboardAdmin() {
 
             <button
               onClick={salvarHorarios}
-              className="w-full sm:w-auto bg-pink-600 hover:bg-pink-700 text-white px-6 py-2 rounded-full font-semibold"
+              className="w-full sm:w-auto bg-[#613d20] hover:bg-[#8a5a33] text-white px-6 py-2 rounded-full font-semibold"
             >
               Salvar Horários
             </button>
@@ -142,7 +142,7 @@ export default function DashboardAdmin() {
 
       {/* Seção de Administração de Usuários */}
       <section className="max-w-5xl w-full mx-auto mt-12 p-4 sm:p-6 bg-white rounded-3xl shadow-2xl">
-        <h1 className="text-3xl font-extrabold text-center text-pink-600 mb-6">
+        <h1 className="text-3xl font-extrabold text-center text-[#613d20] mb-6">
           Administração de Usuários
         </h1>
 
@@ -153,14 +153,14 @@ export default function DashboardAdmin() {
             placeholder="Pesquisar por nome ou email..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full p-3 rounded-lg border border-pink-300 focus:outline-none focus:ring-2 focus:ring-pink-500"
+            className="w-full p-3 rounded-lg border border-[#8a5a33] focus:outline-none focus:ring-2 focus:ring-[#613d20]"
           />
         </div>
 
         {/* Tabela responsiva */}
         <div className="overflow-x-auto md:overflow-visible">
           <table className="w-full border-collapse">
-            <thead className="bg-pink-600 text-white hidden md:table-header-group">
+            <thead className="bg-[#613d20] text-white hidden md:table-header-group">
               <tr>
                 <th className="py-3 px-6 text-left">Nome</th>
                 <th className="py-3 px-6 text-left">Email</th>
@@ -174,18 +174,18 @@ export default function DashboardAdmin() {
                 filteredUsers.map((usuario) => (
                   <tr
                     key={usuario.id}
-                    className="block md:table-row border-b border-pink-100 mb-6 md:mb-0 p-4 md:p-0 rounded-lg bg-pink-50 md:bg-transparent"
+                    className="block md:table-row border-b border-[#613d20] mb-6 md:mb-0 p-4 md:p-0 rounded-lg bg-[#8a5a33] md:bg-transparent"
                   >
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 break-words">
-                      <span className="font-semibold md:hidden text-pink-600">Nome: </span>
+                      <span className="font-semibold md:hidden text-[#613d20">Nome: </span>
                       {usuario.name}
                     </td>
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 break-words max-w-xs truncate">
-                      <span className="font-semibold md:hidden text-pink-600">Email: </span>
+                      <span className="font-semibold md:hidden text-[#613d20">Email: </span>
                       {usuario.email}
                     </td>
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 text-center">
-                      <span className="font-semibold md:hidden text-pink-600">Admin: </span>
+                      <span className="font-semibold md:hidden text-[#613d20">Admin: </span>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold 
                           ${
@@ -234,7 +234,7 @@ export default function DashboardAdmin() {
           {usuarios.prev_page_url && (
             <a
               href={usuarios.prev_page_url}
-              className="flex items-center gap-2 px-5 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 text-sm font-medium"
+              className="flex items-center gap-2 px-5 py-2 bg-[#8a5a33] text-white rounded-full hover:bg-[#613d20] text-sm font-medium"
             >
               <FiArrowLeft size={18} />
               Anterior
@@ -243,7 +243,7 @@ export default function DashboardAdmin() {
           {usuarios.next_page_url && (
             <a
               href={usuarios.next_page_url}
-              className="flex items-center gap-2 px-5 py-2 bg-pink-500 text-white rounded-full hover:bg-pink-600 text-sm font-medium"
+              className="flex items-center gap-2 px-5 py-2 bg-[#8a5a33] text-white rounded-full hover:bg-[#613d20] text-sm font-medium"
             >
               Próximo
               <FiArrowRight size={18} />

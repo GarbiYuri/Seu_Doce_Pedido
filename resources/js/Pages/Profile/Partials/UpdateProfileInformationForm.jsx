@@ -29,7 +29,7 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-bold text-pink-600">
+                <h2 className="text-lg font-bold text-[#613d20]">
                     Informações do Perfil
                 </h2>
 
@@ -82,7 +82,7 @@ export default function UpdateProfileInformation({
                                 href={route('verification.send')}
                                 method="post"
                                 as="button"
-                                className="ml-1 rounded-md text-sm text-pink-600 underline hover:text-pink-800"
+                                className="ml-1 rounded-md text-sm text-[#613d20] underline hover:text-[#8a5a33]"
                             >
                                 Clique aqui para reenviar o email de verificação.
                             </Link>
@@ -96,8 +96,8 @@ export default function UpdateProfileInformation({
                     </div>
                 )}
 
-                <div className="flex items-center gap-4">
-                    <PrimaryButton disabled={processing}>
+                <div className="flex items-center gap-4 ">
+                    <PrimaryButton disabled={processing} >
                         Salvar
                     </PrimaryButton>
 
