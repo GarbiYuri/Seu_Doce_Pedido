@@ -4,7 +4,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
-        <title inertia>{{ config('app.name', 'Seu Doce Pedido') }}</title>
+        <title inertia>{{ config('app.name', 'Amor Com Recheio') }}</title>
 
         <link rel="shortcut icon" href="imagens/Logo_Original - Editado.png" type="image/x-icon">
 
