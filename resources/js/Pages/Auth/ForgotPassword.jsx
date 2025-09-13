@@ -3,7 +3,7 @@ import InputError from '@/Components/InputError';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, useForm } from '@inertiajs/react';
+import { Head, useForm, Link } from '@inertiajs/react';
 
 export default function ForgotPassword({ status }) {
     const { data, setData, post, processing, errors } = useForm({
@@ -19,7 +19,7 @@ export default function ForgotPassword({ status }) {
         <GuestLayout>
             <Head title="Recuperar Senha" />
   <Link
-                    href="http://127.0.0.1:8000/"
+                    href="/login"
                     className="fixed top-6 left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#8a5a33] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
                 >
                     <svg

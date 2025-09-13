@@ -3,6 +3,8 @@
 namespace App\Models;
 use App\Notifications\CustomVerifyEmail;  // Importe a notificação personalizada
 
+use App\Notifications\ResetPasswordNotification;  // Importe a notificação personalizada
+
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
@@ -51,6 +53,10 @@ class User extends Authenticatable
     public function sendEmailVerificationNotification()
 {
     $this->notify(new CustomVerifyEmail());  // Use a sua notificação personalizada
+}
+public function sendPasswordResetNotification($token)
+{
+    $this->notify(new ResetPasswordNotification($token, $this->email));
 }
 public function informacoesPessoais()
 {

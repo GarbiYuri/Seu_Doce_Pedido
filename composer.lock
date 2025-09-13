@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4910fdba01e318fd2f7a91a29d1a8389",
+    "content-hash": "b50cf59ae20c2f8611991076b5e1a9f1",
     "packages": [
         {
             "name": "archtechx/enums",
@@ -2198,16 +2198,16 @@
         },
         {
             "name": "laravel-lang/lang",
-            "version": "15.24.4",
+            "version": "15.24.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Laravel-Lang/lang.git",
-                "reference": "df51bc69c347c7d3ac52382aeb91f5c78828c824"
+                "reference": "495096372a2c45a69f9a2759973495c9d013367f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/df51bc69c347c7d3ac52382aeb91f5c78828c824",
-                "reference": "df51bc69c347c7d3ac52382aeb91f5c78828c824",
+                "url": "https://api.github.com/repos/Laravel-Lang/lang/zipball/495096372a2c45a69f9a2759973495c9d013367f",
+                "reference": "495096372a2c45a69f9a2759973495c9d013367f",
                 "shasum": ""
             },
             "require": {
@@ -2258,7 +2258,7 @@
                 "issues": "https://github.com/Laravel-Lang/lang/issues",
                 "source": "https://github.com/Laravel-Lang/lang"
             },
-            "time": "2025-09-10T09:37:52+00:00"
+            "time": "2025-09-10T20:41:54+00:00"
         },
         {
             "name": "laravel-lang/locale-list",
@@ -10755,12 +10755,12 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {},
+    "stability-flags": [],
     "prefer-stable": true,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.2"
     },
-    "platform-dev": {},
+    "platform-dev": [],
     "plugin-api-version": "2.6.0"
 }

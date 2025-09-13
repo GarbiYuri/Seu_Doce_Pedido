@@ -28,7 +28,7 @@ public function store(Request $request)
         Storage::disk('r2_produtos')->put('banner/' . $ImagemName, file_get_contents($arquivo));
 
         // Monta URL pública CDN para salvar no banco
-        $urlImagem = 'https://cdn.seudocepedido.shop/banner/' . $ImagemName;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/banner/' . $ImagemName;
     }
 
     Banner::create([

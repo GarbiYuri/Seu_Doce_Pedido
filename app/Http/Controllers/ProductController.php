@@ -59,7 +59,7 @@ public function store(Request $request): RedirectResponse
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // Montar URL pública para salvar no banco
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
     }
 
     // Criar o produto com a URL completa da imagem
@@ -125,7 +125,7 @@ public function update(Request $request, $id): RedirectResponse
     // Deleta imagem antiga no R2 se existir
     if ($product->imagem) {
         // Extrai o nome do arquivo antigo da URL
-        $caminhoAntigo = str_replace('https://cdn.seudocepedido.shop/imagens/', '', $product->imagem);
+        $caminhoAntigo = str_replace('https://cdn.amorcomrecheio.shop/imagens/', '', $product->imagem);
 
         // Deleta do R2
         Storage::disk('r2_produtos')->delete('imagens/' . $caminhoAntigo);
@@ -135,7 +135,7 @@ public function update(Request $request, $id): RedirectResponse
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // URL pública
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
         $data['imagem'] = $urlImagem;
 
         // (Opcional) apagar imagem antiga — só se for local. 

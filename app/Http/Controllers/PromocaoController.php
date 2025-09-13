@@ -70,7 +70,7 @@ class PromocaoController extends Controller
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // URL pública
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
         $data['imagem'] = $urlImagem;
 
         // (Opcional) apagar imagem antiga — só se for local. 
@@ -133,7 +133,7 @@ class PromocaoController extends Controller
     // Deleta imagem antiga no R2 se existir
     if ($promocao->imagem) {
         // Extrai o nome do arquivo antigo da URL
-        $caminhoAntigo = str_replace('https://cdn.seudocepedido.shop/imagens/', '', $promocao->imagem);
+        $caminhoAntigo = str_replace('https://cdn.amorcomrecheio.shop/imagens/', '', $promocao->imagem);
 
         // Deleta do R2
         Storage::disk('r2_produtos')->delete('imagens/' . $caminhoAntigo);
@@ -143,7 +143,7 @@ class PromocaoController extends Controller
         Storage::disk('r2_produtos')->put('imagens/' . $nomeArquivo, file_get_contents($arquivo));
 
         // URL pública
-        $urlImagem = 'https://cdn.seudocepedido.shop/imagens/' . $nomeArquivo;
+        $urlImagem = 'https://cdn.amorcomrecheio.shop/imagens/' . $nomeArquivo;
         $data['imagem'] = $urlImagem;
 
         // (Opcional) apagar imagem antiga — só se for local. 
