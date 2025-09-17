@@ -161,7 +161,7 @@ export default function Welcome({ products, categories, promocoes }) {
           <img
             src={banner.imagem}
             alt={banner.nome}
-              className="w-full max-h-128 object-contain rounded shadow-md mx-auto"
+              className="w-full max-h-108 object-contain rounded shadow-md mx-auto"
           />
         ) : (
           <div></div>
