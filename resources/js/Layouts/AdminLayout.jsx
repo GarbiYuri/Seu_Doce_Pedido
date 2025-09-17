@@ -31,7 +31,8 @@ export default function AdminLayout({ children }) {
     return (
         <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
             {/* HEADER */}
-            <header className="bg-[#e2b9a1] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+           <header className="bg-gradient-to-l from-[#e2b9a1] to-[#f4e0d5] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+
 
                 {/* Botão hamburguer - visível só no mobile */}
                 <button
@@ -48,9 +49,10 @@ export default function AdminLayout({ children }) {
                     <img
                         src="imagens/Simbolo.png"
                         alt="Logo ADM"
-                        className="w-14 h-14 sm:w-16 sm:h-16"
+                        className="w-14 h-14 sm:w-16 sm:h-16 animate-breathe"
                     />
                 </Link>
+
 
                 {/* Frase centralizada - apenas desktop */}
                 <div className="flex-1 text-center hidden md:block">
@@ -89,7 +91,7 @@ export default function AdminLayout({ children }) {
                     className={`
                         fixed z-30 inset-y-0 left-0 transform md:relative md:translate-x-0
                         transition-transform duration-300 ease-in-out
-                        w-64 max-w-full bg-[#fffaf7] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
+                        w-64 max-w-full bg-[#ffffff] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
                         ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                     `}
                 >
@@ -141,4 +143,7 @@ export default function AdminLayout({ children }) {
             </div>
         </div>
     );
+
 }
+
+

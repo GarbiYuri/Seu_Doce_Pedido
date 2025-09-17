@@ -213,11 +213,11 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
       </div>
       {promocoes.length > 0 && (
         <div className="w-full px-4 md:px-10 mt-10">
-          <h2 className="text-center text-3xl font-bold text-pink-700 mb-8">
+          <h2 className="text-center text-3xl font-bold text-[#613d20] mb-8">
             PROMOÇÕES
           </h2>
 
-          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+          <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mx-auto max-w-7xl px-4">
             {promocoes.map((promo) => {
               const product = promo.product;
               const precoOriginal = product?.price || null;
@@ -296,7 +296,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
                     <button
                       className={`w-full py-2 rounded-full font-semibold text-white transition-colors duration-300 ${buttonTexts[promo.Id_Product] === 'Adicionado!'
                           ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                          : 'bg-pink-600 hover:bg-pink-700'
+                          : 'bg-[#8a5a33] hover:bg-[#613d20]'
                         }`}
                       onClick={() =>
                         addToCart(
@@ -429,7 +429,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
 
         return (
           <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-            <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4">
+            <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6">
               {category.name.toUpperCase()}
             </h2>
 
@@ -566,7 +566,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
 
       {showScrollTop && (
 
-        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg- [#613d20] text-white rounded-full shadow-lg hover:bg-[#613d20] transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
+        <button onClick={scrollToTop} className="fixed bottom-6 right-6 p-3 bg-[#613d20] text-white rounded-full shadow-lg hover:bg-[#613d20] transition" title="Voltar ao topo" style={{ zIndex: 1000 }}>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 15l7-7 7 7" />
           </svg>

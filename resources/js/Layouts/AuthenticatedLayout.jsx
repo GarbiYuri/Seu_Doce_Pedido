@@ -85,32 +85,32 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <>
                                 {user.admin === 1 && (
-                                    <Link href="/Administracao" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                    <Link href="/Administracao" className="hover:text-[#8a5a33] transition-colors duration-300 text-base">
                                         ADMINISTRAÇÃO
                                     </Link>
                                 )}
-                                <Link href="/dashboard" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                <Link href="/dashboard" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     CATÁLOGO
                                 </Link>
-                                <Link href="/CarrinhoDeCompra" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                <Link href="/CarrinhoDeCompra" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     CARRINHO
                                 </Link>
-                                <Link href="/MeusPedidos" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                <Link href="/MeusPedidos" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     MEUS PEDIDOS
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link href="/" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                <Link href="/" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     CATÁLOGO
                                 </Link>
-                                <Link href="/CarrinhoWL" className="hover:text-[#8a5a33] transition-colors duration-300">
+                                <Link href="/CarrinhoWL" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     CARRINHO
                                 </Link>
                             </>
                         )}
 
-                        <Link href="/Sobre" className="hover:text-[#8a5a33] transition-colors duration-300">
+                        <Link href="/Sobre" className="hover:text-[#8a5a33] transition-colors duration-300 text-base">
                             SOBRE
                         </Link>
                         {user ? (
@@ -135,7 +135,7 @@ export default function AuthenticatedLayout({ header, children }) {
                     <button
                         onClick={() => setShowingNavigationDropdown(!showingNavigationDropdown)}
 
-                        className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-white hover:bg-[#613d20] focus:outline-none transition"
+                        className="sm:hidden inline-flex items-center justify-center p-2 rounded-md text-gray-600 hover:text-white hover:bg-[#613d20] focus:outline-none transition "
 
                     >
                         <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
@@ -159,7 +159,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             <ResponsiveNavLink
                                 href={route('profile.edit')}
 
-                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
+                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded text-base"
 
                             >
                                 Perfil
@@ -169,7 +169,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 href={route('logout')}
                                 as="button"
 
-                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded"
+                                className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded text-base"
 
                             >
                                 Sair
@@ -184,27 +184,27 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <>
                                 {user.admin === 1 && (
-                                    <Link href="/Administracao" className="block text-gray-700 hover:text-[#8a5a33]">
+                                    <Link href="/Administracao" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                         ADMINISTRAÇÃO
                                     </Link>
                                 )}
-                                <Link href="/dashboard" className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href="/dashboard" className="block text-gray-700 hover:text-[#8a5a33] text-base ">
                                     CATÁLOGO
                                 </Link>
-                                <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href="/CarrinhoDeCompra" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     CARRINHO
                                 </Link>
-                                <Link href="/MeusPedidos" className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href="/MeusPedidos" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     MEUS PEDIDOS
                                 </Link>
                             </>
                         ) : (
                             <>
-                                <Link href="/" className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href="/" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     CATÁLOGO
                                 </Link>
 
-                                <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href="/CarrinhoWL" className="block text-gray-700 hover:text-[#8a5a33] text-base">
 
                                     CARRINHO
                                 </Link>
@@ -212,19 +212,19 @@ export default function AuthenticatedLayout({ header, children }) {
                         )}
 
 
-                        <Link href="/Sobre" className="block text-gray-700 hover:text-[#8a5a33]">
+                        <Link href="/Sobre" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                             SOBRE
                         </Link>
                         {user ? (
                             <>
-                                <Link href={route('profile.edit')} className="block text-gray-700 hover:text-[#8a5a33]">
+                                <Link href={route('profile.edit')} className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     PERFIL
                                 </Link>
                                 <Link
                                     method="post"
                                     href={route('logout')}
                                     as="button"
-                                    className="block w-full text-left text-gray-700 hover:text-[#8a5a33]"
+                                    className="block w-full text-left text-gray-700 hover:text-[#8a5a33] text-base"
                                 >
                                     SAIR
                                 </Link>

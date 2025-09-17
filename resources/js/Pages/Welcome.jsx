@@ -161,7 +161,7 @@ export default function Welcome({ products, categories, promocoes }) {
           <img
             src={banner.imagem}
             alt={banner.nome}
-              className="w-full max-h-[px] object-contain rounded shadow-md mx-auto"
+              className="w-full max-h-96 object-contain rounded shadow-md mx-auto"
           />
         ) : (
           <div></div>
@@ -174,7 +174,7 @@ export default function Welcome({ products, categories, promocoes }) {
       PROMOÇÕES
     </h2>
 
-    <div className="grid gap-6 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4">
+    <div className="grid-cols-2 md:grid-cols-3 xl:grid-cols-4 mx-auto max-w-7xl px-4">
       {promocoes.map((promo) => {
         const product = promo.product;
         const precoOriginal = product?.price || null;
@@ -315,7 +315,7 @@ export default function Welcome({ products, categories, promocoes }) {
                 if (el) el.scrollIntoView({ behavior: 'smooth' });
               }}
             >
-              <div className="w-24 h-24 rounded-full border-2 border-[#613d20]overflow-hidden flex items-center justify-center bg-white shadow">
+              <div className="w-24 h-24 rounded-full border-2 border-[#613d20] overflow-hidden flex items-center justify-center bg-white shadow">
                 {category.imagem ? (
                   <img
                     src={`/imagens/categorias/${category.imagem}`}
@@ -402,7 +402,7 @@ export default function Welcome({ products, categories, promocoes }) {
 
   return (
     <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-      <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4">
+      <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6">
         {category.name.toUpperCase()}
       </h2>
 
@@ -445,8 +445,8 @@ export default function Welcome({ products, categories, promocoes }) {
               <button
                 className={`w-full py-2 rounded-full font-semibold shadow-md transition-colors duration-300 ${
                   buttonTexts[product.id] === 'Adicionado!'
-                    ? 'bg-green-500 hover:bg-green-600 cursor-default'
-                    : 'bg-pink-600 hover:bg-pink-700'
+                    ? 'bg-[#613d20] hover:bg-green-600 cursor-default'
+                    : 'bg-[#613d20] hover:bg-[#8a5a33]'
                 } text-white`}
                 onClick={() => addToCart(product.id)}
                 disabled={buttonTexts[product.id] === 'Adicionado!'}
