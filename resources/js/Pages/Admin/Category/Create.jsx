@@ -42,7 +42,7 @@ export default function CategoryCreate() {
                     <FiFolderPlus className="text-[#613d20] w-8 h-8" />
                     <h2
                         className="text-3xl font-extrabold text-[#613d20] text-center"
-                        style={{ fontFamily: "'Candice', cursive" }}
+                        
                     >
                         Criar Categoria
                     </h2>

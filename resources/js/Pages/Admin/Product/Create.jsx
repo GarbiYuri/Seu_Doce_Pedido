@@ -75,7 +75,7 @@ export default function ProductCreate({ categories }) {
         className="bg-white border border-[#8a5a33] rounded-3xl shadow-lg p-6 sm:p-10 space-y-6"
         encType="multipart/form-data"
       >
-        <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
+        <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6">
           Cadastrar Produto
         </h2>
 
@@ -95,7 +95,7 @@ export default function ProductCreate({ categories }) {
         </div>
 
         <div>
-          <label htmlFor="descricao" className="block text-sm font-semibold text-[#8a5a33] mb-1">
+          <label htmlFor="descricao" className="block text-sm font-semibold text-[#613d20] mb-1">
             Descrição
           </label>
           <textarea

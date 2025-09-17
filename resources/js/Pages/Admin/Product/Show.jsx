@@ -165,7 +165,7 @@ const [ativo, setAtivo] = useState(false);
         {/* Botão */}
         <button
           type="submit"
-          className="w-full py-3 bg-pink-600 hover:bg-[#613d20] text-white font-semibold rounded-xl shadow-lg transition"
+          className="w-full py-3 bg-[#8a5a33] hover:bg-[#613d20] text-white font-semibold rounded-xl shadow-lg transition"
         >
           Salvar Alterações
         </button>
