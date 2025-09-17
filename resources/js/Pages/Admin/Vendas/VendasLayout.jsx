@@ -93,17 +93,17 @@ export default function VendasLayout() {
     <AdminLayout>
       <Head title="Pedidos" />
 
-      <div style={{ display: "flex", justifyContent: "center", margin: "20px 0" }}>
+      <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
         <img
           src="imagens/Banner2 - Editado - Editado.png"
           alt="Logo"
-          style={{ width: "350px", height: "auto" }}
+          style={{ width: "350px", height: "auto",marginBottom:"5" }}
         />
         
       </div>
 
       {/* Filtros */}
-      <div className="max-w-6xl mx-auto mt-2 px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
+      <div className="max-w-6xl mx-auto mt-2 mb-2 px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
         <div className="flex gap-2">
           {['todos', 'hoje', '7dias'].map((tipo) => (
             <button
@@ -141,7 +141,7 @@ export default function VendasLayout() {
               <div
                 key={venda.id}
                 onClick={() => setPedidoSelecionado(venda)}
-                className={`p-4 rounded-xl shadow cursor-pointer border border-[#613d20]hover:bg-[#8a5a33] transition ${pedidoSelecionado?.id === venda.id ? 'bg-pink-50 ring-2 ring-pink-400' : ''
+                className={`p-4 rounded-xl shadow cursor-pointer border border-[#613d20] hover:bg-[#8a5a33] transition ${pedidoSelecionado?.id === venda.id ? 'bg-[#8a5a33] ring-2 ring-[#613d20]' : ''
                   }`}
               >
                 <div className="flex justify-between items-center mb-1">

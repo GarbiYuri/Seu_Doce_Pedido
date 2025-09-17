@@ -116,7 +116,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <button
                                 onClick={() => setShowMenu(!showMenu)}
-                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#8a5a33] transition-colors duration-300 shadow-md"
+                                className="bg-[#613d20] text-white px-4 py-2 rounded-md hover:bg-[#8a5a33] transition-colors duration-300 shadow-md text-base"
                             >
                                 {user.name}
                             </button>
