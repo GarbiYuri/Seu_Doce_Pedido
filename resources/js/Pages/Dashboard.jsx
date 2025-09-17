@@ -163,7 +163,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
             <img
               src={banner.imagem}
               alt={banner.nome}
-              className="w-full h-48 sm:h-60 md:h-72 lg:h-80 object-cover rounded shadow-md "
+              className="w-full max-h-96 object-contain rounded shadow-md mx-auto"
             />
 
             {user?.admin === 1 && (
