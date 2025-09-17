@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export default function PersonalInfoForm() {
   const informacoes = usePage().props.auth.informacoes;
 
-  const { data, setData, put, processing, recentlySuccessful } = useForm({
+  const { data, setData, put, post, processing, recentlySuccessful } = useForm({
     rua: informacoes?.rua || '',
     numero: informacoes?.numero || '',
     bairro: informacoes?.bairro || '',
@@ -51,7 +51,13 @@ export default function PersonalInfoForm() {
   const submit = (e) => {
     e.preventDefault();
     
+    informacoes?.id ? 
+
     put(route('informacoes.update', informacoes.id), {
+    preserveScroll: true,
+    })
+    :
+    post(route('informacoes.store'), {
     preserveScroll: true,
     });
     

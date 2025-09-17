@@ -15,6 +15,35 @@ use App\Models\VendaProduct;
 class MercadoPagoController extends Controller
 {
    
+    public function webhook(Request $request)
+    {
+        // Mercado Pago envia dados em JSON
+        $data = $request->all();
+
+        // Logar tudo para testar/debug
+        Log::info('Webhook MercadoPago:', $data);
+
+        // Verifica se veio ID do pagamento
+        if (isset($data['data']['id'])) {
+            $paymentId = $data['data']['id'];
+
+            // Aqui você pode consultar o pagamento na API do MP para pegar detalhes
+            // Exemplo: status, forma de pagamento, valor etc.
+
+            // ----> Supondo que você já tenha o pedido atrelado ao paymentId:
+            $venda = Venda::where('payment_id', $paymentId)->first();
+
+            if ($venda) {
+                // Atualiza status e método de pagamento
+                $venda->status = $data['type'] === 'payment' ? 'pago' : 'pendente';
+                $venda->forma_pagamento = $data['payment_type_id'] ?? null;
+                $venda->save();
+            }
+        }
+
+        // Sempre retorne 200 pro Mercado Pago saber que recebeu
+        return response()->json(['status' => 'success'], 200);
+    }
 
    public function pagar(Request $request)
 {
