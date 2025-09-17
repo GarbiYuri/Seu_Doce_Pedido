@@ -141,10 +141,9 @@ export default function VendasLayout() {
               <div
                 key={venda.id}
                 onClick={() => setPedidoSelecionado(venda)}
-                className={`p-4 rounded-xl shadow cursor-pointer border border-amber-800 bg-amber-600 bg-opacity-50 hover:bg-amber-600 hover:bg-opacity-80 ${pedidoSelecionado?.id === venda.id ? 'bg-[#8a5a33] ring-2 ring-[#613d20]' : ''
+                className={`p-4 rounded-xl shadow cursor-pointer border border-[#613d20] hover:bg-white transition ${pedidoSelecionado?.id === venda.id ? 'bg-white ring-2 ring-[#8a5a33]' : ''
                   }`}
-
-
+                  
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-bold text-gray-800">{venda.nome}</span>
