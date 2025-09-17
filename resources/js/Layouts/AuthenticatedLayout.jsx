@@ -58,7 +58,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         {user ? (
                             <Link href="/dashboard">
                                 <img
-                                    src="imagens/Banner2 - Editado - Editado.png"
+                                    src="imagens/Banner sem fundo.png"
                                     alt="Logo"
                                     width="300"
                                     height="300"
@@ -68,7 +68,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         ) : (
                             <Link href="/">
                                 <img
-                                    src="imagens/Banner2 - Editado - Editado.png"
+                                    src="imagens/Banner sem fundo.png"
                                     alt="Logo"
                                     width="300"
                                     height="300"
