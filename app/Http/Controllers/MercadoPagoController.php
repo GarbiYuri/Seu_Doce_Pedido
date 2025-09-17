@@ -138,7 +138,6 @@ class MercadoPagoController extends Controller
 
                 // Cria a preferência Mercado Pago
             $preference = $client->create([
-                "auto_return" => "all",
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,
@@ -373,7 +372,6 @@ class MercadoPagoController extends Controller
             session()->put('cart');
             // Cria a preferência Mercado Pago
             $preference = $client->create([
-                "auto_return" => "all",
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,
