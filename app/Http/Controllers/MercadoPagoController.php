@@ -25,12 +25,14 @@ class MercadoPagoController extends Controller
     if ($data['type'] === 'payment') {
         $paymentObject = $data['object'] ?? null;
         if ($paymentObject) {
+            
             $externalRef = $paymentObject['external_reference'] ?? null;
             $statusMP = $paymentObject['status'] ?? null;
             $paymentType = $paymentObject['payment_type_id'] ?? null;
 
             if ($externalRef) {
-                $venda = Venda::find($externalRef);
+                 $vendaId = (int) $externalRef; 
+                $venda = Venda::find($vendaId);
                 if ($venda) {
                     $venda->status = match($statusMP) {
                         'approved' => 'pago',
@@ -157,6 +159,8 @@ $preference = $client->create([
     "binary_mode" => true,
     "external_reference" => $venda->id
 ]);
+
+dd($preference);
 
 // 3. Salva a URL do pagamento na venda
 $venda->payment_url = $preference->init_point ?? null;
@@ -368,7 +372,7 @@ $venda->save();
     ]);
     }
 
-
+    
 
 
             session()->put('cart');
