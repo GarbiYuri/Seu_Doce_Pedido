@@ -27,7 +27,14 @@ class MercadoPagoController extends Controller
         $paymentId = $data['data']['id'] ?? null;
         Log::info('Só essa informação passa', $data);
         if ($paymentId) {
-            
+             try {
+                $accessToken = config('services.mercadopago.token');
+                    if (!$accessToken) {
+                        Log::error('Token do Mercado Pago não configurado. Verifique .env e config/services.php');
+                        return response()->json(['status' => 'error', 'message' => 'Token not configured'], 500);
+                    }
+                    MercadoPagoConfig::setAccessToken($accessToken);
+                    
              $client = new PaymentClient();
             $payment = $client->get($paymentId);
 
@@ -56,10 +63,14 @@ class MercadoPagoController extends Controller
 
                     $venda->save();
                     Log::info("SUCESSO: Venda ID {$venda->id} foi atualizada para o status '{$venda->status}'.");
-                }else {
+                }
+            }else {
                 Log::warning("AVISO: Venda com external_reference {$externalRef} não foi encontrada no banco de dados.");
                 }
-            }
+            } catch (\Exception $e) {
+                    Log::error('ERRO ao processar webhook do Mercado Pago:', ['message' => $e->getMessage(), 'payment_id' => $paymentId]);
+                    return response()->json(['status' => 'error'], 500);
+                }
         }
     }
 
