@@ -132,7 +132,7 @@ export default function DashboardAdmin() {
             </div>
             <div className="md:col-span-2">
               <label htmlFor="rua" className="block font-semibold text-gray-700">Rua:</label>
-              <input id="rua" type="text" value={data.rua} onChange={(e) => setData('rua', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Preenchido automaticamente" readOnly/>
+              <input id="rua" type="text" value={data.rua} onChange={(e) => setData('rua', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Rua das Flores..." />
               {errors.rua && <p className="text-red-500 text-sm mt-1">{errors.rua}</p>}
             </div>
           </div>
@@ -144,7 +144,7 @@ export default function DashboardAdmin() {
             </div>
             <div>
               <label htmlFor="bairro" className="block font-semibold text-gray-700">Bairro:</label>
-              <input id="bairro" type="text" value={data.bairro} onChange={(e) => setData('bairro', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Preenchido automaticamente" readOnly/>
+              <input id="bairro" type="text" value={data.bairro} onChange={(e) => setData('bairro', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Bairro das FLores..."/>
               {errors.bairro && <p className="text-red-500 text-sm mt-1">{errors.bairro}</p>}
             </div>
             <div>
@@ -156,12 +156,12 @@ export default function DashboardAdmin() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <label htmlFor="cidade" className="block font-semibold text-gray-700">Cidade:</label>
-              <input id="cidade" type="text" value={data.cidade} onChange={(e) => setData('cidade', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Preenchido automaticamente" readOnly/>
+              <input id="cidade" type="text" value={data.cidade} onChange={(e) => setData('cidade', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="São Paulo..." />
               {errors.cidade && <p className="text-red-500 text-sm mt-1">{errors.cidade}</p>}
             </div>
             <div>
               <label htmlFor="estado" className="block font-semibold text-gray-700">Estado:</label>
-              <input id="estado" type="text" value={data.estado} onChange={(e) => setData('estado', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Preenchido automaticamente" readOnly/>
+              <input id="estado" type="text" value={data.estado} onChange={(e) => setData('estado', e.target.value)} className="border border-gray-300 p-2 rounded w-full bg-gray-100" placeholder="Mogi Das Cruzes..." />
               {errors.estado && <p className="text-red-500 text-sm mt-1">{errors.estado}</p>}
             </div>
           </div>
