@@ -17,37 +17,37 @@ use MercadoPago\Payment;
 class MercadoPagoController extends Controller
 {
    
-   public function webhook(Request $request)
-    {
-        $data = $request->all();
+  public function webhook(Request $request)
+{
+    $data = $request->all();
 
-        Log::info('Webhook MercadoPago recebido:', $data);
+    Log::info('Webhook MercadoPago recebido:', $data);
 
-        if (isset($data['type']) && $data['type'] === 'payment') {
-            $paymentId = $data['data']['id'] ?? null;
+    if (isset($data['type']) && $data['type'] === 'payment') {
+        // Pega diretamente os dados do webhook
+        $externalRef = $data['data']['external_reference'] ?? null;
+        $statusMP = $data['data']['status'] ?? null;
+        $paymentType = $data['data']['payment_type_id'] ?? null;
 
-            if ($paymentId) {
-                $payment = Payment::find_by_id($paymentId);
+        if ($externalRef) {
+            $venda = Venda::find($externalRef);
 
-                if ($payment) {
-                    $venda = Venda::where('id', $payment->external_reference)->first();
-
-                    if ($venda) {
-                        $venda->status = match($payment->status) {
-                            'approved' => 'pago',
-                            'pending' => 'pagamento_pendente',
-                            'rejected' => 'falha_pagamento',
-                            default => $venda->status
-                        };
-                        $venda->forma_pagamento = $payment->payment_type_id ?? null;
-                        $venda->save();
-                    }
-                }
+            if ($venda) {
+                $venda->status = match($statusMP) {
+                    'approved' => 'pago',
+                    'pending' => 'pagamento_pendente',
+                    'rejected' => 'falha_pagamento',
+                    default => $venda->status
+                };
+                $venda->forma_pagamento = $paymentType;
+                $venda->save();
             }
         }
-
-        return response()->json(['status' => 'ok'], 200);
     }
+
+    return response()->json(['status' => 'ok'], 200);
+}
+
 
 
    public function pagar(Request $request)
