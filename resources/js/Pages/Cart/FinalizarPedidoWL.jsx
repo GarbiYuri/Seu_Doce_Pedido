@@ -4,9 +4,16 @@ export default function FinalizarPedido({ tipoPedido, setTipoPedido, dadosEntreg
  
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setDadosEntrega(prev => ({
+     let finalValue = value;
+   
+     const camposNumericos = ['telefone', 'cpf', 'numero', 'cep'];
+
+      if (camposNumericos.includes(name)) {
+      finalValue = value.replace(/\D/g, '');
+    }
+ setDadosEntrega(prev => ({
       ...prev,
-      [name]: value
+      [name]: finalValue
     }));
   };
 

@@ -88,6 +88,7 @@ console.log(pedidoSelecionado);
     pix: 'Pix',
     ticket: 'Boleto Bancário',
     account_money: 'Saldo Mercado Pago',
+    bank_transfer: 'Transferencia Bancária',
   };
 
 

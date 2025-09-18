@@ -54,6 +54,10 @@ Route::get('/CheckoutRedirectWL', function () {
         return Inertia::render('Checkout/CheckoutRedirectWL');
 })->name('CheckoutRedirectWL');
 
+Route::get('/sobre', function(){
+    return Inertia::render('Sobre/Sobre');
+})->name('sobre');
+
 //Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
  
@@ -66,9 +70,7 @@ Route::middleware('auth')->group(function () {
 
 Route::resource('informacoes', InformacoesPessoaisController::class);
 
-Route::get('/sobre', function(){
-    return Inertia::render('Sobre/Sobre');
-})->name('sobre');
+
 
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
