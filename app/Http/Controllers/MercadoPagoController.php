@@ -126,31 +126,32 @@ class MercadoPagoController extends Controller
             $client = new PreferenceClient();
 
 
-                // Cria a preferência Mercado Pago
-            $preference = $client->create([
-                "items" => $items,
-                "payer" => $payer,
-                "binary_mode" => true,
-    
-            ]);
+      // 1. Cria a venda no banco
+$venda = Venda::create([
+    'id_user' => $user->id,
+    'status' => 'iniciado', // ou 'pendente'
+    'valor' => $total,
+    'tipo' => $tipoPedido, // retirada ou entrega
+    'nome' => $user->name,
+    'email' => $user->email,
+    'telefone' => $informacoes['telefone'],
+    'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
+    'rua' => $informacoes['rua'] ?? null,
+    'numero' => $informacoes['numero'] ?? null,
+    'cep' => $informacoes['cep'] ?? null,
+]);
 
-                // 1. Cria a venda no banco
-        $venda = Venda::create([
-         'id_user' => $user->id,
-         'status' => 'iniciado', // ou 'pendente'
-          'payment_url' => $preference->init_point ?? null,
-        'valor' => $total,
-        'tipo' => $tipoPedido, // retirada ou entrega
-        'nome' => $user->name,
-        'email' => $user->email,
-        'telefone' => $informacoes['telefone'],
-        'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
-        'rua' => $informacoes['rua'] ?? null,
-        'numero' => $informacoes['numero'] ?? null,
-        'cep' => $informacoes['cep'] ?? null,
-        ]);
+// 2. Cria a preferência Mercado Pago usando o id da venda
+$preference = $client->create([
+    "items" => $items,
+    "payer" => $payer,
+    "binary_mode" => true,
+    "external_reference" => $venda->id
+]);
 
-
+// 3. Salva a URL do pagamento na venda
+$venda->payment_url = $preference->init_point ?? null;
+$venda->save();
 
         // 2. Salva os produtos da venda
     foreach ($products as $product) {
@@ -365,6 +366,7 @@ class MercadoPagoController extends Controller
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,
+                "external_reference" => $venda->id
             ]);
 
 
