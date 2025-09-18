@@ -16,6 +16,7 @@ class Venda extends Model
     protected $fillable = [
         'id_user',
         'status',
+        'id_mp',
         'payment_url',
         'forma_pagamento',
         'valor',

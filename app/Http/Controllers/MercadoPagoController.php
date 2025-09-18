@@ -17,46 +17,70 @@ use MercadoPago\Payment;
 class MercadoPagoController extends Controller
 {
    
- public function webhook(Request $request)
-{
-    $data = $request->all();
-    Log::info('Webhook MercadoPago recebido:', $data);
+  public function webhook(Request $request)
+    {
+        Log::info('Webhook MercadoPago recebido:', $request->all());
 
-    if ($data['type'] === 'payment') {
-        $paymentObject = $data['object'] ?? null;
-        if ($paymentObject) {
+        $data = $request->all();
+
+        // O código agora só se importa com a notificação do tipo 'payment'
+        if (isset($data['type']) && $data['type'] === 'payment') {
             
-            $externalRef = $paymentObject['external_reference'] ?? null;
-            $statusMP = $paymentObject['status'] ?? null;
-            $paymentType = $paymentObject['payment_type_id'] ?? null;
+            // 1. Pega o ID do pagamento que veio na notificação
+            $paymentId = $data['data']['id'] ?? null;
 
-            if ($externalRef) {
-                 $vendaId = (int) $externalRef; 
-                $venda = Venda::find($vendaId);
-                if ($venda) {
-                    $venda->status = match($statusMP) {
-                        'approved' => 'pago',
-                        'pending' => 'pagamento_pendente',
-                        'rejected', 'refused', 'cancelled' => 'falha_pagamento',
-                        default => $venda->status
-                    };
-                    $venda->forma_pagamento = $paymentType;
-                    $venda->save();
+            if ($paymentId) {
+                try {
+                    // 2. Configura a API para buscar os detalhes
+                    $accessToken = config('services.mercadopago.token');
+                    if (!$accessToken) {
+                        Log::error('Token do Mercado Pago não configurado.');
+                        return response()->json(['status' => 'error', 'message' => 'Token not configured'], 500);
+                    }
+                    MercadoPagoConfig::setAccessToken($accessToken);
+
+                    // 3. Busca os detalhes completos do pagamento na API do Mercado Pago
+                    $client = new PaymentClient();
+                    $payment = $client->get($paymentId);
+
+                    // 4. Com os dados completos em mãos, processamos a venda
+                    $externalRef = $payment->external_reference;
+                    $venda = Venda::find((int)$externalRef);
+
+                    if ($venda) {
+                        // Atualiza o status
+                        $venda->status = match($payment->status) {
+                            'approved' => 'pago',
+                            'pending'  => 'pagamento_pendente',
+                            'rejected', 'cancelled' => 'falha_pagamento',
+                            default    => $venda->status
+                        };
+                        
+                        // Salva a forma de pagamento
+                        $venda->forma_pagamento = $payment->payment_type_id;
+
+                        // Salva o ID da transação do Mercado Pago (se você tiver a coluna no banco)
+                        if (isset($venda->mercadopago_payment_id)) {
+                             $venda->mercadopago_payment_id = $payment->id;
+                        }
+
+                        $venda->save();
+
+                        Log::info("SUCESSO: Venda ID {$venda->id} atualizada para '{$venda->status}' com o Pagamento MP ID {$payment->id}.");
+                    } else {
+                        Log::warning("AVISO: Venda não encontrada para external_reference: $externalRef");
+                    }
+
+                } catch (\Exception $e) {
+                    Log::error('ERRO ao processar webhook do Mercado Pago:', ['message' => $e->getMessage(), 'payment_id' => $paymentId]);
+                    return response()->json(['status' => 'error'], 500);
                 }
             }
         }
-    } elseif ($data['type'] === 'topic_merchant_order_wh') {
-        // Aqui você pode tratar merchant order
-        $merchantOrderId = $data['id'] ?? null;
-        $statusOrder = $data['status'] ?? null;
-
-        Log::info("Webhook Merchant Order recebido: $merchantOrderId, status: $statusOrder");
-
-        // Se quiser atualizar a venda baseada na ordem, precisa buscar pagamentos via API
+        
+        // Responde 200 OK para o Mercado Pago, confirmando o recebimento.
+        return response()->json(['status' => 'ok'], 200);
     }
-
-    return response()->json(['status' => 'ok'], 200);
-}
 
 
 
