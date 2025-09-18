@@ -149,7 +149,7 @@ $venda = Venda::create([
     'numero' => $informacoes['numero'] ?? null,
     'cep' => $informacoes['cep'] ?? null,
 ]);
-dd($venda);
+
 // 2. Cria a preferência Mercado Pago usando o id da venda
 $preference = $client->create([
     "items" => $items,
