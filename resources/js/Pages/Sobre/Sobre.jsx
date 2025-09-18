@@ -1,15 +1,41 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
-
+import { Head, usePage } from '@inertiajs/react';
+import { Mail, Phone, MapPin } from 'lucide-react';
 
 export default function Sobre() {
+  const { shop } = usePage().props;
+
+  const formatarTelefone = (numero) => {
+  // Se o número não existir ou for nulo, retorna uma string vazia
+  if (!numero) return '';
+
+  // Converte para string e remove qualquer caractere que não seja dígito
+  const numeroStr = String(numero).replace(/\D/g, '');
+  
+  const tamanho = numeroStr.length;
+
+  if (tamanho === 11) {
+    // Formato para celular: (XX) 9XXXX-XXXX
+    return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 7)}-${numeroStr.substring(7)}`;
+  } 
+  
+  if (tamanho === 10) {
+    // Formato para telefone fixo: (XX) XXXX-XXXX
+    return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 6)}-${numeroStr.substring(6)}`;
+  }
+
+  // Se o número tiver um tamanho diferente, retorna como está
+  return numeroStr;
+};
+
   return (
     <AuthenticatedLayout>
+       <Head title="Sobre" />
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Banner / Imagem de capa */}
         <div className="w-full h-64 rounded-2xl overflow-hidden mb-12 shadow-lg">
           <img
-            src="/images/sobre-banner.jpg"
+            src="/imagens/Banner2 - Editado.png"
             alt="Nossa loja"
             className="w-full h-full object-cover"
           />
@@ -27,7 +53,7 @@ export default function Sobre() {
           doces, mas sim experiências que ficam na memória. ❤
         </p>
 
-        {/* Galeria de imagens */}
+        {/* Galeria de imagens 
         <div className="grid md:grid-cols-3 gap-6 mb-16">
           <img
             src="/images/loja1.jpg"
@@ -45,42 +71,47 @@ export default function Sobre() {
             className="rounded-xl object-cover h-60 w-full shadow-md hover:scale-105 transition-transform duration-300"
           />
         </div>
-
+        */}
         {/* Seção de contato */}
         <div className="grid md:grid-cols-3 gap-8">
           <div className="bg-[#fdfdfd] shadow-lg rounded-2xl p-6 text-center border-t-4 border-[#613d20] hover:shadow-xl transition-shadow duration-300">
             <Mail className="mx-auto w-10 h-10 text-[#8a5a33] mb-3" />
             <h2 className="font-semibold text-xl text-[#613d20]">E-mail</h2>
-            <p className="text-gray-600">contato@sualoja.com</p>
+            <p className="text-gray-600">{shop.email}</p>
           </div>
 
           <div className="bg-[#fdfdfd] shadow-lg rounded-2xl p-6 text-center border-t-4 border-[#8a5a33] hover:shadow-xl transition-shadow duration-300">
             <Phone className="mx-auto w-10 h-10 text-[#bc845b] mb-3" />
             <h2 className="font-semibold text-xl text-[#613d20]">Telefone</h2>
-            <p className="text-gray-600">(11) 99999-9999</p>
+            <p className="text-gray-600">{formatarTelefone(shop.telefone)}</p>
           </div>
 
           <div className="bg-[#fdfdfd] shadow-lg rounded-2xl p-6 text-center border-t-4 border-[#bc845b] hover:shadow-xl transition-shadow duration-300">
             <MapPin className="mx-auto w-10 h-10 text-[#8a5a33] mb-3" />
             <h2 className="font-semibold text-xl text-[#613d20]">Endereço</h2>
-            <p className="text-gray-600">Rua Exemplo, 123 - São Paulo</p>
+            <p className="text-gray-600">{shop.rua}, {shop.numero}  - {shop.estado}</p>
           </div>
         </div>
 
         {/* Botão de call-to-action */}
         <div className="text-center mt-12">
           <a
-            href="/contato"
-            className="inline-block bg-[#8a5a33] text-white px-6 py-3 rounded-xl font-medium shadow-md hover:bg-[#613d20] transition-colors"
-          >
-            Fale Conosco
-          </a>
+    // Substitua pelo seu número completo
+    href={`https://wa.me/55${shop.telefone}`}
+    // Abre o link em uma nova aba, o que é bom para links externos
+    target="_blank"
+    rel="noopener noreferrer"
+    className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-xl font-medium shadow-md hover:bg-[#128C7E] transition-colors"
+  >
+    <Phone size={20} /> {/* Ícone opcional */}
+    Fale Conosco no WhatsApp
+  </a>
         </div>
 
         {/* Rodapé */}
         <div className="text-center mt-12">
           <p className="text-gray-500 text-sm">
-            © {new Date().getFullYear()} Sua Loja - Todos os direitos reservados
+            © {new Date().getFullYear()} Amor Com Recheio - Todos os direitos reservados
           </p>
         </div>
       </div>

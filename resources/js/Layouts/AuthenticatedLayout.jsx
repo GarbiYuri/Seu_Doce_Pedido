@@ -110,7 +110,7 @@ export default function AuthenticatedLayout({ header, children }) {
                             </>
                         )}
 
-                        <Link href="/Sobre" className="hover:text-[#8a5a33] transition-colors duration-300 text-base">
+                        <Link href="/sobre" className="hover:text-[#8a5a33] transition-colors duration-300 text-base">
                             SOBRE
                         </Link>
                         {user ? (
@@ -212,7 +212,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         )}
 
 
-                        <Link href="/Sobre" className="block text-gray-700 hover:text-[#8a5a33] text-base">
+                        <Link href="/sobre" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                             SOBRE
                         </Link>
                         {user ? (

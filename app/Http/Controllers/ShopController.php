@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Shop;
+use Illuminate\Support\Facades\Redirect;
 
 class ShopController extends Controller
 {
@@ -24,44 +25,38 @@ class ShopController extends Controller
     /**
      * Atualiza o banner da loja com o ID 1.
      */
-public function update(Request $request)
-{
-    // Validação flexível: só valida se o campo foi enviado
-    $request->validate([
-        'id_banner' => 'nullable|exists:banner,id',
-        'hora_abertura' => 'nullable',
-        'hora_fechamento' => 'nullable',
-        'loja_aberta' => 'nullable|boolean',
-        'telefone' => 'nullable'
-    ]);
+  public function update(Request $request)
+    {
+        // 1. ATUALIZE A VALIDAÇÃO
+        // Adicionando as regras para os novos campos de endereço e e-mail.
+        $validatedData = $request->validate([
+            'id_banner'       => 'nullable|exists:banner,id',
+            'hora_abertura'   => 'nullable|date_format:H:i',
+            'hora_fechamento' => 'nullable|date_format:H:i',
+            'loja_aberta'     => 'nullable|boolean',
+            'telefone'        => 'nullable|string|max:20',
+            // --- Novos campos validados ---
+            'email'           => 'nullable|email|max:255',
+            'cep'             => 'nullable|string|max:9',
+            'rua'             => 'nullable|string|max:255',
+            'numero'          => 'nullable|string|max:20',
+            'bairro'          => 'nullable|string|max:255',
+            'cidade'          => 'nullable|string|max:255',
+            'estado'          => 'nullable|string|max:255', // Ajuste o max se usar a sigla (ex: max:2)
+            'complemento'     => 'nullable|string|max:255',
+        ]);
 
-    // Busca ou cria o registro da loja
-    $shop = Shop::firstOrNew(['id' => 1]);
+        // Busca ou cria o registro da loja (seu código está correto)
+        $shop = Shop::firstOrCreate(['id' => 1]);
 
-    // Atualiza apenas os campos que vieram no request
-    if ($request->has('id_banner')) {
-        $shop->id_banner = $request->id_banner;
+        // 2. ATUALIZE OS CAMPOS (usando o array validado)
+        // O método `update` é uma forma mais limpa e segura de fazer isso.
+        // Ele só vai tentar preencher os campos que foram validados.
+        $shop->update($validatedData);
+
+        // Resposta para o Inertia
+        return Redirect::back()->with('success', 'Loja atualizada com sucesso!');
     }
-
-    if ($request->has('hora_abertura')) {
-        $shop->hora_abertura = $request->hora_abertura;
-    }
-
-    if ($request->has('hora_fechamento')) {
-        $shop->hora_fechamento = $request->hora_fechamento;
-    }
-
-    if ($request->has('loja_aberta')) {
-        $shop->loja_aberta = $request->loja_aberta;
-    }
-     if ($request->has('telefone')) {
-        $shop->telefone = $request->telefone;
-    }
-
-    $shop->save();
-
-    return redirect()->back();
-}
 
 
 
