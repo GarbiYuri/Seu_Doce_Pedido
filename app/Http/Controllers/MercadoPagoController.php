@@ -160,7 +160,6 @@ $preference = $client->create([
     "external_reference" => $venda->id
 ]);
 
-dd($preference);
 
 // 3. Salva a URL do pagamento na venda
 $venda->payment_url = $preference->init_point ?? null;
