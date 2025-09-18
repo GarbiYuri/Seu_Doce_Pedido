@@ -543,7 +543,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
               </Link>
 
               <Link
-                href="/contato"
+               href={`https://wa.me/55${shop.telefone}`}
                 className="flex items-center justify-center w-10 h-10 text-[#613d20] hover:text-[#613d20] transition"
                 title="Contato"
               >
