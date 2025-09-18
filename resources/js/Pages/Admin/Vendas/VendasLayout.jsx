@@ -135,15 +135,15 @@ export default function VendasLayout() {
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-
+{/*
       <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
         <img
-          src="/imagens/Banner2 - Editado - Editado.png"
+          src="/imagens/Banner2.jpeg"
           alt="Logo"
           style={{ width: '350px', height: 'auto', marginBottom: '5' }}
         />
       </div>
-
+*/}
       {/* Filtros */}
       <div className="max-w-6xl mx-auto mt-2 mb-6 px-4">
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
