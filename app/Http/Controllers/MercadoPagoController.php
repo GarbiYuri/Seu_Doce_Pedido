@@ -22,9 +22,8 @@ class MercadoPagoController extends Controller
     $data = $request->all();
     Log::info('Webhook MercadoPago recebido:', $data);
 
-    if (isset($data['type']) && $data['type'] === 'payment') {
+    if ($data['type'] === 'payment') {
         $paymentObject = $data['object'] ?? null;
-
         if ($paymentObject) {
             $externalRef = $paymentObject['external_reference'] ?? null;
             $statusMP = $paymentObject['status'] ?? null;
@@ -36,7 +35,7 @@ class MercadoPagoController extends Controller
                     $venda->status = match($statusMP) {
                         'approved' => 'pago',
                         'pending' => 'pagamento_pendente',
-                        'rejected' => 'falha_pagamento',
+                        'rejected', 'refused', 'cancelled' => 'falha_pagamento',
                         default => $venda->status
                     };
                     $venda->forma_pagamento = $paymentType;
@@ -44,10 +43,19 @@ class MercadoPagoController extends Controller
                 }
             }
         }
+    } elseif ($data['type'] === 'topic_merchant_order_wh') {
+        // Aqui você pode tratar merchant order
+        $merchantOrderId = $data['id'] ?? null;
+        $statusOrder = $data['status'] ?? null;
+
+        Log::info("Webhook Merchant Order recebido: $merchantOrderId, status: $statusOrder");
+
+        // Se quiser atualizar a venda baseada na ordem, precisa buscar pagamentos via API
     }
 
     return response()->json(['status' => 'ok'], 200);
 }
+
 
 
 
@@ -141,7 +149,7 @@ $venda = Venda::create([
     'numero' => $informacoes['numero'] ?? null,
     'cep' => $informacoes['cep'] ?? null,
 ]);
-
+dd($venda);
 // 2. Cria a preferência Mercado Pago usando o id da venda
 $preference = $client->create([
     "items" => $items,
@@ -153,6 +161,8 @@ $preference = $client->create([
 // 3. Salva a URL do pagamento na venda
 $venda->payment_url = $preference->init_point ?? null;
 $venda->save();
+
+
 
         // 2. Salva os produtos da venda
     foreach ($products as $product) {
