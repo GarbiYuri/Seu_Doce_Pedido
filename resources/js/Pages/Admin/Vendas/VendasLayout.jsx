@@ -126,6 +126,7 @@ export default function VendasLayout() {
       pix: 'Pix',
       ticket: 'Boleto Bancário',
       account_money: 'Saldo Mercado Pago',
+      bank_transfer: 'Transferencia Bancária'
     };
 
     return nomes[formaApi] || formaApi || 'Não informado';
