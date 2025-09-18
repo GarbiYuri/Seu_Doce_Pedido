@@ -17,30 +17,31 @@ use MercadoPago\Payment;
 class MercadoPagoController extends Controller
 {
    
-  public function webhook(Request $request)
+ public function webhook(Request $request)
 {
     $data = $request->all();
-
     Log::info('Webhook MercadoPago recebido:', $data);
 
     if (isset($data['type']) && $data['type'] === 'payment') {
-        // Pega diretamente os dados do webhook
-        $externalRef = $data['data']['external_reference'] ?? null;
-        $statusMP = $data['data']['status'] ?? null;
-        $paymentType = $data['data']['payment_type_id'] ?? null;
+        $paymentObject = $data['object'] ?? null;
 
-        if ($externalRef) {
-            $venda = Venda::find($externalRef);
+        if ($paymentObject) {
+            $externalRef = $paymentObject['external_reference'] ?? null;
+            $statusMP = $paymentObject['status'] ?? null;
+            $paymentType = $paymentObject['payment_type_id'] ?? null;
 
-            if ($venda) {
-                $venda->status = match($statusMP) {
-                    'approved' => 'pago',
-                    'pending' => 'pagamento_pendente',
-                    'rejected' => 'falha_pagamento',
-                    default => $venda->status
-                };
-                $venda->forma_pagamento = $paymentType;
-                $venda->save();
+            if ($externalRef) {
+                $venda = Venda::find($externalRef);
+                if ($venda) {
+                    $venda->status = match($statusMP) {
+                        'approved' => 'pago',
+                        'pending' => 'pagamento_pendente',
+                        'rejected' => 'falha_pagamento',
+                        default => $venda->status
+                    };
+                    $venda->forma_pagamento = $paymentType;
+                    $venda->save();
+                }
             }
         }
     }
