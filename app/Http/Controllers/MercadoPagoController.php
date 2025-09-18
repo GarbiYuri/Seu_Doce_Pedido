@@ -24,9 +24,10 @@ class MercadoPagoController extends Controller
 
     if ($data['type'] === 'payment') {
         $paymentObject = $data['object'] ?? null;
+        Log::info('Só essa informação passa', $data);
         if ($paymentObject) {
             $externalRef = $paymentObject['external_reference'] ?? null;
-              Log::info($externalRef);
+              
             $statusMP = $paymentObject['status'] ?? null;
             $paymentType = $paymentObject['payment_type_id'] ?? null;
 
