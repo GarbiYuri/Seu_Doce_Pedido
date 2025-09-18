@@ -20,7 +20,7 @@ export default function VendasLayout() {
     'em_entrega',
     'entregue',
     'falha_pagamento',
-    'cancelado',
+
   ];
 
   const nomesStatus = {
@@ -31,7 +31,7 @@ export default function VendasLayout() {
     em_entrega: 'Em Entrega',
     entregue: 'Entregue',
     falha_pagamento: 'Falha/Pendente',
-    cancelado: 'Cancelado/Descartado',
+
   };
 
   const avancarStatus = (vendaId, novoStatus) => {
@@ -65,7 +65,7 @@ export default function VendasLayout() {
     em_entrega: 'bg-blue-100 text-blue-700',
     entregue: 'bg-green-100 text-green-700',
     falha_pagamento: 'bg-red-100 text-red-700',
-    cancelado: 'bg-gray-100 text-gray-700',
+
   };
 
   const vendasFiltradas = useMemo(() => {
@@ -307,7 +307,7 @@ export default function VendasLayout() {
                   </select>
                 </div>
 
-                {pedidoSelecionado.status !== 'entregue' && pedidoSelecionado.status !== 'cancelado' && (
+                {pedidoSelecionado.status !== 'entregue' && (
                   <button
                     onClick={() => cancelarPedido(pedidoSelecionado.id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
