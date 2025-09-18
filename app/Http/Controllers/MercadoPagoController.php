@@ -13,6 +13,7 @@ use App\Models\Venda;
 use App\Models\VendaProduct;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\Payment;
+  use MercadoPago\Client\Payment\PaymentClient;
 
 class MercadoPagoController extends Controller
 {
@@ -22,26 +23,41 @@ class MercadoPagoController extends Controller
     $data = $request->all();
     Log::info('Webhook MercadoPago recebido:', $data);
 
-    if ($data['type'] === 'payment') {
-        $paymentObject = $data['object'] ?? null;
+    if (isset($data['type']) && $data['type'] === 'payment') {
+        $paymentId = $data['data']['id'] ?? null;
         Log::info('Só essa informação passa', $data);
-        if ($paymentObject) {
-            $externalRef = $paymentObject['external_reference'] ?? null;
-              
-            $statusMP = $paymentObject['status'] ?? null;
-            $paymentType = $paymentObject['payment_type_id'] ?? null;
+        if ($paymentId) {
+            
+             $client = new PaymentClient();
+            $payment = $client->get($paymentId);
+
+            Log::info('Aqui tem o objeto do cliente', $data);
+            $externalRef = $payment->external_reference;
 
             if ($externalRef) {
                 $venda = Venda::find($externalRef);
                 if ($venda) {
+                    $statusMP = $payment->status; 
+
+                    $paymentType = $payment->payment_type_id;
+
                     $venda->status = match($statusMP) {
                         'approved' => 'pago',
                         'pending' => 'pagamento_pendente',
                         'rejected', 'refused', 'cancelled' => 'falha_pagamento',
                         default => $venda->status
                     };
+
                     $venda->forma_pagamento = $paymentType;
+
+                    if (isset($venda->mercadopago_payment_id)) {
+                        $venda->mercadopago_payment_id = $payment->id;
+                    }
+
                     $venda->save();
+                    Log::info("SUCESSO: Venda ID {$venda->id} foi atualizada para o status '{$venda->status}'.");
+                }else {
+                Log::warning("AVISO: Venda com external_reference {$externalRef} não foi encontrada no banco de dados.");
                 }
             }
         }
