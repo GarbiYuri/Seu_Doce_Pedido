@@ -11,54 +11,44 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\Venda;
 use App\Models\VendaProduct;
+use Illuminate\Support\Facades\Log;
+use MercadoPago\Payment;
 
 class MercadoPagoController extends Controller
 {
    
- public function webhook(Request $request)
-{
-    $data = $request->all();
+   public function webhook(Request $request)
+    {
+        $data = $request->all();
 
-    // Log para debug
-    Log::info('Webhook MercadoPago recebido:', $data);
+        Log::info('Webhook MercadoPago recebido:', $data);
 
-    // Só processa se for pagamento
-    if (isset($data['type']) && $data['type'] === 'payment') {
-        $paymentId = $data['data']['id'] ?? null;
+        if (isset($data['type']) && $data['type'] === 'payment') {
+            $paymentId = $data['data']['id'] ?? null;
 
-        if ($paymentId) {
-            // Consulta o pagamento completo na API do Mercado Pago
-            $payment = Payment::find_by_id($paymentId);
+            if ($paymentId) {
+                $payment = Payment::find_by_id($paymentId);
 
-            if ($payment) {
-                // Encontra a venda pelo external_reference
-                $venda = Venda::where('id', $payment->external_reference)->first();
+                if ($payment) {
+                    $venda = Venda::where('id', $payment->external_reference)->first();
 
-                if ($venda) {
-                    // Atualiza status com base no retorno do Mercado Pago
-                    // Valores comuns: approved, pending, rejected
-                    $venda->status = match($payment->status) {
-                        'approved' => 'pago',
-                        'pending' => 'pagamento_pendente',
-                        'rejected' => 'falha_pagamento',
-                        default => $venda->status
-                    };
-
-                    // Salva forma de pagamento (credit_card, pix, ticket, etc.)
-                    $venda->forma_pagamento = $payment->payment_type_id ?? null;
-
-                    // Salva transaction_id se quiser
-                    //$venda->transaction_id = $payment->id;
-
-                    $venda->save();
+                    if ($venda) {
+                        $venda->status = match($payment->status) {
+                            'approved' => 'pago',
+                            'pending' => 'pagamento_pendente',
+                            'rejected' => 'falha_pagamento',
+                            default => $venda->status
+                        };
+                        $venda->forma_pagamento = $payment->payment_type_id ?? null;
+                        $venda->save();
+                    }
                 }
             }
         }
+
+        return response()->json(['status' => 'ok'], 200);
     }
 
-    // Retorna 200 OK pro Mercado Pago
-    return response()->json(['status' => 'ok'], 200);
-}
 
    public function pagar(Request $request)
 {
