@@ -25,15 +25,13 @@ class MercadoPagoController extends Controller
     if ($data['type'] === 'payment') {
         $paymentObject = $data['object'] ?? null;
         if ($paymentObject) {
-            
             $externalRef = $paymentObject['external_reference'] ?? null;
+              Log::info($externalRef);
             $statusMP = $paymentObject['status'] ?? null;
             $paymentType = $paymentObject['payment_type_id'] ?? null;
 
             if ($externalRef) {
-                
-                 $vendaId = (int) $externalRef; 
-                $venda = Venda::find($vendaId);
+                $venda = Venda::find($externalRef);
                 if ($venda) {
                     $venda->status = match($statusMP) {
                         'approved' => 'pago',
@@ -46,14 +44,6 @@ class MercadoPagoController extends Controller
                 }
             }
         }
-    } elseif ($data['type'] === 'topic_merchant_order_wh') {
-        // Aqui você pode tratar merchant order
-        $merchantOrderId = $data['id'] ?? null;
-        $statusOrder = $data['status'] ?? null;
-
-        Log::info("Webhook Merchant Order recebido: $merchantOrderId, status: $statusOrder");
-
-        // Se quiser atualizar a venda baseada na ordem, precisa buscar pagamentos via API
     }
 
     return response()->json(['status' => 'ok'], 200);
