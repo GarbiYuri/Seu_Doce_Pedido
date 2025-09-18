@@ -90,7 +90,7 @@ console.log(pedidoSelecionado);
     account_money: 'Saldo Mercado Pago',
   };
 
-  // Retorna o nome formatado ou o nome original se não encontrar no dicionário
+
   return nomes[formaApi] || formaApi || 'Não informado';
 };
 
