@@ -174,18 +174,18 @@ export default function DashboardAdmin() {
                 filteredUsers.map((usuario) => (
                   <tr
                     key={usuario.id}
-                    className="block md:table-row border-b border-[#613d20] mb-6 md:mb-0 p-4 md:p-0 rounded-lg bg-[#8a5a33] md:bg-transparent"
+                    className="block md:table-row border-b border-[#613d20] mb-6 md:mb-0 p-4 md:p-0 rounded-lg bg-white md:bg-transparent"
                   >
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 break-words">
-                      <span className="font-semibold md:hidden text-[#613d20">Nome: </span>
+                      <span className="font-semibold md:hidden text-[#613d20]">Nome: </span>
                       {usuario.name}
                     </td>
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 break-words max-w-xs truncate">
-                      <span className="font-semibold md:hidden text-[#613d20">Email: </span>
+                      <span className="font-semibold md:hidden text-[#613d20]">Email: </span>
                       {usuario.email}
                     </td>
                     <td className="block md:table-cell py-2 md:py-4 px-2 md:px-6 text-center">
-                      <span className="font-semibold md:hidden text-[#613d20">Admin: </span>
+                      <span className="font-semibold md:hidden text-[#613d20]">Admin: </span>
                       <span
                         className={`px-3 py-1 rounded-full text-xs font-bold 
                           ${

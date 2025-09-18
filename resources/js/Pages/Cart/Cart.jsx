@@ -230,7 +230,7 @@ useEffect(() => {
 
           {/* Subtotal */}
           <div className="flex justify-between items-center pt-4 border-t border-[#8a5a33] mt-4">
-            <span className="text-[##613d20] font-bold text-base">SubTotal</span>
+            <span className="text-[#613d20] font-bold text-base">SubTotal</span>
             <span className="text-lg font-bold text-gray-900">
               R$ {total.toFixed(2).replace('.', ',')}
             </span>

@@ -152,7 +152,7 @@ export default function PromocaoEdit({ promocao, products }) {
           <div className="flex items-center gap-4">
             <label
               htmlFor="imagem"
-              className="inline-flex items-center px-4 py-2 bg-pink-600 text-white text-sm font-medium rounded-xl shadow hover:bg--[#613d20] cursor-pointer transition"
+              className="inline-flex items-center px-4 py-2 bg-[#8a5a33] text-white text-sm font-medium rounded-xl shadow hover:bg--[#613d20] cursor-pointer transition"
             >
               <FiFolderPlus className="mr-2" />
               Selecionar nova imagem

@@ -52,7 +52,7 @@ export default function PromocaoCreate({ products }) {
       className="bg-white border border-[#8a5a33] rounded-3xl shadow-lg p-6 sm:p-10 space-y-6 mb-10 max-w-4xl mx-auto"
       encType="multipart/form-data"
     >
-      <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6" style={{ fontFamily: "'Candice', cursive" }}>
+      <h2 className="text-3xl font-extrabold text-[#613d20] text-center mb-6">
         Criar Promoção
       </h2>
 

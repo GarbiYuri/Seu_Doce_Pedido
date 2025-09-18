@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 export default function PersonalInfoForm() {
   const informacoes = usePage().props.auth.informacoes;
 
-  const { data, setData, put, processing, recentlySuccessful } = useForm({
+  const { data, setData, put, post, processing, recentlySuccessful } = useForm({
     rua: informacoes?.rua || '',
     numero: informacoes?.numero || '',
     bairro: informacoes?.bairro || '',
@@ -51,7 +51,13 @@ export default function PersonalInfoForm() {
   const submit = (e) => {
     e.preventDefault();
     
+    informacoes?.id ? 
+
     put(route('informacoes.update', informacoes.id), {
+    preserveScroll: true,
+    })
+    :
+    post(route('informacoes.store'), {
     preserveScroll: true,
     });
     
@@ -60,13 +66,13 @@ export default function PersonalInfoForm() {
   return (
     <section className="mt-6">
       <header>
-        <h2 className="text-lg font-bold text-[#613d20]">Informações Pessoais</h2>
+        <h2 className="text-lg font-bold text-[#613d20 font-extrabold text-[#613d20]">Informações Pessoais</h2>
         <p className="mt-1 text-sm text-gray-600">
           Adicione seu endereço, telefone e CPF para facilitar o processo de entrega.
         </p>
       </header>
 
-      <form onSubmit={submit} className="mt-6 space-y-4">
+      <form onSubmit={submit} className="mt-6 space-y-4 ">
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <input
             placeholder="CEP"

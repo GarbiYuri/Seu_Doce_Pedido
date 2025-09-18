@@ -11,10 +11,53 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\Venda;
 use App\Models\VendaProduct;
+use Illuminate\Support\Facades\Log;
+use MercadoPago\Payment;
 
 class MercadoPagoController extends Controller
 {
    
+ public function webhook(Request $request)
+{
+    $data = $request->all();
+    Log::info('Webhook MercadoPago recebido:', $data);
+
+    if ($data['type'] === 'payment') {
+        $paymentObject = $data['object'] ?? null;
+        if ($paymentObject) {
+            $externalRef = $paymentObject['external_reference'] ?? null;
+            $statusMP = $paymentObject['status'] ?? null;
+            $paymentType = $paymentObject['payment_type_id'] ?? null;
+
+            if ($externalRef) {
+                $venda = Venda::find($externalRef);
+                if ($venda) {
+                    $venda->status = match($statusMP) {
+                        'approved' => 'pago',
+                        'pending' => 'pagamento_pendente',
+                        'rejected', 'refused', 'cancelled' => 'falha_pagamento',
+                        default => $venda->status
+                    };
+                    $venda->forma_pagamento = $paymentType;
+                    $venda->save();
+                }
+            }
+        }
+    } elseif ($data['type'] === 'topic_merchant_order_wh') {
+        // Aqui você pode tratar merchant order
+        $merchantOrderId = $data['id'] ?? null;
+        $statusOrder = $data['status'] ?? null;
+
+        Log::info("Webhook Merchant Order recebido: $merchantOrderId, status: $statusOrder");
+
+        // Se quiser atualizar a venda baseada na ordem, precisa buscar pagamentos via API
+    }
+
+    return response()->json(['status' => 'ok'], 200);
+}
+
+
+
 
    public function pagar(Request $request)
 {
@@ -92,35 +135,32 @@ class MercadoPagoController extends Controller
             $client = new PreferenceClient();
 
 
-                // Cria a preferência Mercado Pago
-            $preference = $client->create([
-                "back_urls" => array(
-                    "success" => "https://www.amorcomrecheio.shop/success",
-                    "failure" => "https://www.amorcomrecheio.shop/failure",
-                    "pending" => "https://www.amorcomrecheio.shop/pending"
-                ),
-                "auto_return" => "all",
-                "items" => $items,
-                "payer" => $payer,
-                "binary_mode" => true,
-    
-            ]);
+      // 1. Cria a venda no banco
+$venda = Venda::create([
+    'id_user' => $user->id,
+    'status' => 'iniciado', // ou 'pendente'
+    'valor' => $total,
+    'tipo' => $tipoPedido, // retirada ou entrega
+    'nome' => $user->name,
+    'email' => $user->email,
+    'telefone' => $informacoes['telefone'],
+    'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
+    'rua' => $informacoes['rua'] ?? null,
+    'numero' => $informacoes['numero'] ?? null,
+    'cep' => $informacoes['cep'] ?? null,
+]);
 
-                // 1. Cria a venda no banco
-        $venda = Venda::create([
-         'id_user' => $user->id,
-         'status' => 'iniciado', // ou 'pendente'
-          'payment_url' => $preference->init_point ?? null,
-        'valor' => $total,
-        'tipo' => $tipoPedido, // retirada ou entrega
-        'nome' => $user->name,
-        'email' => $user->email,
-        'telefone' => $informacoes['telefone'],
-        'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
-        'rua' => $informacoes['rua'] ?? null,
-        'numero' => $informacoes['numero'] ?? null,
-        'cep' => $informacoes['cep'] ?? null,
-        ]);
+// 2. Cria a preferência Mercado Pago usando o id da venda
+$preference = $client->create([
+    "items" => $items,
+    "payer" => $payer,
+    "binary_mode" => true,
+    "external_reference" => $venda->id
+]);
+
+// 3. Salva a URL do pagamento na venda
+$venda->payment_url = $preference->init_point ?? null;
+$venda->save();
 
 
 
@@ -334,15 +374,10 @@ class MercadoPagoController extends Controller
             session()->put('cart');
             // Cria a preferência Mercado Pago
             $preference = $client->create([
-                "back_urls" => [
-                     "success" => "https://www.seudocepedido.shop/success",
-                    "failure" => "https://www.seudocepedido.shop/failure",
-                    "pending" => "https://www.seudocepedido.shop/pending"
-                ],
-                "auto_return" => "all",
                 "items" => $items,
                 "payer" => $payer,
                 "binary_mode" => true,
+                "external_reference" => $venda->id
             ]);
 
 

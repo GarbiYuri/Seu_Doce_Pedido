@@ -29,7 +29,7 @@ export default function UpdateProfileInformation({
     return (
         <section className={className}>
             <header>
-                <h2 className="text-lg font-bold text-[#613d20]">
+                <h2 className="text-lg font-extrabold text-[#613d20]">
                     Informações do Perfil
                 </h2>
 

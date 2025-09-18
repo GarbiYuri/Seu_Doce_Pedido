@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('status');
             $table->string('payment_url')->nullable();
             $table->decimal('valor', 10,2);
+            $table->string('forma_pagamento')->nullable();
             $table->string('tipo');
             $table->string('nome');
             $table->string('email');

@@ -41,7 +41,7 @@ export default function PromocaoIndex({ promocoes, products }) {
 
   return (
     <div className="max-w-6xl mx-auto">
-      <h2 className="text-3xl font-extrabold text-[#613d20] mb-6 text-center" style={{ fontFamily: "'Candice', cursive" }}>
+      <h2 className="text-3xl font-extrabold text-[#613d20] mb-8 text-center">
         Promoções Atuais
       </h2>
 

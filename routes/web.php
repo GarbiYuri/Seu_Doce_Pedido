@@ -187,6 +187,7 @@ Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); /
 
 Route::match(['get', 'post'], '/pagar', [MercadoPagoController::class, 'pagar'])->name('pagar');
 Route::match(['get', 'post'], '/pagarWL', [MercadoPagoController::class, 'pagarWL'])->name('pagarWL');
+
 Route::get('/pagamento/sucesso', fn() => 'Pagamento aprovado!')->name('pagamento.sucesso');
 Route::get('/pagamento/falha', fn() => 'Pagamento falhou!')->name('pagamento.falha');
 Route::get('/pagamento/pendente', fn() => 'Pagamento pendente!')->name('pagamento.pendente');

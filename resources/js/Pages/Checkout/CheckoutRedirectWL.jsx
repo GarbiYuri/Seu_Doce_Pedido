@@ -43,7 +43,7 @@ const gerarMensagemWhatsApp = () => {
       <Head title="Confirmar Pedido" />
 
       <div className="max-w-3xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-center text-pink-600 mb-6">Confirme seu pedido</h1>
+        <h1 className="text-3xl font-bold text-center text-pink-600 mb-6 mt-6">Confirme seu pedido</h1>
 
         <div className="bg-white shadow-md rounded-lg p-4 mb-6">
           {cartItems.length === 0 ? (

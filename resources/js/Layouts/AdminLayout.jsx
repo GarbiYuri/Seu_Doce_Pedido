@@ -31,7 +31,8 @@ export default function AdminLayout({ children }) {
     return (
         <div className="min-h-screen bg-[#fffaf7] font-sans overflow-x-hidden">
             {/* HEADER */}
-            <header className="bg-[#e2b9a1] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+           <header className="bg-[#f4eae5] text-white px-6 py-3 shadow flex items-center justify-between h-20 relative z-20">
+
 
                 {/* Botão hamburguer - visível só no mobile */}
                 <button
@@ -48,13 +49,14 @@ export default function AdminLayout({ children }) {
                     <img
                         src="imagens/Simbolo.png"
                         alt="Logo ADM"
-                        className="w-14 h-14 sm:w-16 sm:h-16"
+                        className="w-14 h-14 sm:w-16 sm:h-16 animate-breathe"
                     />
                 </Link>
 
+
                 {/* Frase centralizada - apenas desktop */}
                 <div className="flex-1 text-center hidden md:block">
-                    <span className="text-lg sm:text-xl font-medium italic leading-snug font-poppins text-[#613d20]">
+                    <span className="text-lg sm:text-xl font-extrabold leading-snug  text-[#613d20]">
                         A cada novo dia, você tem a chance de fazer diferente e melhor!
                     </span>
 
@@ -66,7 +68,7 @@ export default function AdminLayout({ children }) {
                         <Dropdown.Trigger>
                             <span className="inline-flex rounded-md items-center">
                                 <img src="/imagens/icone-sobre-marrom.png" alt="Ícone Sobre" className="h-6 w-6" />
-                                <button type="button" className="ml-2 text-white flex items-center">
+                                <button type="button" className="ml-2 text-[#613d20]  flex items-center text-base">
                                     {user.name}
                                     <svg className="ml-1 h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
                                         <path fillRule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clipRule="evenodd" />
@@ -89,7 +91,7 @@ export default function AdminLayout({ children }) {
                     className={`
                         fixed z-30 inset-y-0 left-0 transform md:relative md:translate-x-0
                         transition-transform duration-300 ease-in-out
-                        w-64 max-w-full bg-[#fffaf7] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
+                        w-64 max-w-full bg-[#ffffff] backdrop-blur-md border-r  p-4 sm:p-6 shadow-lg
                         ${showSidebar ? 'translate-x-0' : '-translate-x-full'} md:translate-x-0
                     `}
                 >
@@ -141,4 +143,7 @@ export default function AdminLayout({ children }) {
             </div>
         </div>
     );
+
 }
+
+

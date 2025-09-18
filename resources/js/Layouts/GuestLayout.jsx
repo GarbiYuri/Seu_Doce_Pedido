@@ -4,8 +4,8 @@ export default function GuestLayout({ children }) {
     // Frases rotativas
     const frases = [
         "Doces momentos por aqui!",
-        "Feito com amor",
-        "Um pedacinho de doçura pra você"
+        "Feito com amor"
+        
     ];
 
     const [fraseAtual, setFraseAtual] = useState(0);
