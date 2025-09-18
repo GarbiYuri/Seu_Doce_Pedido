@@ -13,6 +13,7 @@ use App\Models\Venda;
 use App\Models\VendaProduct;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\Payment;
+  use MercadoPago\Client\Payment\PaymentClient;
 
 class MercadoPagoController extends Controller
 {
@@ -22,35 +23,55 @@ class MercadoPagoController extends Controller
     $data = $request->all();
     Log::info('Webhook MercadoPago recebido:', $data);
 
-    if ($data['type'] === 'payment') {
-        $paymentObject = $data['object'] ?? null;
-        if ($paymentObject) {
-            $externalRef = $paymentObject['external_reference'] ?? null;
-            $statusMP = $paymentObject['status'] ?? null;
-            $paymentType = $paymentObject['payment_type_id'] ?? null;
+    if (isset($data['type']) && $data['type'] === 'payment') {
+        $paymentId = $data['data']['id'] ?? null;
+        Log::info('Só essa informação passa', $data);
+        if ($paymentId) {
+             try {
+                $accessToken = config('services.mercadopago.token');
+                    if (!$accessToken) {
+                        Log::error('Token do Mercado Pago não configurado. Verifique .env e config/services.php');
+                        return response()->json(['status' => 'error', 'message' => 'Token not configured'], 500);
+                    }
+                    MercadoPagoConfig::setAccessToken($accessToken);
+                    
+             $client = new PaymentClient();
+            $payment = $client->get($paymentId);
+
+            Log::info('Aqui tem o objeto do cliente', $data);
+            $externalRef = $payment->external_reference;
 
             if ($externalRef) {
                 $venda = Venda::find($externalRef);
                 if ($venda) {
+                    $statusMP = $payment->status; 
+
+                    $paymentType = $payment->payment_type_id;
+
                     $venda->status = match($statusMP) {
                         'approved' => 'pago',
                         'pending' => 'pagamento_pendente',
                         'rejected', 'refused', 'cancelled' => 'falha_pagamento',
                         default => $venda->status
                     };
+
                     $venda->forma_pagamento = $paymentType;
+
+                    if (isset($venda->mercadopago_payment_id)) {
+                        $venda->mercadopago_payment_id = $payment->id;
+                    }
+
                     $venda->save();
+                    Log::info("SUCESSO: Venda ID {$venda->id} foi atualizada para o status '{$venda->status}'.");
                 }
-            }
+            }else {
+                Log::warning("AVISO: Venda com external_reference {$externalRef} não foi encontrada no banco de dados.");
+                }
+            } catch (\Exception $e) {
+                    Log::error('ERRO ao processar webhook do Mercado Pago:', ['message' => $e->getMessage(), 'payment_id' => $paymentId]);
+                    return response()->json(['status' => 'error'], 500);
+                }
         }
-    } elseif ($data['type'] === 'topic_merchant_order_wh') {
-        // Aqui você pode tratar merchant order
-        $merchantOrderId = $data['id'] ?? null;
-        $statusOrder = $data['status'] ?? null;
-
-        Log::info("Webhook Merchant Order recebido: $merchantOrderId, status: $statusOrder");
-
-        // Se quiser atualizar a venda baseada na ordem, precisa buscar pagamentos via API
     }
 
     return response()->json(['status' => 'ok'], 200);
@@ -157,6 +178,7 @@ $preference = $client->create([
     "binary_mode" => true,
     "external_reference" => $venda->id
 ]);
+
 
 // 3. Salva a URL do pagamento na venda
 $venda->payment_url = $preference->init_point ?? null;
@@ -368,7 +390,7 @@ $venda->save();
     ]);
     }
 
-
+    
 
 
             session()->put('cart');

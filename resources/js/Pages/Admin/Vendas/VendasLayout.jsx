@@ -9,6 +9,30 @@ export default function VendasLayout() {
   const [filtroData, setFiltroData] = useState('todos');
   const [buscaNome, setBuscaNome] = useState('');
   const [dataSelecionada, setDataSelecionada] = useState('');
+  const [filtroStatus, setFiltroStatus] = useState('todos'); // <-- ADICIONADO
+
+  // Define os status e seus nomes amigáveis
+  const statusDisponiveis = [
+    'todos',
+    'iniciado',
+    'pago',
+    'em_preparo',
+    'em_entrega',
+    'entregue',
+    'falha_pagamento',
+    'cancelado',
+  ];
+
+  const nomesStatus = {
+    todos: 'Todos',
+    iniciado: 'iniciado',
+    pago: 'Pago',
+    em_preparo: 'Em Preparo',
+    em_entrega: 'Em Entrega',
+    entregue: 'Entregue',
+    falha_pagamento: 'Falha/Pendente',
+    cancelado: 'Cancelado/Descartado',
+  };
 
   const avancarStatus = (vendaId, novoStatus) => {
     router.post(
@@ -25,19 +49,23 @@ export default function VendasLayout() {
   const cancelarPedido = (pedidoId) => {
     router.post(
       `/admin/vendas/${pedidoId}/cancelar`,
+      {},
       {
         preserveScroll: true,
         preserveState: true,
         only: ['vendas'],
       }
     );
-  }
+  };
 
   const coresStatus = {
+    pago: 'bg-cyan-100 text-cyan-700',
     iniciado: 'bg-red-100 text-red-700',
     em_preparo: 'bg-yellow-100 text-yellow-700',
     em_entrega: 'bg-blue-100 text-blue-700',
     entregue: 'bg-green-100 text-green-700',
+    falha_pagamento: 'bg-red-100 text-red-700',
+    cancelado: 'bg-gray-100 text-gray-700',
   };
 
   const vendasFiltradas = useMemo(() => {
@@ -47,7 +75,6 @@ export default function VendasLayout() {
 
     return vendas.filter((venda) => {
       const dataVenda = new Date(venda.created_at);
-      //      if (venda.status === 'iniciado') return false;
 
       if (dataSelecionada) {
         const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
@@ -55,11 +82,9 @@ export default function VendasLayout() {
       }
 
       if (filtroData === 'hoje') {
-        if (
-          dataVenda.getDate() !== hoje.getDate() ||
-          dataVenda.getMonth() !== hoje.getMonth() ||
-          dataVenda.getFullYear() !== hoje.getFullYear()
-        ) return false;
+        const hojeFormatada = hoje.toISOString().split('T')[0];
+        const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
+        if (dataVendaFormatada !== hojeFormatada) return false;
       } else if (filtroData === '7dias') {
         if (dataVenda < seteDiasAtras) return false;
       }
@@ -69,9 +94,14 @@ export default function VendasLayout() {
         !venda.nome.toLowerCase().includes(buscaNome.toLowerCase())
       ) return false;
 
+      // NOVO FILTRO DE STATUS
+      if (filtroStatus !== 'todos' && venda.status !== filtroStatus) {
+        return false;
+      }
+
       return true;
     });
-  }, [vendas, filtroData, buscaNome, dataSelecionada]);
+  }, [vendas, filtroData, buscaNome, dataSelecionada, filtroStatus]); // <-- ADICIONADO filtroStatus
 
   useEffect(() => {
     if (pedidoSelecionado) {
@@ -82,55 +112,86 @@ export default function VendasLayout() {
   useEffect(() => {
     const idSalvo = localStorage.getItem('pedidoSelecionadoId');
     if (vendasFiltradas.length > 0) {
-      const vendaSalva = vendasFiltradas.find(v => String(v.id) === idSalvo);
+      const vendaSalva = vendasFiltradas.find((v) => String(v.id) === idSalvo);
       setPedidoSelecionado(vendaSalva || vendasFiltradas[0]);
     } else {
       setPedidoSelecionado(null);
     }
   }, [vendasFiltradas]);
 
+  const formatarFormaPagamento = (formaApi) => {
+    const nomes = {
+      credit_card: 'Cartão de Crédito',
+      debit_card: 'Cartão de Débito',
+      pix: 'Pix',
+      ticket: 'Boleto Bancário',
+      account_money: 'Saldo Mercado Pago',
+    };
+
+    return nomes[formaApi] || formaApi || 'Não informado';
+  };
+  
   return (
     <AdminLayout>
       <Head title="Pedidos" />
 
-      <div style={{ display: "flex", justifyContent: "center", margin: "20px" }}>
+      <div style={{ display: 'flex', justifyContent: 'center', margin: '20px' }}>
         <img
-          src="imagens/Banner2 - Editado - Editado.png"
+          src="/imagens/Banner2 - Editado - Editado.png"
           alt="Logo"
-          style={{ width: "350px", height: "auto",marginBottom:"5" }}
+          style={{ width: '350px', height: 'auto', marginBottom: '5' }}
         />
-        
       </div>
 
       {/* Filtros */}
-      <div className="max-w-6xl mx-auto mt-2 mb-2 px-4 mb-6 flex flex-col sm:flex-row gap-4 justify-between items-center">
-        <div className="flex gap-2">
-          {['todos', 'hoje', '7dias'].map((tipo) => (
-            <button
-              key={tipo}
-              onClick={() => setFiltroData(tipo)}
-              className={`px-4 py-2 rounded-full font-semibold ${filtroData === tipo ? 'bg-[#613d20] text-white' : 'bg-gray-200'
+      <div className="max-w-6xl mx-auto mt-2 mb-6 px-4">
+        <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
+          <div className="flex gap-2">
+            {['todos', 'hoje', '7dias'].map((tipo) => (
+              <button
+                key={tipo}
+                onClick={() => setFiltroData(tipo)}
+                className={`px-4 py-2 rounded-full font-semibold ${
+                  filtroData === tipo ? 'bg-[#613d20] text-white' : 'bg-gray-200'
                 }`}
+              >
+                {tipo === 'todos' ? 'Todos' : tipo === 'hoje' ? 'Hoje' : 'Últimos 7 dias'}
+              </button>
+            ))}
+          </div>
+
+          <input
+            type="date"
+            value={dataSelecionada}
+            onChange={(e) => setDataSelecionada(e.target.value)}
+            className="px-4 py-2 rounded border border-gray-300 w-full sm:w-auto"
+          />
+
+          <input
+            type="text"
+            placeholder="Buscar por nome do cliente..."
+            value={buscaNome}
+            onChange={(e) => setBuscaNome(e.target.value)}
+            className="px-4 py-2 rounded border border-gray-300 w-full sm:max-w-xs"
+          />
+        </div>
+        
+        {/* FILTROS DE STATUS ADICIONADOS AQUI */}
+        <div className="w-full flex flex-wrap gap-2 border-t pt-4 mt-4">
+          {statusDisponiveis.map((status) => (
+            <button
+              key={status}
+              onClick={() => setFiltroStatus(status)}
+              className={`px-3 py-1 text-sm rounded-full font-semibold transition-colors ${
+                filtroStatus === status
+                  ? 'bg-[#613d20] text-white'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
             >
-              {tipo === 'todos' ? 'Todos' : tipo === 'hoje' ? 'Hoje' : 'Últimos 7 dias'}
+              {nomesStatus[status]}
             </button>
           ))}
         </div>
-
-        <input
-          type="date"
-          value={dataSelecionada}
-          onChange={(e) => setDataSelecionada(e.target.value)}
-          className="px-4 py-2 rounded border border-gray-300 w-full sm:w-auto"
-        />
-
-        <input
-          type="text"
-          placeholder="Buscar por nome do cliente..."
-          value={buscaNome}
-          onChange={(e) => setBuscaNome(e.target.value)}
-          className="px-4 py-2 rounded border border-gray-300 w-full sm:max-w-xs"
-        />
       </div>
 
       <div className="flex flex-col lg:flex-row gap-6 px-4 max-w-6xl mx-auto">
@@ -141,21 +202,30 @@ export default function VendasLayout() {
               <div
                 key={venda.id}
                 onClick={() => setPedidoSelecionado(venda)}
-                className={`p-4 rounded-xl shadow cursor-pointer border border-[#613d20] hover:bg-white transition ${pedidoSelecionado?.id === venda.id ? 'bg-white ring-2 ring-[#8a5a33]' : ''
-                  }`}
-                  
+                className={`p-4 rounded-xl shadow cursor-pointer border hover:bg-white transition ${
+                  pedidoSelecionado?.id === venda.id
+                    ? 'bg-white ring-2 ring-[#613d20]'
+                    : 'bg-gray-50 border-transparent'
+                }`}
               >
-                <div className="flex justify-between items-center mb-1">
-                  <span className="font-bold text-gray-800">{venda.nome}</span>
-                  <span className={`text-xs px-2 py-1 rounded-full ${coresStatus[venda.status]}`}>
-                    {venda.status.replace('_', ' ')}
-                  </span>
+                <div>
+                  <div className="flex justify-between items-center mb-1">
+                    <span className="font-bold text-gray-800">{venda.nome}</span>
+
+                    <span
+                      className={`text-xs px-2 py-1 rounded-full capitalize ${
+                        coresStatus[venda.status] || 'bg-gray-100 text-gray-700'
+                      }`}
+                    >
+                      {venda.status.replace('_', ' ')}
+                    </span>
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Pedido feito:{' '}
+                    {new Date(venda.created_at).toLocaleDateString('pt-BR')} — #
+                    {String(venda.id).padStart(5, '0')}
+                  </p>
                 </div>
-                <p className="text-sm text-gray-600">
-                  Pedido feito:{' '}
-                  {new Date(venda.created_at).toLocaleDateString('pt-BR')} — #
-                  {String(venda.id).padStart(5, '0')}
-                </p>
               </div>
             ))
           ) : (
@@ -169,7 +239,9 @@ export default function VendasLayout() {
         <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[70vh] overflow-y-auto">
           {pedidoSelecionado ? (
             <>
-              <h2 className="text-xl font-bold mb-2 text-[#613d20]">Pedido #{pedidoSelecionado.id}</h2>
+              <h2 className="text-xl font-bold mb-2 text-[#613d20]">
+                Pedido #{String(pedidoSelecionado.id).padStart(5, '0')}
+              </h2>
               <p className="text-sm text-gray-700">
                 Horário:{' '}
                 {new Date(pedidoSelecionado.created_at).toLocaleTimeString([], {
@@ -179,14 +251,20 @@ export default function VendasLayout() {
               </p>
 
               <div className="text-sm text-gray-800 space-y-1">
-                <p><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
-                <p><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
+                <p>
+                  <strong>Cliente:</strong> {pedidoSelecionado.nome}
+                </p>
+                <p>
+                  <strong>Contato:</strong> {pedidoSelecionado.telefone}
+                </p>
               </div>
 
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
                   <p className="font-semibold mt-2">Endereço de Entrega</p>
-                  <p>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
+                  <p>
+                    {pedidoSelecionado.rua}, {pedidoSelecionado.numero}
+                  </p>
                   <p>{pedidoSelecionado.endereco}</p>
                   <p>{pedidoSelecionado.cep}</p>
                 </div>
@@ -204,13 +282,16 @@ export default function VendasLayout() {
               </div>
 
               <div className="text-sm text-gray-700">
-                <p className="mt-2"><strong>Pagamento:</strong></p>
-                <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
+                <p className="mt-2">
+                  <strong>Pagamento: {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</strong>
+                </p>
+                <p>
+                  <strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}
+                </p>
               </div>
 
-
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
-                <div className="flex gap-4 items-center mt-4">
+                <div className="flex gap-4 items-center">
                   <select
                     value={pedidoSelecionado.status}
                     onChange={(e) =>
@@ -223,20 +304,17 @@ export default function VendasLayout() {
                     <option value="em_entrega">Em Entrega</option>
                     <option value="entregue">Entregue</option>
                   </select>
-
-
                 </div>
 
-                {pedidoSelecionado.status !== 'pago' && (
+                {pedidoSelecionado.status !== 'entregue' && pedidoSelecionado.status !== 'cancelado' && (
                   <button
-                    onClick={(e) => cancelarPedido(pedidoSelecionado.id, e.target.value)}
+                    onClick={() => cancelarPedido(pedidoSelecionado.id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
                   >
                     DESCARTAR
                   </button>
                 )}
               </div>
-
             </>
           ) : (
             <p className="text-gray-500">Selecione um pedido para ver os detalhes</p>
@@ -245,4 +323,4 @@ export default function VendasLayout() {
       </div>
     </AdminLayout>
   );
-}
+} 

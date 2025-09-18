@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('vendas', function (Blueprint $table) {
             $table->id();
             $table->timestamps();
+            $table->unsignedBigInteger('id_mp')->nullable()->unique()->comment('ID do pagamento gerado pelo Mercado Pago');
             $table->unsignedBigInteger('id_user')->nullable();
             $table->string('status');
             $table->string('payment_url')->nullable();

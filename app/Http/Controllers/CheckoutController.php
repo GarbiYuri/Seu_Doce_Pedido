@@ -97,6 +97,7 @@ public function meuspedidos()
         SELECT 
             v.id as venda_id,
             v.status,
+            v.forma_pagamento,
             v.payment_url,
             v.valor,
             v.tipo,

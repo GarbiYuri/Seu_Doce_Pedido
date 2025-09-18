@@ -44,6 +44,7 @@ const cancelarSemRetorno = () => {
         acc[id] = {
           venda_id: id,
           status: item.status,
+          formapagamento : item.forma_pagamento,
           payment_url: item.payment_url,
           tipo: item.tipo,
           valor: item.valor,
@@ -80,6 +81,20 @@ console.log(pedidoSelecionado);
         entregue: 'bg-green-100 text-green-700',
     };
 
+    const formatarFormaPagamento = (formaApi) => {
+  const nomes = {
+    credit_card: 'Cartão de Crédito',
+    debit_card: 'Cartão de Débito',
+    pix: 'Pix',
+    ticket: 'Boleto Bancário',
+    account_money: 'Saldo Mercado Pago',
+  };
+
+
+  return nomes[formaApi] || formaApi || 'Não informado';
+};
+
+
     return (
         <AuthenticatedLayout>
             <Head title="Meus Pedidos" />
@@ -114,6 +129,7 @@ console.log(pedidoSelecionado);
                         <>
                             <h2 className="text-xl font-bold text-pink-600 mb-2">Pedido #{pedidoSelecionado.venda_id}</h2>
                             <p className="text-sm text-gray-600 mb-1">Status: <strong>{pedidoSelecionado.status.replace('_', ' ')}</strong></p>
+                            <p className="text-sm text-gray-600 mb-1">Forma de Pagamento: <strong>{formatarFormaPagamento(pedidoSelecionado?.formapagamento)}</strong></p>
                             <p className="text-sm text-gray-600 mb-1">Tipo: {pedidoSelecionado.tipo}</p>
                             <p className="text-sm text-gray-600 mb-1">Valor: R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
                             <p className="text-sm text-gray-600 mb-1">Feito em: {new Date(pedidoSelecionado.created_at).toLocaleString()}</p>
@@ -145,7 +161,7 @@ console.log(pedidoSelecionado);
 
                             </ul>
 
-                        {pedidoSelecionado.status === 'iniciado' && (
+                        {pedidoSelecionado.status != 'pago' && (
                           
   <div className="mt-6 flex gap-2">
     <button
