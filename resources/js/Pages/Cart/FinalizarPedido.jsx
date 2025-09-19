@@ -3,7 +3,7 @@ import { Link } from '@inertiajs/react';
 import { useEffect } from 'react';
 export default function FinalizarPedido({ tipoPedido, setTipoPedido, informacoes, botao, setBotao }) {
   const camposObrigatorios = ['rua', 'numero', 'bairro', 'cidade', 'estado', 'telefone'];
-
+  const campoObrigatorio = ['telefone'];
   
 
 // Retorna true se algum estiver vazio
@@ -11,8 +11,16 @@ const algumCampoFaltando = camposObrigatorios.some(
   campo => !informacoes?.[campo]?.trim()
 );
 
+const campofaltando = campoObrigatorio.some(
+  campo => !informacoes?.[campo]?.trim()
+);
+
+
  useEffect(() => {
-      if (algumCampoFaltando && tipoPedido === 'entrega') {
+
+
+
+      if (algumCampoFaltando && tipoPedido === 'entrega' || campofaltando && tipoPedido === 'retirada') {
     setBotao(true);
   } else {
     setBotao(false);
@@ -46,7 +54,7 @@ const algumCampoFaltando = camposObrigatorios.some(
         </label>
       </fieldset>
 
-      {tipoPedido === 'entrega' && (
+      {tipoPedido === 'entrega' ? (
   <>
     {algumCampoFaltando ? (
      <div className="mt-3 p-3 border rounded bg-yellow-100 text-yellow-800">
@@ -68,6 +76,26 @@ const algumCampoFaltando = camposObrigatorios.some(
       <p> <strong>Cidade:</strong> <span className="text-red-500">*</span>{informacoes?.cidade || 'Não informado'}</p>
       <p><strong>Estado:</strong> <span className="text-red-500">*</span>{informacoes?.estado || 'Não informado'}</p>
       <p><strong>CEP:</strong> {informacoes?.cep || 'Não informado'}</p>
+      <p><strong>Telefone:</strong><span className="text-red-500">*</span> {informacoes?.telefone || 'Não informado'}</p>
+    </div>
+  </>
+) : (
+  <>
+    {algumCampoFaltando ? (
+     <div className="mt-3 p-3 border rounded bg-yellow-100 text-yellow-800">
+      
+  ⚠️ Há informações para retirada incompleta. Por favor, revise os dados abaixo. <br />
+  <Link
+    href="/profile#infos"
+    className="mt-2 inline-block text-sm underline text-blue-600 hover:text-blue-800"
+  >
+    👉 Clique aqui para preencher as informações no seu perfil
+  </Link>
+</div>
+    ) : null}
+
+    <div className="mt-3 p-3 border rounded bg-gray-50">
+
       <p><strong>Telefone:</strong><span className="text-red-500">*</span> {informacoes?.telefone || 'Não informado'}</p>
     </div>
   </>
