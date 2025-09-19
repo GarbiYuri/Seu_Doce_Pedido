@@ -1,6 +1,6 @@
 import AdminLayout from '@/Layouts/AdminLayout';
 import { Head, usePage, router } from '@inertiajs/react';
-import { useState, useMemo, useEffect, useRef } from 'react'; // useRef foi importado
+import { useState, useMemo, useEffect, useRef } from 'react';
 
 export default function VendasLayout() {
   const { vendas } = usePage().props;
@@ -12,81 +12,58 @@ export default function VendasLayout() {
   const [filtroStatus, setFiltroStatus] = useState('todos');
 
   // --- INÍCIO DA LÓGICA DO SOM DE NOTIFICAÇÃO ---
-
-  // 1. Cria uma "memória" para guardar a contagem anterior de vendas.
   const previousVendasCount = useRef(vendas.length);
 
   useEffect(() => {
-    // 2. Compara a quantidade atual de vendas com a quantidade "lembrada".
     if (vendas.length > previousVendasCount.current) {
-      
-      // 3. Se houver mais vendas agora, cria um objeto de áudio e toca o som.
-      //    O caminho '/sounds/notification.mp3' está correto pois aponta para a pasta 'public'.
       const audio = new Audio('/sounds/notification.mp3'); 
       audio.play().catch(error => {
-        // Navegadores podem bloquear o som se o usuário não interagiu com a página primeiro.
         console.error("Erro ao tocar o som de notificação:", error);
       });
     }
-
-    // 4. Atualiza a "memória" com a nova contagem de vendas para a próxima verificação.
     previousVendasCount.current = vendas.length;
-
-  }, [vendas]); // 5. Este efeito roda toda vez que a prop `vendas` mudar.
-
+  }, [vendas]);
   // --- FIM DA LÓGICA DO SOM DE NOTIFICAÇÃO ---
 
+  // --- INÍCIO DA LÓGICA DE ATUALIZAÇÃO AUTOMÁTICA (POLLING) ---
+  useEffect(() => {
+    const interval = setInterval(() => {
+      router.reload({ 
+        only: ['vendas'],
+        preserveState: true,
+        preserveScroll: true,
+      });
+    }, 20000); // Atualiza a cada 20 segundos
+
+    return () => clearInterval(interval);
+  }, []);
+  // --- FIM DA LÓGICA DE ATUALIZAÇÃO AUTOMÁTICA ---
+
   const statusDisponiveis = [
-    'todos',
-    'iniciado',
-    'pago',
-    'em_preparo',
-    'em_entrega',
-    'entregue',
-    'falha_pagamento',
+    'todos', 'iniciado', 'pago', 'em_preparo', 'em_entrega', 'entregue', 'falha_pagamento',
   ];
 
   const nomesStatus = {
-    todos: 'Todos',
-    iniciado: 'Iniciado',
-    pago: 'Pago',
-    em_preparo: 'Em Preparo',
-    em_entrega: 'Em Entrega',
-    entregue: 'Entregue',
-    falha_pagamento: 'Falha/Pendente',
+    todos: 'Todos', iniciado: 'Iniciado', pago: 'Pago', em_preparo: 'Em Preparo',
+    em_entrega: 'Em Entrega', entregue: 'Entregue', falha_pagamento: 'Falha/Pendente',
   };
 
   const avancarStatus = (vendaId, novoStatus) => {
-    router.post(
-      `/admin/vendas/${vendaId}/status`,
-      { status: novoStatus },
-      {
-        preserveScroll: true,
-        preserveState: true,
-        only: ['vendas'],
-      }
-    );
+    router.post(`/admin/vendas/${vendaId}/status`, { status: novoStatus }, {
+        preserveScroll: true, preserveState: true, only: ['vendas'],
+    });
   };
 
   const cancelarPedido = (pedidoId) => {
-    router.post(
-      `/admin/vendas/${pedidoId}/cancelar`,
-      {},
-      {
-        preserveScroll: true,
-        preserveState: true,
-        only: ['vendas'],
-      }
-    );
+    router.post(`/admin/vendas/${pedidoId}/cancelar`, {}, {
+        preserveScroll: true, preserveState: true, only: ['vendas'],
+    });
   };
 
   const coresStatus = {
-    pago: 'bg-cyan-100 text-cyan-700',
-    iniciado: 'bg-red-100 text-red-700',
-    em_preparo: 'bg-yellow-100 text-yellow-700',
-    em_entrega: 'bg-blue-100 text-blue-700',
-    entregue: 'bg-green-100 text-green-700',
-    falha_pagamento: 'bg-red-100 text-red-700',
+    pago: 'bg-cyan-100 text-cyan-700', iniciado: 'bg-red-100 text-red-700',
+    em_preparo: 'bg-yellow-100 text-yellow-700', em_entrega: 'bg-blue-100 text-blue-700',
+    entregue: 'bg-green-100 text-green-700', falha_pagamento: 'bg-red-100 text-red-700',
   };
 
   const vendasFiltradas = useMemo(() => {
@@ -96,12 +73,10 @@ export default function VendasLayout() {
 
     return vendas.filter((venda) => {
       const dataVenda = new Date(venda.created_at);
-
       if (dataSelecionada) {
         const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
         if (dataVendaFormatada !== dataSelecionada) return false;
       }
-
       if (filtroData === 'hoje') {
         const hojeFormatada = hoje.toISOString().split('T')[0];
         const dataVendaFormatada = dataVenda.toISOString().split('T')[0];
@@ -109,16 +84,8 @@ export default function VendasLayout() {
       } else if (filtroData === '7dias') {
         if (dataVenda < seteDiasAtras) return false;
       }
-
-      if (
-        buscaNome.trim() !== '' &&
-        !venda.nome.toLowerCase().includes(buscaNome.toLowerCase())
-      ) return false;
-      
-      if (filtroStatus !== 'todos' && venda.status !== filtroStatus) {
-        return false;
-      }
-
+      if (buscaNome.trim() !== '' && !venda.nome.toLowerCase().includes(buscaNome.toLowerCase())) return false;
+      if (filtroStatus !== 'todos' && venda.status !== filtroStatus) return false;
       return true;
     });
   }, [vendas, filtroData, buscaNome, dataSelecionada, filtroStatus]);
@@ -141,12 +108,8 @@ export default function VendasLayout() {
 
   const formatarFormaPagamento = (formaApi) => {
     const nomes = {
-      credit_card: 'Cartão de Crédito',
-      debit_card: 'Cartão de Débito',
-      pix: 'Pix',
-      ticket: 'Boleto Bancário',
-      account_money: 'Saldo Mercado Pago',
-      bank_transfer: 'Transferencia Bancária'
+      credit_card: 'Cartão de Crédito', debit_card: 'Cartão de Débito', pix: 'Pix',
+      ticket: 'Boleto Bancário', account_money: 'Saldo Mercado Pago', bank_transfer: 'Transferencia Bancária'
     };
     return nomes[formaApi] || formaApi || 'Não informado';
   };
@@ -272,7 +235,6 @@ export default function VendasLayout() {
                     className="border px-4 py-2 rounded"
                   >
                     <option value="iniciado">Iniciado</option>
-                    <option value="pago">Pago</option>
                     <option value="em_preparo">Em Preparo</option>
                     <option value="em_entrega">Em Entrega</option>
                     <option value="entregue">Entregue</option>
