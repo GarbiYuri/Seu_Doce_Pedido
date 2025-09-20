@@ -108,9 +108,13 @@ export default function VendasLayout() {
 
   const formatarFormaPagamento = (formaApi) => {
     const nomes = {
-      credit_card: 'Cartão de Crédito', debit_card: 'Cartão de Débito', pix: 'Pix',
-      ticket: 'Boleto Bancário', account_money: 'Saldo Mercado Pago', bank_transfer: 'Transferencia Bancária'
-    };
+    credit_card: 'Cartão de Crédito',
+    debit_card: 'Cartão de Débito',
+    pix: 'Pix',
+    ticket: 'Boleto Bancário',
+    account_money: 'Saldo Mercado Pago',
+    bank_transfer: 'Transferencia Bancária',
+  };
     return nomes[formaApi] || formaApi || 'Não informado';
   };
   
