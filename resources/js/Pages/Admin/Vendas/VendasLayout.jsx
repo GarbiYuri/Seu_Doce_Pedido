@@ -211,6 +211,7 @@ export default function VendasLayout() {
               <div className="text-sm text-gray-800 space-y-1">
                 <p><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
                 <p><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
+                <p className="mt-2"><strong>Pagamento: {formatarFormaPagamento(venda?.forma_pagamento)}</strong></p>
               </div>
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
@@ -229,7 +230,6 @@ export default function VendasLayout() {
                 </ul>
               </div>
               <div className="text-sm text-gray-700">
-                <p className="mt-2"><strong>Pagamento: {formatarFormaPagamento(venda?.forma_pagamento)}</strong></p>
                 <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
