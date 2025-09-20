@@ -19,6 +19,7 @@ class CheckoutController extends Controller
             'vendas.id as venda_id',
             'vendas.status',
             'vendas.payment_url',
+            'vendas.forma_pagamento',
             'vendas.valor',
             'vendas.tipo',
             'vendas.created_at',
