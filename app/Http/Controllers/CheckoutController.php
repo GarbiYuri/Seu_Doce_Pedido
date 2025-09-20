@@ -62,6 +62,7 @@ class CheckoutController extends Controller
                 'endereco' => $item->endereco,
                 'cep' => $item->cep,
                 'rua' => $item->rua,
+                'forma_pagamento' => $item->forma_pagamento,
                 'numero' => $item->numero,
                 'produtos' => [],
             ];
