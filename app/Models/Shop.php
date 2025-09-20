@@ -32,6 +32,16 @@ class Shop extends Model
         'estado',
         'complemento',
         'cep',
+
+        // --- Dias de Funcionamento
+
+        'funciona_domingo',
+        'funciona_segunda',
+        'funciona_terca',
+        'funciona_quarta',
+        'funciona_quinta',
+        'funciona_sexta',
+        'funciona_sabado'
     ];
 
     /**

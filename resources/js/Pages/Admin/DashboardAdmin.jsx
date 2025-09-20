@@ -12,6 +12,27 @@ const [horaFechamento, setHoraFechamento] = useState((shops.hora_fechamento || '
   const [lojaAberta, setLojaAberta] = useState(Boolean(shops.loja_aberta));
   const [search, setSearch] = useState('');
 
+  const [diasFuncionamento, setDiasFuncionamento] = useState({
+  funciona_domingo: Boolean(shops.funciona_domingo),
+  funciona_segunda: Boolean(shops.funciona_segunda),
+  funciona_terca: Boolean(shops.funciona_terca),
+  funciona_quarta: Boolean(shops.funciona_quarta),
+  funciona_quinta: Boolean(shops.funciona_quinta),
+  funciona_sexta: Boolean(shops.funciona_sexta),
+  funciona_sabado: Boolean(shops.funciona_sabado),
+});
+const handleDiaChange = (dia, valor) => {
+  setDiasFuncionamento(prev => ({ ...prev, [dia]: valor }));
+};
+
+const salvarDiasFuncionamento = () => {
+  router.post('/shop/atualizar', diasFuncionamento, {
+    preserveScroll: true,
+    onSuccess: () => alert('Dias de funcionamento atualizados!'),
+    onError: () => alert('Erro ao salvar os dias de funcionamento.'),
+  });
+};
+
   const { data, setData, post, processing, errors } = useForm({
     telefone: shops.telefone || '',
     email: shops.email || '',
@@ -105,6 +126,8 @@ const [horaFechamento, setHoraFechamento] = useState((shops.hora_fechamento || '
     );
   });
 
+  
+
   return (
     <AdminLayout>
       <Head title="Administração" />
@@ -181,6 +204,7 @@ const [horaFechamento, setHoraFechamento] = useState((shops.hora_fechamento || '
                 {lojaAberta ? 'Fechar Loja' : 'Abrir Loja'}
               </button>
             </div>
+            
             <div className="flex flex-col sm:flex-row gap-4 items-center w-full sm:w-auto">
               <div className="flex flex-col">
                 <label className="block font-semibold mb-1">Hora de abertura:</label>
@@ -196,7 +220,35 @@ const [horaFechamento, setHoraFechamento] = useState((shops.hora_fechamento || '
             </div>
           </div>
         </div>
+        {/* Cole este bloco de código dentro da <section> de Controle da Loja */}
+
+<div className="border-t pt-6">
+  <h2 className="text-xl font-bold text-[#613d20] mb-4">Dias de Funcionamento</h2>
+  
+  <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 mb-4 text-center">
+    {/* Mapeia o objeto de estado para criar um checkbox para cada dia */}
+    {Object.keys(diasFuncionamento).map((diaKey) => {
+      const nomeDia = diaKey.replace('funciona_', '');
+      return (
+        <label key={diaKey} className="flex flex-col items-center justify-center p-3 border rounded-lg cursor-pointer transition-colors hover:bg-gray-50">
+          <span className="font-medium text-gray-700 capitalize">{nomeDia}</span>
+          <input
+            type="checkbox"
+            checked={diasFuncionamento[diaKey]}
+            onChange={(e) => handleDiaChange(diaKey, e.target.checked)}
+            className="mt-2 w-5 h-5 rounded text-[#613d20] focus:ring-[#8a5a33] border-gray-300"
+          />
+        </label>
+      );
+    })}
+  </div>
+  
+  <button onClick={salvarDiasFuncionamento} className="w-full sm:w-auto bg-[#613d20] hover:bg-[#8a5a33] text-white px-6 py-2 rounded-full font-semibold">
+    Salvar Dias de Funcionamento
+  </button>
+</div>
       </section>
+      
 
       {/* Seção de Administração de Usuários */}
       <section className="max-w-5xl w-full mx-auto mt-12 p-4 sm:p-6 bg-white rounded-3xl shadow-2xl">

@@ -44,6 +44,16 @@ class ShopController extends Controller
             'cidade'          => 'nullable|string|max:255',
             'estado'          => 'nullable|string|max:255', // Ajuste o max se usar a sigla (ex: max:2)
             'complemento'     => 'nullable|string|max:255',
+
+            // -- Dias da semana funcionamento
+
+            'funciona_domingo' => 'nullable|boolean',
+            'funciona_segunda' => 'nullable|boolean',
+            'funciona_terca' => 'nullable|boolean',
+            'funciona_quarta' => 'nullable|boolean',
+            'funciona_quinta' => 'nullable|boolean',
+            'funciona_sexta' => 'nullable|boolean',
+            'funciona_sabado' => 'nullable|boolean'
         ]);
 
         // Busca ou cria o registro da loja (seu código está correto)
