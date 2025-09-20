@@ -7,8 +7,8 @@ export default function DashboardAdmin() {
   const { auth, usuarios, shops, errors: pageErrors } = usePage().props;
   const user = auth.user;
 
-  const [horaAbertura, setHoraAbertura] = useState(shops.hora_abertura || '09:00');
-  const [horaFechamento, setHoraFechamento] = useState(shops.hora_fechamento || '18:00');
+const [horaAbertura, setHoraAbertura] = useState((shops.hora_abertura || '09:00:00').substring(0, 5));
+const [horaFechamento, setHoraFechamento] = useState((shops.hora_fechamento || '18:00:00').substring(0, 5));
   const [lojaAberta, setLojaAberta] = useState(Boolean(shops.loja_aberta));
   const [search, setSearch] = useState('');
 
@@ -57,7 +57,10 @@ export default function DashboardAdmin() {
   }, [data.cep]);
 
   const toggleAdmin = (id) => {
-    router.post(`/admin/toggle/${id}`), {preserveScroll: true};
+    router.post(`/admin/toggle/${id}`), {
+      preserveScroll: true
+    
+    };
    
   };
 
