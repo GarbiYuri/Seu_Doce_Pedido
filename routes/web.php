@@ -31,9 +31,7 @@ Route::post('/remove', [CartWLController::class, 'destroy']);
 //Rotas do Checkout
 
 
-Route::get('/Vendas',  
-[CheckoutController::class, 'index'])
-->name('vendas.index');
+
 
 Route::get('/success', 
 [CheckoutController::class, 'success'])
@@ -61,6 +59,8 @@ Route::get('/sobre', function(){
 //Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
  
+
+
     // Rota para a verificação do email
  Route::get('/VerifyEmail', function () {
     return Inertia::render('Auth/VerifyEmail');
@@ -81,6 +81,10 @@ Route::resource('informacoes', InformacoesPessoaisController::class);
         Route::get('/Administracao', function () {
             return Inertia::render('Admin/DashboardAdmin');
         })->name('Administracao');
+
+        Route::get('/Vendas',  
+        [CheckoutController::class, 'index'])
+        ->name('vendas.index');
 
         //Rota Promoção
 
