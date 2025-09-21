@@ -87,7 +87,12 @@ class MercadoPagoController extends Controller
  
             $user = auth()->user();
 
-            $accessToken = config('services.mercadopago.token');
+            if($user->admin){
+                $accessToken = config('services.mercadopago.tokentest');
+            }else{
+                $accessToken = config('services.mercadopago.token');
+            }
+            
 
             if (!$accessToken) {
             abort(500, 'Token do Mercado Pago não configurado.');
