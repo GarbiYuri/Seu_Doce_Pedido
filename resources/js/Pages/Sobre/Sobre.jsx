@@ -89,7 +89,7 @@ export default function Sobre() {
           <div className="bg-[#fdfdfd] shadow-lg rounded-2xl p-6 text-center border-t-4 border-[#bc845b] hover:shadow-xl transition-shadow duration-300">
             <MapPin className="mx-auto w-10 h-10 text-[#8a5a33] mb-3" />
             <h2 className="font-semibold text-xl text-[#613d20]">Endereço</h2>
-            <p className="text-gray-600">{shop.rua}, {shop.numero}  - {shop.estado}</p>
+            <p className="text-gray-600">{shop.rua}, {shop.numero}  - {shop.cidade}, {shop.estado}</p>
           </div>
         </div>
 
