@@ -9,7 +9,8 @@ export default function Cart({ cartProducts}) {
   const shop = usePage().props.shop; 
   const [updatedCart, setUpdatedCart] = useState(cartProducts);
   const [tipoPedido, setTipoPedido] = useState('retirada');
-
+  const user = usePage().props.auth.user;
+  
   const [botao, setBotao] = useState(false);
 
   const form = useForm({
@@ -243,7 +244,7 @@ useEffect(() => {
             <div>
            <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
 
-         {shop.loja_aberta ? (
+         {shop.loja_aberta || user.admin ? (
   <div className="flex flex-col gap-3 mt-6">
     <button
       type="submit"
