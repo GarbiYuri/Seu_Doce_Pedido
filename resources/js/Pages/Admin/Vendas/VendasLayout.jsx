@@ -3,13 +3,58 @@ import { Head, usePage, router } from '@inertiajs/react';
 import { useState, useMemo, useEffect, useRef } from 'react';
 
 export default function VendasLayout() {
-  const { vendas } = usePage().props;
+  const { vendas, usuarios } = usePage().props;
 
   const [pedidoSelecionado, setPedidoSelecionado] = useState(null);
   const [filtroData, setFiltroData] = useState('todos');
   const [buscaNome, setBuscaNome] = useState('');
   const [dataSelecionada, setDataSelecionada] = useState('');
   const [filtroStatus, setFiltroStatus] = useState('todos');
+  const [search, setSearch] = useState("");
+
+const gerarMensagemWhatsApp = (pedido) => {
+  let mensagem = `📦 Olá, ${pedido.nome}!\n\n`;
+
+  // Mensagens personalizadas por status
+  const mensagensStatus = {
+    iniciado: "Seu pedido foi iniciado, aguardando confirmação do pagamento. 💳",
+    pago: "Pagamento confirmado! 🎉 Seu pedido já está sendo processado.",
+    em_preparo: "Seu pedido está em preparo na cozinha. 👩‍🍳🍫",
+    em_entrega: "Seu pedido saiu para entrega. 🚚💨",
+    entregue: "Pedido entregue com sucesso! ✅ Obrigado pela preferência. 💖",
+    falha_pagamento: "⚠️ Ocorreu uma falha no pagamento. Verifique e tente novamente.",
+    default: "Seu pedido foi recebido com sucesso. 🙌",
+  };
+
+  // Escolhe a mensagem certa ou usa a default
+  mensagem += mensagensStatus[pedido.status] || mensagensStatus.default;
+  mensagem += `\nStatus atual: *${pedido.status.toUpperCase()}*\n\n`;
+
+  // Detalhes do pedido
+  mensagem += `🧾 Detalhes do Pedido:\n`;
+  pedido.produtos.forEach((item, index) => {
+    mensagem += `${index + 1}. ${item.nome} - ${item.quantity}x R$ ${parseFloat(item.preco).toFixed(2)}\n`;
+  });
+
+  mensagem += `\n💰 Total: R$ ${parseFloat(pedido.valor).toFixed(2)}`;
+
+  // Endereço ou retirada
+  if (pedido.tipo === "entrega") {
+    mensagem += `\n\n🚚 Endereço de entrega:\n${pedido.rua}, ${pedido.numero}\n${pedido.bairro} - ${pedido.cidade}/${pedido.estado}\nCEP: ${pedido.cep}`;
+  } else {
+    mensagem += `\n\n🏬 Retirada na loja.`;
+  }
+
+  // Fechamento amigável (se não for falha no pagamento)
+  if (pedido.status !== "falha_pagamento") {
+    mensagem += `\n\n✅ Em breve você receberá novas atualizações do seu pedido!`;
+  }
+
+  return encodeURIComponent(mensagem);
+};
+
+
+
 
   // --- INÍCIO DA LÓGICA DO SOM DE NOTIFICAÇÃO ---
   const previousVendasCount = useRef(vendas.length);
@@ -118,6 +163,16 @@ export default function VendasLayout() {
     return nomes[formaApi] || formaApi || 'Não informado';
   };
   
+
+    const filteredUsers = usuarios.data.filter((usuario) => {
+    const termo = search.toLowerCase();
+    return (
+      usuario.name.toLowerCase().includes(termo) ||
+      usuario.email.toLowerCase().includes(termo)
+    );
+  });
+
+
   return (
     <AdminLayout>
       <Head title="Pedidos" />
@@ -253,6 +308,14 @@ export default function VendasLayout() {
                     <option value="entregue">Entregue</option>
                   </select>
                 </div>
+                <a
+  href={`https://wa.me/55${pedidoSelecionado.telefone.replace(/\D/g, '')}?text=${gerarMensagemWhatsApp(pedidoSelecionado)}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow font-semibold"
+>
+  Enviar WhatsApp
+</a>
                 {pedidoSelecionado.status !== 'entregue' && pedidoSelecionado.status !== 'cancelado' && (
                   <button onClick={() => cancelarPedido(pedidoSelecionado.id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"
