@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
 public function share(Request $request): array
 {
     $user = $request->user();
-    $info = $user?->informacoesPessoais?->descriptografado();
+
 
     $cartCount = 0;
 
@@ -56,7 +56,8 @@ public function share(Request $request): array
 
         'auth' => [
             'user' => $user,
-            'informacoes' => $info,
+            'informacoes' => $user?->informacoesPessoais,
+            'enderecos' =>$user?->enderecos,
             'cart' => [
                 'totalItems' => $cartCount,
             ],

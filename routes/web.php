@@ -68,9 +68,16 @@ Route::middleware('auth')->group(function () {
 
 //Rota de Informações Pessoais
 
-Route::resource('informacoes', InformacoesPessoaisController::class);
 
 
+Route::post('/informacoes', [InformacoesPessoaisController::class, 'storeOrUpdate'])
+    ->name('informacoes.storeOrUpdate')
+    ->middleware('auth');
+
+
+Route::delete('/informacoes/{id}', [InformacoesPessoaisController::class, 'destroy'])
+    ->name('informacoes.destroy')
+    ->middleware('auth');
 
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin

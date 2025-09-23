@@ -5,81 +5,40 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 
 class InformacoesPessoais extends Model
 {
     use HasFactory;
+
     protected $table = "informacoes_pessoais";
 
     protected $fillable = [
         'user_id',
-        'rua',
-        'numero',
-        'bairro',
-        'cidade',
-        'estado',
-        'complemento',
-        'cep',
         'telefone',
         'cpf',
     ];
 
-    // Criptografar antes de salvar
-    public function setAttribute($key, $value)
+    /**
+     * Accessor/Mutator para telefone
+     */
+    protected function telefone(): Attribute
     {
-        if (in_array($key, $this->encryptableFields()) && !is_null($value)) {
-            $value = Crypt::encryptString($value);
-        }
-
-        return parent::setAttribute($key, $value);
+        return Attribute::make(
+            get: fn($value) => $value ? Crypt::decryptString($value) : null,
+            set: fn($value) => $value ? Crypt::encryptString($value) : null,
+        );
     }
 
-    // Descriptografar ao acessar
-    public function getAttribute($key)
+    /**
+     * Accessor/Mutator para cpf
+     */
+    protected function cpf(): Attribute
     {
-        $value = parent::getAttribute($key);
-
-        if (in_array($key, $this->encryptableFields()) && !is_null($value)) {
-            try {
-                return Crypt::decryptString($value);
-            } catch (\Exception $e) {
-                // Caso o dado já esteja em texto simples
-                return $value;
-            }
-        }
-
-        return $value;
-    }
-    public function descriptografado()
-{
-    return [
-        'id' => $this->id,
-        'rua' => $this->rua,
-        'numero' => $this->numero,
-        'bairro' => $this->bairro,
-        'cidade' => $this->cidade,
-        'estado' => $this->estado,
-        'complemento' => $this->complemento,
-        'cep' => $this->cep,
-        'telefone' => $this->telefone,
-        'cpf' => $this->cpf,
-    ];
-}
-
-    // Lista dos campos a serem criptografados
-    protected function encryptableFields()
-    {
-        return [
-            'rua',
-            'numero',
-            'bairro',
-            'cidade',
-            'estado',
-            'complemento',
-            'cep',
-            'telefone',
-            'cpf',
-        ];
+        return Attribute::make(
+            get: fn($value) => $value ? Crypt::decryptString($value) : null,
+            set: fn($value) => $value ? Crypt::encryptString($value) : null,
+        );
     }
 
     public function user()

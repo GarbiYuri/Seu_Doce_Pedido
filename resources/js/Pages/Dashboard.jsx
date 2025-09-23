@@ -263,7 +263,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
                           R${precoOriginal.replace('.', ',')}
                         </span>
                       )}
-                      <span className="text-xl font-bold text-pink-600">
+                      <span className="text-xl font-bold text-[#8a5a33]">
                         R${precoPromo.toFixed(2).replace('.', ',')}
                       </span>
 
@@ -271,7 +271,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
                     </div>
                     <div className="flex flex-col items-center mb-2">
                       <p className="text-sm text-gray-600">Preço unitário</p>
-                      <span className="text-xl font-extrabold text-pink-600 tracking-tight">
+                      <span className="text-xl font-extrabold text-[#8a5a33] tracking-tight">
                         R$ {unidade.toFixed(2).replace('.', ',')}
                       </span>
                     </div>
@@ -370,9 +370,13 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
 
               )
 
+              {/*
+                bg-[#8a5a33] hover:bg-[#613d20]
+                */}
+
             })}
             {showCartNotification && (
-              <div className="fixed bottom-6 right-20 bg-pink-600 text-white rounded-full shadow-lg p-3 flex items-center justify-center z-50 animate-fade-in-out cursor-pointer"
+              <div className="fixed bottom-6 right-20 bg-[#8a5a33] hover:bg-[#613d20] text-white rounded-full shadow-lg p-3 flex items-center justify-center z-50 animate-fade-in-out cursor-pointer"
                 title="Ver carrinho"
               >
                 <Link href="/CarrinhoDeCompra" className="relative flex items-center justify-center">

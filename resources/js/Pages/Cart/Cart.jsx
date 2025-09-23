@@ -13,6 +13,10 @@ export default function Cart({ cartProducts}) {
   
   const [botao, setBotao] = useState(false);
 
+  const [enderecoSelecionado, setEnderecoSelecionado] = useState(
+  usePage().props.auth.enderecos?.find(end => end.is_principal) || null
+);
+
   const form = useForm({
   products: updatedCart.map(p => ({
     id_product: p.Id_Product,
@@ -44,7 +48,25 @@ useEffect(() => {
     description: p.product_description,
     id_categoria: p.product_Id_Category,
   })));
-}, [updatedCart]);
+  // Inclui endereço se for entrega
+  if(tipoPedido === 'entrega') {
+    const enderecoAtual = enderecoSelecionado || enderecoTemporario;
+    form.setData('endereco', {
+      rua: enderecoAtual?.rua || '',
+      numero: enderecoAtual?.numero || '',
+      bairro: enderecoAtual?.bairro || '',
+      cidade: enderecoAtual?.cidade || '',
+      estado: enderecoAtual?.estado || '',
+      cep: enderecoAtual?.cep || '',
+      complemento: enderecoAtual?.complemento || '',
+      telefone: informacoes?.telefone || '',
+    });
+  } else {
+    form.setData('endereco', null); // ou apenas telefone se quiser
+  }
+
+}, [updatedCart, tipoPedido, enderecoSelecionado, ]);
+
 
 console.log(updatedCart);
 
@@ -238,7 +260,14 @@ useEffect(() => {
           </div>
 
     
-            <FinalizarPedido tipoPedido={tipoPedido} setTipoPedido={setTipoPedido} informacoes={informacoes}  setBotao={setBotao}/>
+            <FinalizarPedido 
+            tipoPedido={tipoPedido} 
+            setTipoPedido={setTipoPedido} 
+            informacoes={informacoes}  
+            setBotao={setBotao}
+            enderecoSelecionado={enderecoSelecionado}
+            setEnderecoSelecionado={setEnderecoSelecionado}
+            />
           {/* Formulário único envolvendo tudo */}
           {botao == false ? (
             <div>

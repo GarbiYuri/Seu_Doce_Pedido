@@ -36,7 +36,7 @@ export default function AdminLayout({ children }) {
 
                 {/* Botão hamburguer - visível só no mobile */}
                 <button
-                    className="md:hidden flex items-center p-2 rounded hover:bg-white/10 transition"
+                    className="md:hidden flex items-center p-2 rounded hover:bg-white/10 text-[#613d20] transition"
                     onClick={() => setShowSidebar(true)}
                 >
                     <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">

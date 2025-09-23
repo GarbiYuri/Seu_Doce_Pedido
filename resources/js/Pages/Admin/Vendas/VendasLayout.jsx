@@ -211,12 +211,14 @@ export default function VendasLayout() {
               <div className="text-sm text-gray-800 space-y-1">
                 <p><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
                 <p><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
+                 <p><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
               </div>
+              
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
                   <p className="font-semibold mt-2">Endereço de Entrega</p>
                   <p>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
-                  <p>{pedidoSelecionado.endereco}</p>
+                  <p>{pedidoSelecionado.bairro} - {pedidoSelecionado.cidade}/{pedidoSelecionado.estado}</p>
                   <p>{pedidoSelecionado.cep}</p>
                 </div>
               )}
@@ -224,7 +226,14 @@ export default function VendasLayout() {
                 <p className="font-semibold text-sm text-gray-700 mb-1">Itens do Pedido</p>
                 <ul className="list-disc list-inside text-sm text-gray-800">
                   {pedidoSelecionado.produtos.map((produto, index) => (
-                    <li key={index}>{produto.quantity}x {produto.nome}</li>
+                    <li key={index}>{produto.quantity}x {produto.nome} {produto?.id_promocao && ("(PROMO)")}
+                       {produto.id_promocao && produto.kitquantity > 1 && (
+        <div className="mt-1 text-xs text-blue-600">
+            (Kit com {produto.kitquantity} unidades)
+        </div>
+    )}
+                    </li>
+                    
                   ))}
                 </ul>
               </div>
