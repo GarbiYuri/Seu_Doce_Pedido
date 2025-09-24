@@ -264,21 +264,21 @@ const gerarMensagemWhatsApp = (pedido) => {
                 })}
               </p>
               <div className="text-sm text-gray-800 space-y-1">
-                <p><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
-                <p><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
-                 <p><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
+                <p style="text-[#613d20]"><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
+                <p style="text-[#613d20]" ><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
+                 <p style="text-[#613d20]"><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
               </div>
               
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
-                  <p className="font-semibold mt-2">Endereço de Entrega</p>
+                  <p className="font-semibold mt-2 text-[#613d20]">Endereço de Entrega</p>
                   <p>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
                   <p>{pedidoSelecionado.bairro} - {pedidoSelecionado.cidade}/{pedidoSelecionado.estado}</p>
                   <p>{pedidoSelecionado.cep}</p>
                 </div>
               )}
               <div>
-                <p className="font-semibold text-sm text-gray-700 mb-1">Itens do Pedido</p>
+                <p className="font-semibold text-sm text-[#613d20] mb-1">Itens do Pedido</p>
                 <ul className="list-disc list-inside text-sm text-gray-800">
                   {pedidoSelecionado.produtos.map((produto, index) => (
                     <li key={index}>{produto.quantity}x {produto.nome} {produto?.id_promocao && ("(PROMO)")}
@@ -293,8 +293,8 @@ const gerarMensagemWhatsApp = (pedido) => {
                 </ul>
               </div>
               <div className="text-sm text-gray-700">
-                <p className="mt-2"><strong>Pagamento: {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</strong></p>
-                <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
+                  <p className="mt-2 text-[#613d20]"><strong>Pagamento: {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</strong></p>
+                <p style="text-[#613d20]"><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
                 <div className="flex gap-4 items-center">

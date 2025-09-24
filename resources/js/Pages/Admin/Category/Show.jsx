@@ -60,10 +60,9 @@ export default function CategoryEdit({ category }) {
       </div>
 
       {/* Formulário de edição */}
-      <div className="bg-white border border-[#8a5a33] rounded-3xl shadow-sm p-6 sm:p-10 ">
+      <div className="bg-white border border-[#8a5a33] sm:p-10 max-w-xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
         <h2
           className="text-3xl font-extrabold text-[#613d20] mb-6 text-center"
-          style={{ fontFamily: "'Candice', cursive" }}
         >
           Editar Categoria
         </h2>

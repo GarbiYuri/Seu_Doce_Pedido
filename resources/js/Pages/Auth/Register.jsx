@@ -49,7 +49,7 @@ export default function Register() {
                 </div>
 
                 <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-lobster">
-                    Cadastro
+                    CADASTRO
                 </h2>
 
                 <form onSubmit={submit} className="space-y-4">

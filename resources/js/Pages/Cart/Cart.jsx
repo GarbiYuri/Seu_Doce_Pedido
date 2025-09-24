@@ -190,7 +190,7 @@ useEffect(() => {
     <span className="line-through text-gray-500 mr-2">
       R$ {Number(product.product_price).toFixed(2).replace('.', ',')}
     </span>
-    <span className="text-pink-600">
+    <span className="text- [#613d20]">
       R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
     </span>
     
@@ -202,7 +202,7 @@ useEffect(() => {
   <p className="text-xs text-gray-500">{product.promo_description}</p>
   <p className="text-md font-bold text-gray-900">
     
-    <span className="text-pink-600">
+    <span className="text-[#613d20]">
       R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
     </span>
   </p>

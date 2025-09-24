@@ -6,31 +6,31 @@ export default function Sobre() {
   const { shop } = usePage().props;
 
   const formatarTelefone = (numero) => {
-  // Se o número não existir ou for nulo, retorna uma string vazia
-  if (!numero) return '';
+    // Se o número não existir ou for nulo, retorna uma string vazia
+    if (!numero) return '';
 
-  // Converte para string e remove qualquer caractere que não seja dígito
-  const numeroStr = String(numero).replace(/\D/g, '');
-  
-  const tamanho = numeroStr.length;
+    // Converte para string e remove qualquer caractere que não seja dígito
+    const numeroStr = String(numero).replace(/\D/g, '');
 
-  if (tamanho === 11) {
-    // Formato para celular: (XX) 9XXXX-XXXX
-    return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 7)}-${numeroStr.substring(7)}`;
-  } 
-  
-  if (tamanho === 10) {
-    // Formato para telefone fixo: (XX) XXXX-XXXX
-    return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 6)}-${numeroStr.substring(6)}`;
-  }
+    const tamanho = numeroStr.length;
 
-  // Se o número tiver um tamanho diferente, retorna como está
-  return numeroStr;
-};
+    if (tamanho === 11) {
+      // Formato para celular: (XX) 9XXXX-XXXX
+      return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 7)}-${numeroStr.substring(7)}`;
+    }
+
+    if (tamanho === 10) {
+      // Formato para telefone fixo: (XX) XXXX-XXXX
+      return `(${numeroStr.substring(0, 2)}) ${numeroStr.substring(2, 6)}-${numeroStr.substring(6)}`;
+    }
+
+    // Se o número tiver um tamanho diferente, retorna como está
+    return numeroStr;
+  };
 
   return (
     <AuthenticatedLayout>
-       <Head title="Sobre" />
+      <Head title="Sobre" />
       <div className="max-w-6xl mx-auto px-6 py-12">
         {/* Banner / Imagem de capa */}
         <div className="w-full h-64 rounded-2xl overflow-hidden mb-12 shadow-lg">
@@ -48,9 +48,10 @@ export default function Sobre() {
 
         {/* Texto principal */}
         <p className="text-lg text-gray-700 leading-relaxed text-center mb-10 max-w-3xl mx-auto">
-          A nossa loja nasceu com a ideia de trazer qualidade, carinho e dedicação
-          em cada produto. Desde o início, buscamos oferecer mais do que apenas
-          doces, mas sim experiências que ficam na memória. ❤
+          A Amor com Recheio nasceu em agosto de 2025, de um sonho cheio de amor.
+          Eu sou a Manu e sempre acreditei que doces são mais do que sobremesas, são gestos de carinho. Foi assim, entre receitas caseiras e dedicação, que decidi transformar minha paixão pela confeitaria em um negócio que adoça momentos especiais.
+
+          Cada pedido é preparado com capricho e com a mesma alegria do primeiro doce. A Amor com Recheio é o meu sonho ganhando forma, e é uma alegria compartilhar esse pedacinho de amor com você.
         </p>
 
         {/* Galeria de imagens 
@@ -96,16 +97,16 @@ export default function Sobre() {
         {/* Botão de call-to-action */}
         <div className="text-center mt-12">
           <a
-    // Substitua pelo seu número completo
-    href={`https://wa.me/55${shop.telefone}`}
-    // Abre o link em uma nova aba, o que é bom para links externos
-    target="_blank"
-    rel="noopener noreferrer"
-    className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-xl font-medium shadow-md hover:bg-[#128C7E] transition-colors"
-  >
-    <Phone size={20} /> {/* Ícone opcional */}
-    Fale Conosco no WhatsApp
-  </a>
+            // Substitua pelo seu número completo
+            href={`https://wa.me/55${shop.telefone}`}
+            // Abre o link em uma nova aba, o que é bom para links externos
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-[#25D366] text-white px-6 py-3 rounded-xl font-medium shadow-md hover:bg-[#128C7E] transition-colors"
+          >
+            <Phone size={20} /> {/* Ícone opcional */}
+            Fale Conosco no WhatsApp
+          </a>
         </div>
 
         {/* Rodapé */}

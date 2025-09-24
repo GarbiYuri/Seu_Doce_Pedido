@@ -58,7 +58,7 @@ export default function Login({ status, canResetPassword }) {
                
                 {/* Título LOGIN com fonte Lobster */}
                 <h2 className="login-title text-[#613d20] text-center mb-6 tracking-widest animate-fadeIn">
-                    Login
+                   LOGIN
                 </h2>
 
                 {status && (

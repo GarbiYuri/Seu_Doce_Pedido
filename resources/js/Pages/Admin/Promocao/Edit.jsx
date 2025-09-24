@@ -62,7 +62,7 @@ export default function PromocaoEdit({ promocao, products }) {
   };
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
+    <div className="max-w-xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
       <button
         onClick={handleBack}
         className="flex items-center text-[#8a5a33] hover:text-[#613d20] mb-6"
@@ -82,7 +82,7 @@ export default function PromocaoEdit({ promocao, products }) {
             name="Id_Product"
             value={formData.Id_Product}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
           >
             <option value="">Selecione um produto</option>
             {products.map(prod => (
@@ -99,7 +99,7 @@ export default function PromocaoEdit({ promocao, products }) {
             value={formData.descricao}
             onChange={handleChange}
             placeholder="Descrição da promoção"
-            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20]transition text-sm"
           />
         </div>
 
@@ -112,7 +112,7 @@ export default function PromocaoEdit({ promocao, products }) {
             onChange={handleChange}
             step="0.01"
             required
-            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
           />
         </div>
 
@@ -123,12 +123,12 @@ export default function PromocaoEdit({ promocao, products }) {
             name="quantidade"
             value={formData.quantidade}
             onChange={handleChange}
-            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-pink-500 transition text-sm"
+            className="w-full px-4 py-2 border border-[#8a5a33] rounded-xl shadow-sm focus:outline-none focus:ring-2 focus:ring-[#613d20] transition text-sm"
           />
         </div>
 
         <div>
-          <label className="block text-sm font-semibold text-pink-700 mb-1">Estoque</label>
+          <label className="block text-sm font-semibold text-[#613d20] mb-1">Estoque</label>
           <input
             type="number"
             name="estoque"
