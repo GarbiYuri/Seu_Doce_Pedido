@@ -264,17 +264,17 @@ const gerarMensagemWhatsApp = (pedido) => {
                 })}
               </p>
               <div className="text-sm text-gray-800 space-y-1">
-                <p className="text-[#613d20]"><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
-                <p className="text-[#613d20]" ><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
-                 <p className="text-[#613d20]"><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
+                <p className="text-[#613d20]"><strong>Cliente:</strong> <p className="font-medium" >{pedidoSelecionado.nome}</p></p>
+                <p className="text-[#613d20]" ><strong>Contato:</strong><p className="font-medium" >{pedidoSelecionado.telefone}</p> </p>
+                 <p className="text-[#613d20]"><strong>Tipo:</strong> <p className="font-medium" >{pedidoSelecionado.tipo}</p></p>
               </div>
               
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
                   <p className="font-semibold mt-2 text-[#613d20]">Endereço de Entrega</p>
-                  <p>{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
-                  <p>{pedidoSelecionado.bairro} - {pedidoSelecionado.cidade}/{pedidoSelecionado.estado}</p>
-                  <p>{pedidoSelecionado.cep}</p>
+                  <p className="font-medium">{pedidoSelecionado.rua}, {pedidoSelecionado.numero}</p>
+                  <p className="font-medium">{pedidoSelecionado.bairro} - {pedidoSelecionado.cidade}/{pedidoSelecionado.estado}</p>
+                  <p className="font-medium">{pedidoSelecionado.cep}</p>
                 </div>
               )}
               <div>
