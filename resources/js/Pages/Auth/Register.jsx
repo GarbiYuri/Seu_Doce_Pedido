@@ -48,7 +48,7 @@ export default function Register() {
                     </Link>
                 </div>
 
-                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-montserrat">
+                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-Montserrat font-extrabold">
                     CADASTRO
                 </h2>
 
@@ -133,15 +133,13 @@ export default function Register() {
                 </form>
 
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;600&display=swap');
+                   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-                    .font-poppins {
-                        font-family: 'Poppins', sans-serif;
+                   .font-Montserrat {
+                        font-family: 'Montserrat', sans-serif;
                     }
 
-                    .font-lobster {
-                        font-family: 'Lobster', cursive;
-                    }
+                
                 `}</style>
             </div>
         </GuestLayout>

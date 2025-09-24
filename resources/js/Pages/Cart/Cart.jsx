@@ -330,7 +330,7 @@ useEffect(() => {
          
 
       ) : (
-        <p className="text-center text-xl text-gray-500">Seu carrinho está vazio.</p>
+        <p className="text-center text-xl text-gray-500 font-Montserrat">Seu carrinho está vazio.</p>
       )}
     </AuthenticatedLayout>
   );

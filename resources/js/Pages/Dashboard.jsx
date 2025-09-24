@@ -578,6 +578,9 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
         </button>
       )}
 
+       <Footer>
+              
+            </Footer>
     </AuthenticatedLayout>
   );
 }

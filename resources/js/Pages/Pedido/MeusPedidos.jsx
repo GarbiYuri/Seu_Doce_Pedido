@@ -142,7 +142,7 @@ export default function MeusPedidos() {
                                             Cancelar Pedido <FiX />
                                         </button>
                                         {/* COR DO BOTÃO DE PAGAMENTO ATUALIZADA */}
-                                        <a href={pedidoSelecionado.payment_url} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#613d20] hover:bg-[#8a5a33] text-white text-sm px-4 py-2 rounded-lg shadow transition-colors">
+                                        <a href={pedidoSelecionado.payment_url} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#613d20] hover:bg-[#8a5a33] text-white text-sm px-4 py-2 rounded-lg shadow transition-colors font-Montserrat font-extrabold">
                                             Realizar Pagamento
                                         </a>
                                     </div>
