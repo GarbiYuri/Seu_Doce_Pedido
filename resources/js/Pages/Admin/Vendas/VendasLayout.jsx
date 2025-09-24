@@ -264,9 +264,9 @@ const gerarMensagemWhatsApp = (pedido) => {
                 })}
               </p>
               <div className="text-sm text-gray-800 space-y-1">
-                <p style="text-[#613d20]"><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
-                <p style="text-[#613d20]" ><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
-                 <p style="text-[#613d20]"><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
+                <p className="text-[#613d20]"><strong>Cliente:</strong> {pedidoSelecionado.nome}</p>
+                <p className="text-[#613d20]" ><strong>Contato:</strong> {pedidoSelecionado.telefone}</p>
+                 <p className="text-[#613d20]"><strong>Tipo:</strong> {pedidoSelecionado.tipo}</p>
               </div>
               
               {pedidoSelecionado.tipo === 'entrega' && (
@@ -294,7 +294,7 @@ const gerarMensagemWhatsApp = (pedido) => {
               </div>
               <div className="text-sm text-gray-700">
                   <p className="mt-2 text-[#613d20]"><strong>Pagamento: {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</strong></p>
-                <p style="text-[#613d20]"><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
+                <p className="text-[#613d20]"><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
                 <div className="flex gap-4 items-center">

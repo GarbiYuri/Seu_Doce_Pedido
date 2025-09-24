@@ -30,27 +30,28 @@ export default function Register() {
 
             <div className="relative w-full max-w-md font-poppins">
                 <div className="relative w-full max-w-md font-poppins">
-                     <Link
-    href="/"
-    className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#613d20] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
->
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-    >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-    </svg>
-    <span>Voltar</span>
-</Link>
+                    <Link
+                        href="/"
+                        className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#613d20] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span>Voltar</span>
+                    </Link>
                 </div>
 
-                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-lobster">
+                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-montserrat">
                     CADASTRO
                 </h2>
+
 
                 <form onSubmit={submit} className="space-y-4">
                     <div>
