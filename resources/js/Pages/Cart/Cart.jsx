@@ -16,6 +16,7 @@ export default function Cart({ cartProducts}) {
   const [enderecoSelecionado, setEnderecoSelecionado] = useState(
   usePage().props.auth.enderecos?.find(end => end.is_principal) || null
 );
+ const [enderecoTemporario, setEnderecoTemporario] = useState(null);
 
   const form = useForm({
   products: updatedCart.map(p => ({
@@ -35,6 +36,7 @@ export default function Cart({ cartProducts}) {
 
 
 
+
 useEffect(() => {
   form.setData('products', updatedCart.map(p => ({
     id_product: p.Id_Product,
@@ -48,9 +50,12 @@ useEffect(() => {
     description: p.product_description,
     id_categoria: p.product_Id_Category,
   })));
+
   // Inclui endereço se for entrega
   if(tipoPedido === 'entrega') {
-    const enderecoAtual = enderecoSelecionado || enderecoTemporario;
+    
+     const enderecoAtual = enderecoSelecionado || enderecoTemporario;
+     
     form.setData('endereco', {
       rua: enderecoAtual?.rua || '',
       numero: enderecoAtual?.numero || '',
@@ -65,10 +70,8 @@ useEffect(() => {
     form.setData('endereco', null); // ou apenas telefone se quiser
   }
 
-}, [updatedCart, tipoPedido, enderecoSelecionado, ]);
+}, [updatedCart, tipoPedido, enderecoSelecionado, enderecoTemporario]);
 
-
-console.log(updatedCart);
 
 useEffect(() => {
   form.setData('tipoPedido', tipoPedido);
@@ -267,6 +270,8 @@ useEffect(() => {
             setBotao={setBotao}
             enderecoSelecionado={enderecoSelecionado}
             setEnderecoSelecionado={setEnderecoSelecionado}
+            enderecoTemporario={enderecoTemporario}
+            setEnderecoTemporario={setEnderecoTemporario}
             />
           {/* Formulário único envolvendo tudo */}
           {botao == false ? (
