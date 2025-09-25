@@ -58,6 +58,8 @@ public function index()
             'email' => $venda->email,
             'telefone' => $venda->telefone,
             'endereco' => $venda->endereco,
+            'cidade' => $venda->cidade,
+            'bairro' => $venda->bairro,
             'cep' => $venda->cep,
             'rua' => $venda->rua,
             'numero' => $venda->numero,

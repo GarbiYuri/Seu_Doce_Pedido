@@ -1,4 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Footer from '@/Components/Footer';
 import { Link, Head, router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect, useRef } from 'react';
 import Modal from '@/Components/Modal';
