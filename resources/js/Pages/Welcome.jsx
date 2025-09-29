@@ -1,4 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
+import Footer from '@/Components/Footer';
 import { Link, Head, router, usePage } from '@inertiajs/react';
 import React, { useState, useEffect, useRef } from 'react';
 import { ShoppingCart, ReceiptText, MessagesSquare, LogOut } from 'lucide-react';
@@ -497,7 +498,9 @@ export default function Welcome({ products, categories, promocoes }) {
         </button>
       )}
       
-      
+      <Footer>
+        
+      </Footer>
     </AuthenticatedLayout>
   );
 }

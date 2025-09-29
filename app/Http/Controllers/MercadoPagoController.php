@@ -87,7 +87,12 @@ class MercadoPagoController extends Controller
  
             $user = auth()->user();
 
-            $accessToken = config('services.mercadopago.token');
+            if($user->admin){
+                $accessToken = config('services.mercadopago.tokentest');
+            }else{
+                $accessToken = config('services.mercadopago.token');
+            }
+            
 
             if (!$accessToken) {
             abort(500, 'Token do Mercado Pago não configurado.');
@@ -127,9 +132,9 @@ class MercadoPagoController extends Controller
                     "title" => "Taxa de entrega",
                     "quantity" => 1,
                     "currency_id" => "BRL",
-                    "unit_price" => 4, // valor fixo da entrega (precisa aplicar api para dinamizar)
+                    "unit_price" => 5, // valor fixo da entrega (precisa aplicar api para dinamizar)
                 ];
-                $frete = 4;
+                $frete = 5;
                 $total += $frete;
                  $payer = [
         "name" => $user->name,
@@ -159,17 +164,23 @@ class MercadoPagoController extends Controller
       // 1. Cria a venda no banco
 $venda = Venda::create([
     'id_user' => $user->id,
-    'status' => 'iniciado', // ou 'pendente'
+    'status' => 'iniciado',
     'valor' => $total,
-    'tipo' => $tipoPedido, // retirada ou entrega
+    'tipo' => $request->tipoPedido,
     'nome' => $user->name,
     'email' => $user->email,
-    'telefone' => $informacoes['telefone'],
-    'endereco' => $informacoes['bairro']  . ' - ' . $informacoes['cidade'] ?? null,
-    'rua' => $informacoes['rua'] ?? null,
-    'numero' => $informacoes['numero'] ?? null,
-    'cep' => $informacoes['cep'] ?? null,
+    'telefone' => $request->informacoes['telefone'] ?? null,
+    // Só adiciona o endereço se for entrega
+    'rua' => $request->endereco['rua'] ?? null,
+    'numero' => $request->endereco['numero'] ?? null,
+    'bairro' => ($request->endereco['bairro'] ?? null),
+    'cidade' => ($request->endereco['cidade'] ?? null), 
+    'estado' => ($request->endereco['estado'] ?? null),
+    'cep' => $request->endereco['cep'] ?? null,
+    'complemento' => $request->endereco['complemento'] ?? null,
 ]);
+
+
 
 // 2. Cria a preferência Mercado Pago usando o id da venda
 $preference = $client->create([
@@ -263,6 +274,7 @@ $venda->save();
             return Inertia::render('Checkout/CheckoutRedirect', [
                 'init_point' => $preference->init_point,
                 'cartItems' => $Checkoutproducts,
+                'venda' => $venda,
                 'userAddress' => $tipoPedido === 'entrega' ? true : null,
                 'isPickup' => $tipoPedido === 'retirada',
                 'frete' => $frete,
@@ -321,9 +333,9 @@ $venda->save();
                     "title" => "Taxa de entrega",
                     "quantity" => 1,
                     "currency_id" => "BRL",
-                    "unit_price" => 4, // valor fixo da entrega (precisa aplicar api para dinamizar)
+                    "unit_price" => 5, // valor fixo da entrega (precisa aplicar api para dinamizar)
                 ];
-                $frete = 4;
+                $frete = 5;
                 $total += $frete;
                  $payer = [
             "name" => $dadosEntrega['nome'],

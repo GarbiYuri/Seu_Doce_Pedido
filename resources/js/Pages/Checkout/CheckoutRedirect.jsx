@@ -2,9 +2,10 @@ import { Head, usePage } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CheckoutRedirect() {
-  const { init_point, cartItems, userAddress, isPickup, frete } = usePage().props;
+  const { init_point, cartItems, userAddress, isPickup, frete, venda } = usePage().props;
   const informacoes = usePage().props.auth.informacoes;
   const user = usePage().props.auth.user;
+
 
   const total = cartItems.reduce((sum, item) => {
     const price = item.isPromo ? item.promo_price : item.product_price;
@@ -103,9 +104,9 @@ export default function CheckoutRedirect() {
               <p className="mt-2"><strong>Endereço:</strong></p>
               {userAddress ? (
                 <>
-                  <p>{informacoes.rua}, {informacoes.numero}</p>
-                  <p>{informacoes.bairro} - {informacoes.cidade}/{informacoes.estado}</p>
-                  <p>CEP: {informacoes.cep}</p>
+                  <p>{venda.rua}, {venda.numero}</p>
+                  <p>{venda.bairro} - {venda.cidade}/{venda.estado}</p>
+                  <p>CEP: {venda.cep}</p>
                 </>
               ) : (
                 <p>Endereço não informado</p>
@@ -152,7 +153,13 @@ export default function CheckoutRedirect() {
             <FiArrowLeft size={20} />
             Voltar para o Carrinho
           </a>
-
+                <a
+            href={`/pagardepois/${venda.id}`}
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
+          >
+            Pagamento na Entrega
+          </a>
           <a
             href={init_point}
             target="_blank"

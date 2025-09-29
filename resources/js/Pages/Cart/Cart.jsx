@@ -9,8 +9,14 @@ export default function Cart({ cartProducts}) {
   const shop = usePage().props.shop; 
   const [updatedCart, setUpdatedCart] = useState(cartProducts);
   const [tipoPedido, setTipoPedido] = useState('retirada');
-
+  const user = usePage().props.auth.user;
+  
   const [botao, setBotao] = useState(false);
+
+  const [enderecoSelecionado, setEnderecoSelecionado] = useState(
+  usePage().props.auth.enderecos?.find(end => end.is_principal) || null
+);
+ const [enderecoTemporario, setEnderecoTemporario] = useState(null);
 
   const form = useForm({
   products: updatedCart.map(p => ({
@@ -30,6 +36,7 @@ export default function Cart({ cartProducts}) {
 
 
 
+
 useEffect(() => {
   form.setData('products', updatedCart.map(p => ({
     id_product: p.Id_Product,
@@ -43,9 +50,28 @@ useEffect(() => {
     description: p.product_description,
     id_categoria: p.product_Id_Category,
   })));
-}, [updatedCart]);
 
-console.log(updatedCart);
+  // Inclui endereço se for entrega
+  if(tipoPedido === 'entrega') {
+    
+     const enderecoAtual = enderecoSelecionado || enderecoTemporario;
+     
+    form.setData('endereco', {
+      rua: enderecoAtual?.rua || '',
+      numero: enderecoAtual?.numero || '',
+      bairro: enderecoAtual?.bairro || '',
+      cidade: enderecoAtual?.cidade || '',
+      estado: enderecoAtual?.estado || '',
+      cep: enderecoAtual?.cep || '',
+      complemento: enderecoAtual?.complemento || '',
+      telefone: informacoes?.telefone || '',
+    });
+  } else {
+    form.setData('endereco', null); // ou apenas telefone se quiser
+  }
+
+}, [updatedCart, tipoPedido, enderecoSelecionado, enderecoTemporario]);
+
 
 useEffect(() => {
   form.setData('tipoPedido', tipoPedido);
@@ -167,7 +193,7 @@ useEffect(() => {
     <span className="line-through text-gray-500 mr-2">
       R$ {Number(product.product_price).toFixed(2).replace('.', ',')}
     </span>
-    <span className="text-pink-600">
+    <span className="text- [#613d20]">
       R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
     </span>
     
@@ -179,7 +205,7 @@ useEffect(() => {
   <p className="text-xs text-gray-500">{product.promo_description}</p>
   <p className="text-md font-bold text-gray-900">
     
-    <span className="text-pink-600">
+    <span className="text-[#613d20]">
       R$ {Number(product.promo_price).toFixed(2).replace('.', ',')}
     </span>
   </p>
@@ -237,13 +263,22 @@ useEffect(() => {
           </div>
 
     
-            <FinalizarPedido tipoPedido={tipoPedido} setTipoPedido={setTipoPedido} informacoes={informacoes}  setBotao={setBotao}/>
+            <FinalizarPedido 
+            tipoPedido={tipoPedido} 
+            setTipoPedido={setTipoPedido} 
+            informacoes={informacoes}  
+            setBotao={setBotao}
+            enderecoSelecionado={enderecoSelecionado}
+            setEnderecoSelecionado={setEnderecoSelecionado}
+            enderecoTemporario={enderecoTemporario}
+            setEnderecoTemporario={setEnderecoTemporario}
+            />
           {/* Formulário único envolvendo tudo */}
           {botao == false ? (
             <div>
            <form onSubmit={handleSubmit} method="post" target="_blank" className="mt-6">
 
-         {shop.loja_aberta ? (
+         {shop.loja_aberta || user.admin ? (
   <div className="flex flex-col gap-3 mt-6">
     <button
       type="submit"
@@ -300,7 +335,7 @@ useEffect(() => {
          
 
       ) : (
-        <p className="text-center text-xl text-gray-500">Seu carrinho está vazio.</p>
+        <p className="text-center text-xl text-gray-500 font-Montserrat">Seu carrinho está vazio.</p>
       )}
     </AuthenticatedLayout>
   );

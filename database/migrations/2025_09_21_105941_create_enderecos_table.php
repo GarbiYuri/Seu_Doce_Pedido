@@ -11,22 +11,27 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('informacoes_pessoais', function (Blueprint $table) {
+        Schema::create('enderecos', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->string('nome')->nullable();
+            // Sintaxe moderna e correta para a chave estrangeira
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            
+            // A ordem é definida pela sequência, sem usar ->after()
+            $table->string('nome_perfil')->default('Principal');
+            $table->boolean('is_principal')->default(false);
+            
+            // Campos de endereço obrigatórios (sem nullable)
+            $table->string('cep')->nullable();
             $table->string('rua')->nullable();
             $table->string('numero')->nullable();
             $table->string('bairro')->nullable();
             $table->string('cidade')->nullable();
             $table->string('estado')->nullable();
-            $table->string('complemento')->nullable();
-            $table->string('cep')->nullable();
-            $table->string('telefone')->nullable();
-            $table->string('cpf')->nullable();
-            $table->timestamps();
 
-            $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
+            // Complemento pode ser opcional
+            $table->string('complemento')->nullable();
+            
+            $table->timestamps();
         });
     }
 
@@ -35,6 +40,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('informacoes_pessoais');
+        Schema::dropIfExists('enderecos');
     }
 };

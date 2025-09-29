@@ -43,7 +43,7 @@ const gerarMensagemWhatsApp = () => {
       <Head title="Confirmar Pedido" />
 
       <div className="max-w-3xl mx-auto p-6">
-        <h1 className="text-3xl font-bold text-center text-pink-600 mb-6 mt-6">Confirme seu pedido</h1>
+        <h1 className="text-3xl font-bold text-center text-[#613d20] mb-6 mt-6">Confirme seu pedido</h1>
 
         <div className="bg-white shadow-md rounded-lg p-4 mb-6">
           {cartItems.length === 0 ? (
@@ -64,7 +64,7 @@ const gerarMensagemWhatsApp = () => {
                       </p>
                     </div>
                   </div>
-                  <p className="text-right font-bold text-pink-600">
+                  <p className="text-right font-bold text-[#613d20]">
                     R$ {(item.price * item.quantity).toFixed(2).replace('.', ',')}
                   </p>
                 </li>
@@ -75,7 +75,7 @@ const gerarMensagemWhatsApp = () => {
 
         
         <div className="bg-white shadow-md rounded-lg p-4 mb-6">
-          <h2 className="text-xl font-semibold mb-3 text-pink-600">Suas Informações</h2>
+          <h2 className="text-xl font-semibold mb-3 text-[#613d20]">Suas Informações</h2>
           <p>Nome: {dadosEntrega.nome}</p>
           <p>Telefone: {dadosEntrega.telefone ? dadosEntrega.telefone : ' Não Informado'}</p>
           <p><strong>CPF:{dadosEntrega.cpf ? dadosEntrega.cpf : ' Não Informado'}</strong> </p>
@@ -99,14 +99,14 @@ const gerarMensagemWhatsApp = () => {
 
 <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>SubTotal:</span>
-          <span className="text-pink-600">R$ {total.toFixed(2).replace('.', ',')}</span>
+          <span className="text-[#613d20]">R$ {total.toFixed(2).replace('.', ',')}</span>
         
         </div>
  {isPickup ? (
            <>
           <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>Frete:</span>
-          <span className="text-pink-600">R$ 0,00</span>
+          <span className="text-[#613d20]">R$ 0,00</span>
         
         </div>
            </>
@@ -114,14 +114,14 @@ const gerarMensagemWhatsApp = () => {
             <>
              <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>Frete:</span>
-          <span className="text-pink-600">R$ {frete.toFixed(2).replace('.', ',')}</span>
+          <span className="text-[#613d20]">R$ {frete.toFixed(2).replace('.', ',')}</span>
         
         </div>
             </>
           )}
           <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>Total:</span>
-          <span className="text-pink-600">R$ 
+          <span className="text-[#613d20]">R$ 
   {( frete + total).toFixed(2).replace('.', ',')}
 </span>
         
@@ -148,7 +148,7 @@ const gerarMensagemWhatsApp = () => {
             href={init_point}
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-pink-500 hover:bg-pink-600 text-white px-6 py-2 text-center rounded-full"
+             className="bg-[#1F7CC9] hover:bg-[#1F7CC9] text-white px-6 py-2 text-center rounded-full"
           >
             Ir para o Mercado Pago
           </a>

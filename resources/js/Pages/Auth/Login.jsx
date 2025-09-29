@@ -56,9 +56,9 @@ export default function Login({ status, canResetPassword }) {
                 </div>
                 
                
-                {/* Título LOGIN com fonte Lobster */}
-                <h2 className="login-title text-[#613d20] text-center mb-6 tracking-widest animate-fadeIn">
-                    Login
+            
+                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-Montserrat font-extrabold">
+                   LOGIN
                 </h2>
 
                 {status && (
@@ -140,10 +140,10 @@ export default function Login({ status, canResetPassword }) {
                 </form>
 
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+                   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-                    .font-poppins {
-                        font-family: 'Poppins', sans-serif;
+                    .font-Montserrat {
+                        font-family: 'Montserrat', sans-serif;
                     }
 
                     @keyframes fadeIn {

@@ -35,6 +35,7 @@ const salvarDiasFuncionamento = () => {
 
   const { data, setData, post, processing, errors } = useForm({
     telefone: shops.telefone || '',
+    instagram : shops.instagram || '',
     email: shops.email || '',
     cep: shops.cep || '',
     rua: shops.rua || '',
@@ -142,6 +143,11 @@ const salvarDiasFuncionamento = () => {
               <label htmlFor="telefone" className="block font-semibold text-gray-700">Telefone / WhatsApp:</label>
               <input id="telefone" type="text" value={data.telefone} onChange={(e) => setData('telefone', e.target.value)} className="border border-gray-300 p-2 rounded w-full" placeholder="(99) 99999-9999"/>
               {errors.telefone && <p className="text-red-500 text-sm mt-1">{errors.telefone}</p>}
+            </div>
+             <div>
+              <label htmlFor="instagram" className="block font-semibold text-gray-700">Instagram:</label>
+              <input id="instagram" type="text" value={data.instagram} onChange={(e) => setData('instagram', e.target.value)} className="border border-gray-300 p-2 rounded w-full" placeholder="meuinstagram(sem @)"/>
+              {errors.instagram && <p className="text-red-500 text-sm mt-1">{errors.instagram}</p>}
             </div>
             <div>
               <label htmlFor="email" className="block font-semibold text-gray-700">E-mail de Contato:</label>

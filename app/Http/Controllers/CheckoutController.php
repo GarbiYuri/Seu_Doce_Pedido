@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Brick\Math\BigInteger;
 use Illuminate\Http\Request;
 use App\Models\Venda;
 use App\Models\VendaProduct;
@@ -11,77 +12,78 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Cart;
 class CheckoutController extends Controller
 {
-  public function index()
+public function index()
 {
-    $vendasRaw = DB::table('vendas')
-        ->join('venda_products', 'vendas.id', '=', 'venda_products.id_venda')
-        ->select(
-            'vendas.id as venda_id',
-            'vendas.status',
-            'vendas.payment_url',
-            'vendas.forma_pagamento',
-            'vendas.valor',
-            'vendas.tipo',
-            'vendas.created_at',
-            'vendas.nome',
-            'vendas.email',
-            'vendas.telefone',
-            'vendas.endereco',
-            'vendas.cep',
-            'vendas.rua',
-            'vendas.numero',
-            'venda_products.id as produto_venda_id',
-            'venda_products.nome as produto_nome',
-            'venda_products.preco as produto_preco',
-            'venda_products.descricao as produto_descricao',
-            'venda_products.categoria as produto_categoria',
-            'venda_products.imagem as produto_imagem',
-            'venda_products.quantity as produto_quantity'
-        )
-        ->orderBy('vendas.id', 'desc')
+    $user = Auth::user();
+
+    // 1. Busca todas as vendas do usuário
+    $vendas = Venda::orderBy('created_at', 'desc')->get();
+
+    // 2. Pega os ids das vendas
+    $vendasIds = $vendas->pluck('id');
+
+    // 3. Busca os produtos das vendas
+    $produtos = VendaProduct::whereIn('id_venda', $vendasIds)
+        ->select([
+            'id',
+            'id_venda',
+            'id_product',
+            'nome',
+            'preco',
+            'quantity',
+            'descricao',
+            'categoria',
+            'imagem',
+            'id_promocao',
+            'kitquantity'
+        ])
         ->get();
 
+    // 4. Agrupa os produtos por venda
+    $produtosPorVenda = $produtos->groupBy('id_venda');
 
+    // 5. Adiciona os produtos à venda correspondente
+    $vendas->each(function ($venda) use ($produtosPorVenda) {
+        $venda->produtos = $produtosPorVenda->get($venda->id, collect());
+    });
 
-    // Agrupar produtos por venda
-    $vendas = [];
-
-    foreach ($vendasRaw as $item) {
-        $vendaId = $item->venda_id;
-
-        if (!isset($vendas[$vendaId])) {
-            $vendas[$vendaId] = [
-                'id' => $vendaId,
-                'status' => $item->status,
-                'valor' => $item->valor,
-                'tipo' => $item->tipo,
-                'created_at' => $item->created_at,
-                'nome' => $item->nome,
-                'email' => $item->email,
-                'telefone' => $item->telefone,
-                'endereco' => $item->endereco,
-                'cep' => $item->cep,
-                'rua' => $item->rua,
-                'forma_pagamento' => $item->forma_pagamento,
-                'numero' => $item->numero,
-                'produtos' => [],
-            ];
-        }
-
-        $vendas[$vendaId]['produtos'][] = [
-            'id' => $item->produto_venda_id,
-            'nome' => $item->produto_nome,
-            'preco' => $item->produto_preco,
-            'descricao' => $item->produto_descricao,
-            'imagem' => $item->produto_imagem,
-            'categoria' => $item->produto_categoria,
-            'quantity' => $item->produto_quantity,
+    // 6. Reindexa para array sequencial para o Inertia
+    $vendasArray = $vendas->map(function ($venda) {
+        return [
+            'id' => $venda->id,
+            'status' => $venda->status,
+            'valor' => $venda->valor,
+            'tipo' => $venda->tipo,
+            'created_at' => $venda->created_at,
+            'nome' => $venda->nome,
+            'email' => $venda->email,
+            'telefone' => $venda->telefone,
+            'endereco' => $venda->endereco,
+            'cidade' => $venda->cidade,
+            'bairro' => $venda->bairro,
+            'cep' => $venda->cep,
+            'rua' => $venda->rua,
+            'numero' => $venda->numero,
+            'complemento' => $venda->complemento,
+            'forma_pagamento' => $venda->forma_pagamento,
+            'payment_url' => $venda->payment_url,
+            'produtos' => $venda->produtos->map(function ($produto) {
+                return [
+                    'id' => $produto->id,
+                    'nome' => $produto->nome,
+                    'preco' => $produto->preco,
+                    'quantity' => $produto->quantity,
+                    'descricao' => $produto->descricao,
+                    'categoria' => $produto->categoria,
+                    'imagem' => $produto->imagem,
+                    'id_promocao' => $produto->id_promocao,
+                    'kitquantity' => $produto->kitquantity,
+                ];
+            })->toArray(),
         ];
-    }
+    })->toArray();
 
-    // Reindexa como array sequencial para o Inertia/Vue
-    $vendas = array_values($vendas);
-
+    // 7. Retorna para o Inertia
 
     return Inertia::render('Admin/Vendas/VendasLayout', [
         'vendas' => $vendas,
@@ -91,39 +93,46 @@ class CheckoutController extends Controller
 
 public function meuspedidos()
 {
-    
-
     $user = Auth::user();
 
-    $vendas = DB::select("
-        SELECT 
-            v.id as venda_id,
-            v.status,
-            v.forma_pagamento,
-            v.payment_url,
-            v.valor,
-            v.tipo,
-            v.created_at,
-            u.name as cliente_nome,
-            u.email as cliente_email,
-            vp.nome as produto_nome,
-            vp.preco as produto_preco,
-            vp.quantity as produto_quantidade,
-            vp.descricao as produto_descricao,
-            vp.id_promocao as id_promocao,
-            vp.kitquantity as kitquantity
-        FROM vendas v
-        JOIN venda_products vp ON v.id = vp.id_venda
-        JOIN users u ON u.id = v.id_user
-        WHERE u.id = ?
-        ORDER BY v.created_at DESC
-    ", [$user->id]);
+    // 1. Busca todas as vendas do usuário
+    $vendas = Venda::where('id_user', $user->id)
+        ->orderBy('created_at', 'desc')
+        ->get();
 
+    // 2. Pega os ids das vendas
+    $vendasIds = $vendas->pluck('id');
 
+    // 3. Busca os produtos das vendas
+    $produtos = VendaProduct::whereIn('id_venda', $vendasIds)
+        ->select([
+            'id', 
+            'id_venda', 
+            'id_product', 
+            'nome', 
+            'preco', 
+            'quantity', 
+            'id_promocao', 
+            'kitquantity'
+        ])
+        ->get();
+
+    // 4. Agrupa os produtos por venda
+    $produtosPorVenda = $produtos->groupBy('id_venda');
+
+    // 5. Adiciona os produtos à venda correspondente
+    $vendas->each(function ($venda) use ($produtosPorVenda) {
+        // produtos será uma coleção, mesmo que vazia
+        $venda->produtos = $produtosPorVenda->get($venda->id, collect());
+    });
+
+    // 6. Retorna para o Inertia
     return Inertia::render('Pedido/MeusPedidos', [
         'vendas' => $vendas,
     ]);
 }
+
+
 public function cancelarPedido(Request $request, $id)
 {
     $userId = Auth::id();
@@ -212,4 +221,25 @@ public function failure(Request $request)
 
     return Inertia::render('Dashboard');
 }
+
+public function pagardepois(Venda $venda)
+{
+    // 1. VERIFICAÇÃO DE SEGURANÇA
+    // Garante que o usuário logado só possa ver os seus próprios pedidos.
+    if (Auth::id() !== $venda->id_user) {
+        abort(403, 'Acesso não autorizado.');
+    }
+
+    // 2. BUSCAR OS PRODUTOS DA VENDA
+    // Usamos 'load' para carregar o relacionamento de produtos.
+    // Como os dados na Venda estão criptografados, o Eloquent os descriptografa aqui.
+    $venda->load('produtos');
+
+    // 3. RETORNAR PARA A PÁGINA DO INERTIA
+    // Enviamos os dados da venda (já com os produtos) como uma 'prop' para o componente React.
+    return Inertia::render('Checkout/Retirada', [
+        'venda' => $venda,
+    ]);
+}
+
 }

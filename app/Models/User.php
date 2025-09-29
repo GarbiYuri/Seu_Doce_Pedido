@@ -62,4 +62,8 @@ public function informacoesPessoais()
 {
     return $this->hasOne(InformacoesPessoais::class, 'user_id');
 }
+  public function enderecos()
+    {
+        return $this->hasMany(Endereco::class, 'user_id');
+    }
 }

@@ -27,6 +27,7 @@ class ShopController extends Controller
      */
   public function update(Request $request)
     {
+
         // 1. ATUALIZE A VALIDAÇÃO
         // Adicionando as regras para os novos campos de endereço e e-mail.
         $validatedData = $request->validate([
@@ -44,6 +45,8 @@ class ShopController extends Controller
             'cidade'          => 'nullable|string|max:255',
             'estado'          => 'nullable|string|max:255', // Ajuste o max se usar a sigla (ex: max:2)
             'complemento'     => 'nullable|string|max:255',
+            'instagram'       => 'nullable|string|max:255',
+
 
             // -- Dias da semana funcionamento
 

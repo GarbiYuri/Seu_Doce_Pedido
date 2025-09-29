@@ -30,6 +30,8 @@ export default {
 
     fontFamily: {
       sans: ['Poppins', 'sans-serif'],
+      montserrat: ['Montserrat', 'sans-serif'],
+
     },
     colors: {
       primary: '#613d20'

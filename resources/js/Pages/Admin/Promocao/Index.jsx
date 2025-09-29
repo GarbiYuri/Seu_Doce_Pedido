@@ -77,7 +77,7 @@ export default function PromocaoIndex({ promocoes, products }) {
             className="bg-white border border-[#8a5a33] rounded-3xl shadow-md p-5 flex flex-col justify-between"
           >
             <div>
-              <p className="text-sm font-semibold text-pink-700">
+              <p className="text-sm font-semibold text-[#613d20]">
                 Produto: {promo.Id_Product ? promo.product.name : promo.nome}
               </p>
               <p className="text-sm text-gray-600 mb-2">{promo.descricao || '-'}</p>
@@ -141,7 +141,7 @@ export default function PromocaoIndex({ promocoes, products }) {
       {showModal && (
         <Modal show={showModal} onClose={() => setShowModal(false)} maxWidth="sm">
           <div className="p-6">
-            <h3 className="text-lg font-bold text-pink-600 mb-4">Exclusão Bloqueada</h3>
+            <h3 className="text-lg font-bold text-[#613d20] mb-4">Exclusão Bloqueada</h3>
             <p className="text-gray-700 text-base">
               A exclusão foi bloqueada porque esta promoção ainda está ativa.
               <br />

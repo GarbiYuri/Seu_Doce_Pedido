@@ -41,6 +41,10 @@ Route::get('/success',
 Route::get('/failure', 
 [CheckoutController::class, 'failure'])->name('failure');
 
+Route::get('/Retirada',  function (){
+    return Inertia::render('Checkout/Retirada');
+})->name('Retirada');
+
 Route::get('/pending', [CheckoutController::class, 'pending'])
 ->name('pending');
 
@@ -60,6 +64,16 @@ Route::get('/sobre', function(){
 Route::middleware('auth')->group(function () {
  
 
+Route::get('/pagardepois/{venda}', [CheckoutController::class, 'pagarDepois'])
+    ->name('venda.pagarDepois');
+
+
+Route::post('/pagamento-retirada/{venda}', [VendaController::class, 'definirPagamentoRetirada'])
+    ->name('venda.pagamentoRetirada')
+    ->middleware('auth');
+
+
+
 
     // Rota para a verificação do email
  Route::get('/VerifyEmail', function () {
@@ -68,9 +82,16 @@ Route::middleware('auth')->group(function () {
 
 //Rota de Informações Pessoais
 
-Route::resource('informacoes', InformacoesPessoaisController::class);
 
 
+Route::post('/informacoes', [InformacoesPessoaisController::class, 'storeOrUpdate'])
+    ->name('informacoes.storeOrUpdate')
+    ->middleware('auth');
+
+
+Route::delete('/informacoes/{id}', [InformacoesPessoaisController::class, 'destroy'])
+    ->name('informacoes.destroy')
+    ->middleware('auth');
 
 
 // As rotas de administração e categorias ficam dentro do middleware de autenticação e do middleware CheckIfAdmin
@@ -161,7 +182,7 @@ Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); /
         return Inertia::render('Cart/Cart');
     })->name('Carrinho');
 
-    Route::get('/CarrinhoDeCompra', [CartProductController::class, 'index']);
+    Route::get('/CarrinhoDeCompra', [CartProductController::class, 'index'])->name('CarrinhoDeCompra');
     Route::post('/cart/add', [CartProductController::class, 'store']);
     Route::post('/updateC', [CartProductController::class, 'update']);
     Route::post('/deleteC', [CartProductController::class, 'destroy']);

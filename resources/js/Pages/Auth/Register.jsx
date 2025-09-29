@@ -30,27 +30,28 @@ export default function Register() {
 
             <div className="relative w-full max-w-md font-poppins">
                 <div className="relative w-full max-w-md font-poppins">
-                     <Link
-    href="/"
-    className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#613d20] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
->
-    <svg
-        xmlns="http://www.w3.org/2000/svg"
-        className="h-6 w-6"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke="currentColor"
-        strokeWidth={2}
-    >
-        <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
-    </svg>
-    <span>Voltar</span>
-</Link>
+                    <Link
+                        href="/"
+                        className="top-6 left-4 md:left-[52%] p-2 flex items-center space-x-1 text-[#613d20] hover:text-[#613d20] transition-transform duration-300 hover:scale-110 animate-pulseArrow z-30"
+                    >
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            className="h-6 w-6"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                            stroke="currentColor"
+                            strokeWidth={2}
+                        >
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
+                        <span>Voltar</span>
+                    </Link>
                 </div>
 
-                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-lobster">
-                    Cadastro
+                <h2 className="text-4xl text-[#613d20] text-center mb-8 tracking-wider font-Montserrat font-extrabold">
+                    CADASTRO
                 </h2>
+
 
                 <form onSubmit={submit} className="space-y-4">
                     <div>
@@ -82,7 +83,7 @@ export default function Register() {
                         />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
-
+                    
                     <div>
                         <InputLabel htmlFor="password" value="Senha" />
                         <TextInput
@@ -96,7 +97,9 @@ export default function Register() {
                             required
                         />
                         <InputError message={errors.password} className="mt-2" />
+             
                     </div>
+                    
 
                     <div>
                         <InputLabel htmlFor="password_confirmation" value="Confirme sua senha" />
@@ -112,7 +115,15 @@ export default function Register() {
                         />
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
-
+                                    <p className="text-xs text-gray-600 mt-1">
+        A senha deve atender aos seguintes critérios:
+    </p>
+    <ul className="text-xs text-gray-600 list-disc list-inside ml-2">
+        <li>Mínimo de 8 caracteres</li>
+        <li>Deve conter letras maiúsculas e minúsculas</li>
+        <li>Deve conter números</li>
+        <li>Não pode estar comprometida em vazamentos (segura)</li>
+    </ul>
                     <div className="flex flex-col items-center justify-center pt-4 space-y-4">
                         <Link
                             href={route('login')}
@@ -132,15 +143,13 @@ export default function Register() {
                 </form>
 
                 <style>{`
-                    @import url('https://fonts.googleapis.com/css2?family=Lobster&family=Poppins:wght@400;600&display=swap');
+                   @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap');
 
-                    .font-poppins {
-                        font-family: 'Poppins', sans-serif;
+                   .font-Montserrat {
+                        font-family: 'Montserrat', sans-serif;
                     }
 
-                    .font-lobster {
-                        font-family: 'Lobster', cursive;
-                    }
+                
                 `}</style>
             </div>
         </GuestLayout>

@@ -32,7 +32,7 @@ export default function VerifyEmail({ status }) {
             <form onSubmit={submit} className="flex flex-col items-center max-w-md mx-auto space-y-6">
                 <PrimaryButton
                     disabled={processing}
-                    className="w-full bg-[#EF3167] hover:bg-pink-700 transition-colors duration-200 font-semibold rounded-lg py-3"
+                    className="w-full bg-[#EF3167] hover:bg-[#613d20] transition-colors duration-200 font-semibold rounded-lg py-3"
                 >
                     Reenviar e-mail de verificação
                 </PrimaryButton>
@@ -41,7 +41,7 @@ export default function VerifyEmail({ status }) {
                     href={route('logout')}
                     method="post"
                     as="button"
-                    className="text-[#EF3167] font-semibold hover:text-pink-700 underline text-center text-sm focus:outline-none focus:ring-2 focus:ring-[#EF3167] focus:ring-offset-2 rounded"
+                    className="text-[#EF3167] font-semibold hover:text-[#613d20] underline text-center text-sm focus:outline-none focus:ring-2 focus:ring-[#EF3167] focus:ring-offset-2 rounded"
                 >
                     Log Out
                 </Link>
