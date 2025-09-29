@@ -41,6 +41,10 @@ Route::get('/success',
 Route::get('/failure', 
 [CheckoutController::class, 'failure'])->name('failure');
 
+Route::get('/Retirada',  function (){
+    return Inertia::render('Checkout/Retirada');
+})->name('Retirada');
+
 Route::get('/pending', [CheckoutController::class, 'pending'])
 ->name('pending');
 
@@ -59,6 +63,16 @@ Route::get('/sobre', function(){
 //Middleware de Usuario Autenticado
 Route::middleware('auth')->group(function () {
  
+
+Route::get('/pagardepois/{venda}', [CheckoutController::class, 'pagarDepois'])
+    ->name('venda.pagarDepois');
+
+
+Route::post('/pagamento-retirada/{venda}', [VendaController::class, 'definirPagamentoRetirada'])
+    ->name('venda.pagamentoRetirada')
+    ->middleware('auth');
+
+
 
 
     // Rota para a verificação do email
@@ -168,7 +182,7 @@ Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); /
         return Inertia::render('Cart/Cart');
     })->name('Carrinho');
 
-    Route::get('/CarrinhoDeCompra', [CartProductController::class, 'index']);
+    Route::get('/CarrinhoDeCompra', [CartProductController::class, 'index'])->name('CarrinhoDeCompra');
     Route::post('/cart/add', [CartProductController::class, 'store']);
     Route::post('/updateC', [CartProductController::class, 'update']);
     Route::post('/deleteC', [CartProductController::class, 'destroy']);

@@ -27,7 +27,6 @@ export default function MeusPedidos() {
     };
 
     useEffect(() => {
-        // A lógica de mapeamento aqui permanece a mesma
         if (!vendas) return;
         const mappedVendas = vendas.map(venda => ({ ...venda, venda_id: venda.id }));
         setPedidos(mappedVendas);
@@ -36,7 +35,6 @@ export default function MeusPedidos() {
         }
     }, [vendas]);
 
-    // OBJETO DE CORES COMPLETO E CORRIGIDO (IGUAL AO VENDASLAYOUT)
     const coresStatus = {
         pago: 'bg-cyan-100 text-cyan-700',
         iniciado: 'bg-red-100 text-red-700',
@@ -49,9 +47,14 @@ export default function MeusPedidos() {
 
     const formatarFormaPagamento = (formaApi) => {
         const nomes = {
-            credit_card: 'Cartão de Crédito', debit_card: 'Cartão de Débito',
-            pix: 'Pix', ticket: 'Boleto Bancário', account_money: 'Saldo Mercado Pago',
+            credit_card: 'Cartão de Crédito',
+            debit_card: 'Cartão de Débito',
+            pix: 'Pix',
+            ticket: 'Boleto Bancário',
+            account_money: 'Saldo Mercado Pago',
             bank_transfer: 'Transferência Bancária',
+            cartao: 'Cartão',
+            dinheiro: 'Dinheiro'
         };
         return nomes[formaApi] || formaApi?.replace('_', ' ') || 'Não informado';
     };
@@ -68,7 +71,6 @@ export default function MeusPedidos() {
                             <div
                                 key={venda.venda_id}
                                 onClick={() => setPedidoSelecionado(venda)}
-                                // ESTILO DO ITEM SELECIONADO ATUALIZADO
                                 className={`p-4 rounded-xl shadow cursor-pointer border hover:bg-white transition ${
                                     pedidoSelecionado?.venda_id === venda.venda_id 
                                     ? 'bg-white ring-2 ring-[#613d20]' 
@@ -76,11 +78,19 @@ export default function MeusPedidos() {
                                 }`}
                             >
                                 <div className="flex justify-between items-center mb-1">
-                                    <span className="font-bold text-gray-800">Pedido #{String(venda.venda_id).padStart(5, '0')}</span>
+                                    <span className="font-bold text-gray-800">
+                                        Pedido #{String(venda.venda_id).padStart(5, '0')}
+                                    </span>
                                     <span className={`text-xs px-2 py-1 rounded-full capitalize ${coresStatus[venda.status] || 'bg-gray-100 text-gray-700'}`}>
                                         {venda.status.replace('_', ' ')}
                                     </span>
-                                </div>
+                                </div>  
+
+                                <p className="text-sm text-gray-600 mb-1">
+                                    Forma de Pagamento: <strong>{formatarFormaPagamento(venda?.forma_pagamento || venda?.formapagamento)}</strong>
+                                </p>
+                                
+
                                 <p className="text-sm text-gray-600">Feito em {new Date(venda.created_at).toLocaleDateString('pt-BR')}</p>
                             </div>
                         ))}
@@ -90,10 +100,19 @@ export default function MeusPedidos() {
                     <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[80vh] overflow-y-auto">
                         {pedidoSelecionado ? (
                             <>
-                                {/* COR DO TÍTULO ATUALIZADA */}
                                 <h2 className="text-xl font-bold text-[#613d20] mb-2">Pedido #{String(pedidoSelecionado.venda_id).padStart(5, '0')}</h2>
                                 <p className="text-sm text-gray-600 mb-1">Status: <strong className="capitalize">{pedidoSelecionado.status.replace('_', ' ')}</strong></p>
-                                <p className="text-sm text-gray-600 mb-1">Forma de Pagamento: <strong>{formatarFormaPagamento(pedidoSelecionado?.formapagamento)}</strong></p>
+
+                                <p className="text-sm text-gray-600 mb-1">
+                                    Forma de Pagamento: <strong>{formatarFormaPagamento(pedidoSelecionado?.forma_pagamento || pedidoSelecionado?.formapagamento)}</strong>
+                                </p>
+
+                                {(pedidoSelecionado?.forma_pagamento === 'dinheiro' || pedidoSelecionado?.formapagamento === 'dinheiro') && pedidoSelecionado?.valor_troco_para && (
+                                    <p className="text-sm text-gray-600 mb-1">
+                                        Troco para: <strong>R$ {parseFloat(pedidoSelecionado.valor_troco_para).toFixed(2)}</strong>
+                                    </p>
+                                )}
+
                                 <p className="text-sm text-gray-600 mb-1">Tipo: <span className="capitalize">{pedidoSelecionado.tipo}</span></p>
 
                                 {pedidoSelecionado.tipo === 'entrega' && (
@@ -117,21 +136,18 @@ export default function MeusPedidos() {
                                     <p className="font-semibold text-sm text-gray-700 mb-2">Produtos:</p>
                                     <ul className="space-y-2 text-sm text-gray-800">
                                         {pedidoSelecionado.produtos.map((produto, index) => (
-                                           <li key={index} className="bg-gray-50 p-3 rounded-md">
-    <div className="flex justify-between items-center">
-        <span className="font-medium">{produto.quantity}x {produto.nome}{produto?.id_promocao && "(PROMO)"}</span>
-        <span className="font-semibold">R$ {Number(produto.preco * produto.quantity).toFixed(2)}</span>
-    </div>
+                                            <li key={index} className="bg-gray-50 p-3 rounded-md">
+                                                <div className="flex justify-between items-center">
+                                                    <span className="font-medium">{produto.quantity}x {produto.nome}{produto?.id_promocao && "(PROMO)"}</span>
+                                                    <span className="font-semibold">R$ {Number(produto.preco * produto.quantity).toFixed(2)}</span>
+                                                </div>
 
-   
-    {produto.id_promocao && produto.kitquantity > 1 && (
-        <div className="mt-1 text-xs text-blue-600">
-            (Kit com {produto.kitquantity} unidades)
-        </div>
-    )}
-
-</li>
-                                            
+                                                {produto.id_promocao && produto.kitquantity > 1 && (
+                                                    <div className="mt-1 text-xs text-blue-600">
+                                                        (Kit com {produto.kitquantity} unidades)
+                                                    </div>
+                                                )}
+                                            </li>
                                         ))}
                                     </ul>
                                 </div>
@@ -141,7 +157,15 @@ export default function MeusPedidos() {
                                         <button onClick={() => abrirModalCancelar(pedidoSelecionado.venda_id)} className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded-lg shadow transition-colors">
                                             Cancelar Pedido <FiX />
                                         </button>
-                                        {/* COR DO BOTÃO DE PAGAMENTO ATUALIZADA */}
+
+                                        <a
+                                            href={`/pagardepois/${pedidoSelecionado.id}`}
+                                            rel="noopener noreferrer"
+                                            className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
+                                        >
+                                            Pagamento na Entrega
+                                        </a>
+
                                         <a href={pedidoSelecionado.payment_url} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#613d20] hover:bg-[#8a5a33] text-white text-sm px-4 py-2 rounded-lg shadow transition-colors font-Montserrat font-extrabold">
                                             Realizar Pagamento
                                         </a>
@@ -166,7 +190,6 @@ export default function MeusPedidos() {
                         <h2 className="text-lg font-bold text-gray-800 mb-4">Cancelar Pedido</h2>
                         <p className="text-sm text-gray-600 mb-6">Deseja <strong>retornar os produtos ao carrinho</strong> ou apenas apagar o pedido?</p>
                         <div className="flex flex-col gap-3">
-                            {/* COR DO BOTÃO DO MODAL ATUALIZADA */}
                             <button onClick={cancelarComRetorno} className="w-full bg-[#613d20] hover:bg-[#8a5a33] text-white py-2 rounded-lg">
                                 Sim, retornar os produtos
                             </button>

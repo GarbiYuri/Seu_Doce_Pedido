@@ -1,6 +1,6 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, usePage } from '@inertiajs/react';
-import { Mail, Phone, MapPin } from 'lucide-react';
+import { Mail, Phone, MapPin,  Instagram } from 'lucide-react';
 
 export default function Sobre() {
   const { shop } = usePage().props;
@@ -95,7 +95,7 @@ export default function Sobre() {
         </div>
 
         {/* Botão de call-to-action */}
-        <div className="text-center mt-12">
+        <div className="text-center mt-12 flex justify-center items-center gap-4">
           <a
             // Substitua pelo seu número completo
             href={`https://wa.me/55${shop.telefone}`}
@@ -107,6 +107,19 @@ export default function Sobre() {
             <Phone size={20} /> {/* Ícone opcional */}
             Fale Conosco no WhatsApp
           </a>
+
+            <a
+  
+    href={`https://www.instagram.com/${shop.instagram}`}
+    target="_blank"
+    rel="noopener noreferrer"
+    // Classes de gradiente do Tailwind para simular as cores do Instagram
+    className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 via-pink-500 to-orange-500 text-white px-6 py-3 rounded-xl font-medium shadow-md hover:opacity-90 transition-opacity"
+  >
+    <Instagram size={20} />
+    Siga-nos
+  </a>
+
         </div>
 
         {/* Rodapé */}

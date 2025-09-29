@@ -83,7 +83,7 @@ export default function Register() {
                         />
                         <InputError message={errors.email} className="mt-2" />
                     </div>
-
+                    
                     <div>
                         <InputLabel htmlFor="password" value="Senha" />
                         <TextInput
@@ -98,6 +98,7 @@ export default function Register() {
                         />
                         <InputError message={errors.password} className="mt-2" />
                     </div>
+                    
 
                     <div>
                         <InputLabel htmlFor="password_confirmation" value="Confirme sua senha" />
@@ -113,7 +114,9 @@ export default function Register() {
                         />
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
-
+                        <p className="text-xs text-gray-600 mt-1 mb-2">
+                    A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas e números.
+                    </p>
                     <div className="flex flex-col items-center justify-center pt-4 space-y-4">
                         <Link
                             href={route('login')}

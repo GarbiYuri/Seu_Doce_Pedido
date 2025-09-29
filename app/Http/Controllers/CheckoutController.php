@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Brick\Math\BigInteger;
 use Illuminate\Http\Request;
 use App\Models\Venda;
 use App\Models\VendaProduct;
@@ -220,4 +221,25 @@ public function failure(Request $request)
 
     return Inertia::render('Dashboard');
 }
+
+public function pagardepois(Venda $venda)
+{
+    // 1. VERIFICAÇÃO DE SEGURANÇA
+    // Garante que o usuário logado só possa ver os seus próprios pedidos.
+    if (Auth::id() !== $venda->id_user) {
+        abort(403, 'Acesso não autorizado.');
+    }
+
+    // 2. BUSCAR OS PRODUTOS DA VENDA
+    // Usamos 'load' para carregar o relacionamento de produtos.
+    // Como os dados na Venda estão criptografados, o Eloquent os descriptografa aqui.
+    $venda->load('produtos');
+
+    // 3. RETORNAR PARA A PÁGINA DO INERTIA
+    // Enviamos os dados da venda (já com os produtos) como uma 'prop' para o componente React.
+    return Inertia::render('Checkout/Retirada', [
+        'venda' => $venda,
+    ]);
+}
+
 }

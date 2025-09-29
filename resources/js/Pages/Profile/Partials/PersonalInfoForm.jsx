@@ -4,11 +4,14 @@ import { useEffect, useState } from 'react';
 export default function PersonalInfoForm() {
   const user = usePage().props.auth.user;
 
+
+  const hash = window.location.hash;
   // Form inicial
   const { data, setData, post, processing, recentlySuccessful, errors } = useForm({
     enderecos: user.enderecos && user.enderecos.length > 0 ? user.enderecos : [
       { id: null, nome_perfil: '', rua: '', numero: '', bairro: '', cidade: '', estado: '', cep: '', complemento: '', is_principal: true }
     ],
+    hash: hash || null,
     cpf: user.informacoes_pessoais?.cpf || '',
     telefone: user.informacoes_pessoais?.telefone || '',
   });
@@ -17,9 +20,12 @@ export default function PersonalInfoForm() {
 
   const Inertia = router;
 
+  
+
   useEffect(() => {
     const indexPrincipal = data.enderecos.findIndex(end => end.is_principal);
     setAbaAtiva(indexPrincipal !== -1 ? indexPrincipal : 0);
+
   }, []);
 
   // Adiciona novo endereço
@@ -94,9 +100,10 @@ const removerEndereco = (id) => {
     e.preventDefault();
 
 
-     const payload = {
+     const payload = {  
     telefone: data.telefone,
     cpf: data.cpf,
+    hash: hash || null,
     enderecos: data.enderecos.map(end => ({
       id: end.id, // null se for novo
       nome_perfil: end.nome_perfil,
@@ -108,10 +115,19 @@ const removerEndereco = (id) => {
       cep: end.cep,
       complemento: end.complemento,
       is_principal: end.is_principal
+
     }))
   };
 
-    post(route('informacoes.storeOrUpdate'), { data: payload, preserveScroll: true });
+    post(route('informacoes.storeOrUpdate'), {
+       data: payload, 
+       preserveScroll: true ,
+      onSuccess: () => {
+      if (payload.hash) {
+        router.visit(route('CarrinhoDeCompra'), { preserveState: true });
+      }
+    }
+      });
   };
 
   return (
@@ -127,13 +143,14 @@ const removerEndereco = (id) => {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="Telefone" className="block text-sm font-medium text-gray-700 mb-1">
-            Telefone
+            Telefone <span className="text-red-500">*</span>
            </label>
             <input
               placeholder="Telefone"
               value={data.telefone}
               onChange={e => setData('telefone', e.target.value)}
               className="border rounded p-2 w-full"
+              required
             />
             {errors.telefone && <p className="text-red-500 text-xs">{errors.telefone}</p>}
           </div>
@@ -179,7 +196,7 @@ const removerEndereco = (id) => {
            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
   <label htmlFor={`nome_perfil-${abaAtiva}`} className="block text-sm font-medium text-gray-700 mb-1">
-    Nome do Perfil-Endereço
+    Nome do Perfil-Endereço <span className="text-red-500">*</span>
   </label>
   <input
     id={`nome_perfil-${abaAtiva}`}
@@ -188,13 +205,14 @@ const removerEndereco = (id) => {
     value={data.enderecos[abaAtiva]?.nome_perfil || ''}
     onChange={e => handleEnderecoChange(abaAtiva, e)}
     className="border rounded p-2 w-full"
+    required
   />
 </div>
 
   {/* CEP */}
   <div>
     <label htmlFor="cep" className="block text-sm font-medium text-gray-700 mb-1">
-      CEP
+      CEP <span className="text-red-500">*</span>
     </label>
     <input
       id="cep"
@@ -204,13 +222,14 @@ const removerEndereco = (id) => {
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       onBlur={e => buscarCep(e.target.value, abaAtiva)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 
   {/* Rua */}
   <div>
     <label htmlFor="rua" className="block text-sm font-medium text-gray-700 mb-1">
-      Rua
+      Rua <span className="text-red-500">*</span>
     </label>
     <input
       id="rua"
@@ -219,13 +238,14 @@ const removerEndereco = (id) => {
       value={data.enderecos[abaAtiva]?.rua || ''}
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 
   {/* Número */}
   <div>
     <label htmlFor="numero" className="block text-sm font-medium text-gray-700 mb-1">
-      Número
+      Número <span className="text-red-500">*</span>
     </label>
     <input
       id="numero"
@@ -234,13 +254,14 @@ const removerEndereco = (id) => {
       value={data.enderecos[abaAtiva]?.numero || ''}
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 
   {/* Bairro */}
   <div>
     <label htmlFor="bairro" className="block text-sm font-medium text-gray-700 mb-1">
-      Bairro
+      Bairro <span className="text-red-500">*</span>
     </label>
     <input
       id="bairro"
@@ -249,13 +270,14 @@ const removerEndereco = (id) => {
       value={data.enderecos[abaAtiva]?.bairro || ''}
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 
   {/* Cidade */}
   <div>
     <label htmlFor="cidade" className="block text-sm font-medium text-gray-700 mb-1">
-      Cidade
+      Cidade <span className="text-red-500">*</span>
     </label>
     <input
       id="cidade"
@@ -264,13 +286,14 @@ const removerEndereco = (id) => {
       value={data.enderecos[abaAtiva]?.cidade || ''}
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 
   {/* Estado */}
   <div>
     <label htmlFor="estado" className="block text-sm font-medium text-gray-700 mb-1">
-      Estado
+      Estado <span className="text-red-500">*</span>
     </label>
     <input
       id="estado"
@@ -279,6 +302,7 @@ const removerEndereco = (id) => {
       value={data.enderecos[abaAtiva]?.estado || ''}
       onChange={e => handleEnderecoChange(abaAtiva, e)}
       className="border rounded p-2 w-full"
+      required
     />
   </div>
 

@@ -153,7 +153,13 @@ export default function CheckoutRedirect() {
             <FiArrowLeft size={20} />
             Voltar para o Carrinho
           </a>
-
+                <a
+            href={`/pagardepois/${venda.id}`}
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
+          >
+            Pagamento na Entrega
+          </a>
           <a
             href={init_point}
             target="_blank"

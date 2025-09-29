@@ -108,8 +108,8 @@ foreach ($cartItems as $item) {
        
         // Retorna os dados para a view
         return Inertia::render('Cart/Cart', [
-            'cartProducts' => $cartProducts,
-        ]);
+    'cartProducts' => $cartProducts ?? [],
+]);
     }
 public function store(Request $request)
 {

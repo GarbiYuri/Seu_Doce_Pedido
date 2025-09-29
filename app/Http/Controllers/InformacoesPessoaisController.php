@@ -125,8 +125,8 @@ public function storeOrUpdate(Request $request)
                 ->update(['is_principal' => false]);
         }
     }
-
-    return redirect()->back()->with('success', 'Informações salvas com sucesso!');
+    
+        return redirect()->back()->with('success', 'Informações salvas com sucesso!');
 }
 
 

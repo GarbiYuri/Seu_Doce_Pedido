@@ -12,51 +12,45 @@ export default function VendasLayout() {
   const [filtroStatus, setFiltroStatus] = useState('todos');
   const [search, setSearch] = useState("");
 
-const gerarMensagemWhatsApp = (pedido) => {
-  let mensagem = `📦 Olá, ${pedido.nome}!\n\n`;
+  const gerarMensagemWhatsApp = (pedido) => {
+    let mensagem = `📦 Olá, ${pedido.nome}!\n\n`;
 
-  // Mensagens personalizadas por status
-  const mensagensStatus = {
-    iniciado: "Seu pedido foi iniciado, aguardando confirmação do pagamento. 💳",
-    pago: "Pagamento confirmado! 🎉 Seu pedido já está sendo processado.",
-    em_preparo: "Seu pedido está em preparo na cozinha. 👩‍🍳🍫",
-    em_entrega: "Seu pedido saiu para entrega. 🚚💨",
-    entregue: "Pedido entregue com sucesso! ✅ Obrigado pela preferência. 💖",
-    falha_pagamento: "⚠️ Ocorreu uma falha no pagamento. Verifique e tente novamente.",
-    default: "Seu pedido foi recebido com sucesso. 🙌",
+    const mensagensStatus = {
+      iniciado: "Seu pedido foi iniciado, aguardando confirmação do pagamento. 💳",
+      pago: "Pagamento confirmado! 🎉 Seu pedido já está sendo processado.",
+      em_preparo: "Seu pedido está em preparo na cozinha. 👩‍🍳🍫",
+      em_entrega: "Seu pedido saiu para entrega. 🚚💨",
+      entregue: "Pedido entregue com sucesso! ✅ Obrigado pela preferência. 💖",
+      falha_pagamento: "⚠️ Ocorreu uma falha no pagamento. Verifique e tente novamente.",
+      default: "Seu pedido foi recebido com sucesso. 🙌",
+    };
+
+    mensagem += mensagensStatus[pedido.status] || mensagensStatus.default;
+    mensagem += `\nStatus atual: *${pedido.status.toUpperCase()}*\n\n`;
+
+    mensagem += `🧾 Detalhes do Pedido:\n`;
+    pedido.produtos.forEach((item, index) => {
+      mensagem += `${index + 1}. ${item.nome} - ${item.quantity}x R$ ${parseFloat(item.preco).toFixed(2)}\n`;
+    });
+
+    mensagem += `\n💰 Total: R$ ${parseFloat(pedido.valor).toFixed(2)}`;
+
+    if (pedido.tipo === "entrega") {
+      mensagem += `\n\n🚚 Endereço de entrega:\n${pedido.rua}, ${pedido.numero}\n${pedido.bairro} - ${pedido.cidade}/${pedido.estado}\nCEP: ${pedido.cep}`;
+    } else {
+      mensagem += `\n\n🏬 Retirada na loja.`;
+      if (pedido.forma_pagamento === 'dinheiro' && pedido.valor_troco_para) {
+        mensagem += `\n💵 Troco para: R$ ${parseFloat(pedido.valor_troco_para).toFixed(2)}`;
+      }
+    }
+
+    if (pedido.status !== "falha_pagamento") {
+      mensagem += `\n\n✅ Em breve você receberá novas atualizações do seu pedido!`;
+    }
+
+    return encodeURIComponent(mensagem);
   };
 
-  // Escolhe a mensagem certa ou usa a default
-  mensagem += mensagensStatus[pedido.status] || mensagensStatus.default;
-  mensagem += `\nStatus atual: *${pedido.status.toUpperCase()}*\n\n`;
-
-  // Detalhes do pedido
-  mensagem += `🧾 Detalhes do Pedido:\n`;
-  pedido.produtos.forEach((item, index) => {
-    mensagem += `${index + 1}. ${item.nome} - ${item.quantity}x R$ ${parseFloat(item.preco).toFixed(2)}\n`;
-  });
-
-  mensagem += `\n💰 Total: R$ ${parseFloat(pedido.valor).toFixed(2)}`;
-
-  // Endereço ou retirada
-  if (pedido.tipo === "entrega") {
-    mensagem += `\n\n🚚 Endereço de entrega:\n${pedido.rua}, ${pedido.numero}\n${pedido.bairro} - ${pedido.cidade}/${pedido.estado}\nCEP: ${pedido.cep}`;
-  } else {
-    mensagem += `\n\n🏬 Retirada na loja.`;
-  }
-
-  // Fechamento amigável (se não for falha no pagamento)
-  if (pedido.status !== "falha_pagamento") {
-    mensagem += `\n\n✅ Em breve você receberá novas atualizações do seu pedido!`;
-  }
-
-  return encodeURIComponent(mensagem);
-};
-
-
-
-
-  // --- INÍCIO DA LÓGICA DO SOM DE NOTIFICAÇÃO ---
   const previousVendasCount = useRef(vendas.length);
 
   useEffect(() => {
@@ -68,9 +62,7 @@ const gerarMensagemWhatsApp = (pedido) => {
     }
     previousVendasCount.current = vendas.length;
   }, [vendas]);
-  // --- FIM DA LÓGICA DO SOM DE NOTIFICAÇÃO ---
 
-  // --- INÍCIO DA LÓGICA DE ATUALIZAÇÃO AUTOMÁTICA (POLLING) ---
   useEffect(() => {
     const interval = setInterval(() => {
       router.reload({ 
@@ -78,11 +70,10 @@ const gerarMensagemWhatsApp = (pedido) => {
         preserveState: true,
         preserveScroll: true,
       });
-    }, 20000); // Atualiza a cada 20 segundos
+    }, 20000);
 
     return () => clearInterval(interval);
   }, []);
-  // --- FIM DA LÓGICA DE ATUALIZAÇÃO AUTOMÁTICA ---
 
   const statusDisponiveis = [
     'todos', 'iniciado', 'pago', 'em_preparo', 'em_entrega', 'entregue', 'falha_pagamento',
@@ -153,30 +144,22 @@ const gerarMensagemWhatsApp = (pedido) => {
 
   const formatarFormaPagamento = (formaApi) => {
     const nomes = {
-    credit_card: 'Cartão de Crédito',
-    debit_card: 'Cartão de Débito',
-    pix: 'Pix',
-    ticket: 'Boleto Bancário',
-    account_money: 'Saldo Mercado Pago',
-    bank_transfer: 'Transferencia Bancária',
-  };
+      credit_card: 'Cartão de Crédito',
+      debit_card: 'Cartão de Débito',
+      pix: 'Pix',
+      ticket: 'Boleto Bancário',
+      account_money: 'Saldo Mercado Pago',
+      bank_transfer: 'Transferência Bancária',
+      cartao: 'Cartão',
+      dinheiro: 'Dinheiro'
+    };
     return nomes[formaApi] || formaApi || 'Não informado';
   };
-  
-
-    const filteredUsers = usuarios.data.filter((usuario) => {
-    const termo = search.toLowerCase();
-    return (
-      usuario.name.toLowerCase().includes(termo) ||
-      usuario.email.toLowerCase().includes(termo)
-    );
-  });
-
 
   return (
     <AdminLayout>
       <Head title="Pedidos" />
-      
+
       {/* Filtros */}
       <div className="max-w-6xl mx-auto mt-2 mb-6 px-4">
         <div className="flex flex-col sm:flex-row gap-4 justify-between items-center">
@@ -225,22 +208,17 @@ const gerarMensagemWhatsApp = (pedido) => {
                     : 'bg-gray-50 border-transparent'
                 }`}
               >
-                <div>
-                  <div className="flex justify-between items-center mb-1">
-                    <span className="font-bold text-gray-800">{venda.nome}</span>
-                    <span className={`text-xs px-2 py-1 rounded-full capitalize ${
-                        coresStatus[venda.status] || 'bg-gray-100 text-gray-700'
-                      }`}
-                    >
-                      {venda.status.replace('_', ' ')}
-                    </span>
-                  </div>
-                  <p className="text-sm text-gray-600">
-                    Pedido feito:{' '}
-                    {new Date(venda.created_at).toLocaleDateString('pt-BR')} — #
-                    {String(venda.id).padStart(5, '0')}
-                  </p>
+                <div className="flex justify-between items-center mb-1">
+                  <span className="font-bold text-gray-800">{venda.nome}</span>
+                  <span className={`text-xs px-2 py-1 rounded-full capitalize ${coresStatus[venda.status] || 'bg-gray-100 text-gray-700'}`}>
+                    {venda.status.replace('_', ' ')}
+                  </span>
                 </div>
+                <p className="text-sm text-gray-600">
+                  Pedido feito: {new Date(venda.created_at).toLocaleDateString('pt-BR')} — #
+                  {String(venda.id).padStart(5, '0')}
+                </p>
+
               </div>
             ))
           ) : (
@@ -258,17 +236,14 @@ const gerarMensagemWhatsApp = (pedido) => {
                 Pedido #{String(pedidoSelecionado.id).padStart(5, '0')}
               </h2>
               <p className="text-sm text-gray-700">
-                Horário:{' '}
-                {new Date(pedidoSelecionado.created_at).toLocaleTimeString([], {
-                  hour: '2-digit', minute: '2-digit',
-                })}
+                Horário: {new Date(pedidoSelecionado.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
               </p>
               <div className="text-sm text-gray-800 space-y-1">
-                <p className="text-[#613d20]"><strong>Cliente:</strong> <p className="font-medium" >{pedidoSelecionado.nome}</p></p>
-                <p className="text-[#613d20]" ><strong>Contato:</strong><p className="font-medium" >{pedidoSelecionado.telefone}</p> </p>
-                 <p className="text-[#613d20]"><strong>Tipo:</strong> <p className="font-medium" >{pedidoSelecionado.tipo}</p></p>
+                <p className="text-[#613d20]"><strong>Cliente:</strong> <span className="font-medium">{pedidoSelecionado.nome}</span></p>
+                <p className="text-[#613d20]"><strong>Contato:</strong> <span className="font-medium">{pedidoSelecionado.telefone}</span></p>
+                <p className="text-[#613d20]"><strong>Tipo:</strong> <span className="font-medium">{pedidoSelecionado.tipo}</span></p>
               </div>
-              
+
               {pedidoSelecionado.tipo === 'entrega' && (
                 <div className="text-sm text-gray-800 space-y-1">
                   <p className="font-semibold mt-2 text-[#613d20]">Endereço de Entrega</p>
@@ -277,31 +252,35 @@ const gerarMensagemWhatsApp = (pedido) => {
                   <p className="font-medium">{pedidoSelecionado.cep}</p>
                 </div>
               )}
+
               <div>
                 <p className="font-semibold text-sm text-[#613d20] mb-1">Itens do Pedido</p>
                 <ul className="list-disc list-inside text-sm text-gray-800">
                   {pedidoSelecionado.produtos.map((produto, index) => (
-                    <li key={index}>{produto.quantity}x {produto.nome} {produto?.id_promocao && ("(PROMO)")}
-                       {produto.id_promocao && produto.kitquantity > 1 && (
-        <div className="mt-1 text-xs text-blue-600">
-            (Kit com {produto.kitquantity} unidades)
-        </div>
-    )}
+                    <li key={index}>
+                      {produto.quantity}x {produto.nome} {produto?.id_promocao && "(PROMO)"}
+                      {produto.id_promocao && produto.kitquantity > 1 && (
+                        <div className="mt-1 text-xs text-blue-600">(Kit com {produto.kitquantity} unidades)</div>
+                      )}
                     </li>
-                    
                   ))}
                 </ul>
               </div>
+
               <div className="text-sm text-gray-700">
-                  <p className="mt-2 text-[#613d20]"><strong>Pagamento: {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</strong></p>
+                <p className="mt-2 text-[#613d20]"><strong>Pagamento:</strong> {formatarFormaPagamento(pedidoSelecionado?.forma_pagamento)}</p>
+                {pedidoSelecionado.forma_pagamento === 'dinheiro' && pedidoSelecionado.valor_troco_para && (
+                  <div>
+                  <p className="text-[#613d20]"><strong>Troco para:</strong> R$ {parseFloat(pedidoSelecionado.valor_troco_para).toFixed(2)}</p>
+                   <p className="text-[#613d20]"><strong>Troco:</strong> R$ {(parseFloat(pedidoSelecionado.valor_troco_para).toFixed(2)-parseFloat(pedidoSelecionado.valor).toFixed(2))}</p>
+                  </div>
+                )}
                 <p className="text-[#613d20]"><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
               </div>
+
               <div className="flex flex-col sm:flex-row gap-4 mt-4">
                 <div className="flex gap-4 items-center">
-                  <select value={pedidoSelecionado.status}
-                    onChange={(e) => avancarStatus(pedidoSelecionado.id, e.target.value)}
-                    className="border px-4 py-2 rounded"
-                  >
+                  <select value={pedidoSelecionado.status} onChange={(e) => avancarStatus(pedidoSelecionado.id, e.target.value)} className="border px-4 py-2 rounded">
                     <option value="iniciado">Iniciado</option>
                     <option value="em_preparo">Em Preparo</option>
                     <option value="em_entrega">Em Entrega</option>
@@ -309,13 +288,13 @@ const gerarMensagemWhatsApp = (pedido) => {
                   </select>
                 </div>
                 <a
-  href={`https://wa.me/55${pedidoSelecionado.telefone.replace(/\D/g, '')}?text=${gerarMensagemWhatsApp(pedidoSelecionado)}`}
-  target="_blank"
-  rel="noopener noreferrer"
-  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow font-semibold"
->
-  Enviar WhatsApp
-</a>
+                  href={`https://wa.me/55${pedidoSelecionado.telefone.replace(/\D/g, '')}?text=${gerarMensagemWhatsApp(pedidoSelecionado)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-full shadow font-semibold"
+                >
+                  Enviar WhatsApp
+                </a>
                 {pedidoSelecionado.status !== 'entregue' && pedidoSelecionado.status !== 'cancelado' && (
                   <button onClick={() => cancelarPedido(pedidoSelecionado.id)}
                     className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-full shadow font-semibold"

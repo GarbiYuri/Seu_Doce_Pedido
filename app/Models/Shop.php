@@ -32,6 +32,7 @@ class Shop extends Model
         'estado',
         'complemento',
         'cep',
+        'instagram',
 
         // --- Dias de Funcionamento
 
