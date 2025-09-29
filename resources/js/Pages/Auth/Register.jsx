@@ -97,6 +97,7 @@ export default function Register() {
                             required
                         />
                         <InputError message={errors.password} className="mt-2" />
+             
                     </div>
                     
 
@@ -114,9 +115,15 @@ export default function Register() {
                         />
                         <InputError message={errors.password_confirmation} className="mt-2" />
                     </div>
-                        <p className="text-xs text-gray-600 mt-1 mb-2">
-                    A senha deve ter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas e números.
-                    </p>
+                                    <p className="text-xs text-gray-600 mt-1">
+        A senha deve atender aos seguintes critérios:
+    </p>
+    <ul className="text-xs text-gray-600 list-disc list-inside ml-2">
+        <li>Mínimo de 8 caracteres</li>
+        <li>Deve conter letras maiúsculas e minúsculas</li>
+        <li>Deve conter números</li>
+        <li>Não pode estar comprometida em vazamentos (segura)</li>
+    </ul>
                     <div className="flex flex-col items-center justify-center pt-4 space-y-4">
                         <Link
                             href={route('login')}
