@@ -434,7 +434,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
 
         return (
           <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-            <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6">
+            <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6 text-center">
               {category.name.toUpperCase()}
             </h2>
 
