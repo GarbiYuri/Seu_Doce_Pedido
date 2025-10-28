@@ -42,7 +42,7 @@ export default function GuestLayout({ children }) {
                 {/* Texto com animação de digitação */}
                 <p
                     key={fraseAtual}
-                    className="mt-8 text-whitet text-2x1 tracking-wide text-center animate-fadeInUp font-Montserrat"
+                    className="mt-8 text-white text-2x1 tracking-wide text-center animate-fadeInUp font-Montserrat"
                 >
                     {frases[fraseAtual]}
                 </p>

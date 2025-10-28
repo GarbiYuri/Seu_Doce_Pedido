@@ -158,7 +158,7 @@ useEffect(() => {
 
       {updatedCart.length > 0 ? (
         
-        <div className="bg-white border border-[#8a5a33] rounded-3xl p-6 shadow-md max-w-3xl mx-auto">
+        <div className="bg-white border border-[#8a5a33] rounded-3xl p-6 shadow-md">
           {updatedCart.map((product) => {
               const existe = product?.promo_Id_Product || null;
             return (
@@ -337,6 +337,11 @@ useEffect(() => {
       ) : (
         <p className="text-center text-xl text-gray-500 font-Montserrat">Seu carrinho está vazio.</p>
       )}
+        <div className="text-center mt-12">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Amor Com Recheio - Todos os direitos reservados
+          </p>
+        </div>
     </AuthenticatedLayout>
   );
 }
