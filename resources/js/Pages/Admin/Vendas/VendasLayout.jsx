@@ -178,7 +178,7 @@ export default function VendasLayout() {
             className="px-4 py-2 rounded border border-gray-300 w-full sm:w-auto"
           />
           <input type="text" placeholder="Buscar por nome do cliente..." value={buscaNome} onChange={(e) => setBuscaNome(e.target.value)}
-            className="px-4 py-2 rounded border border-gray-300 w-full sm:max-w-xs"
+            className="px-4 py-2 rounded border border-[#8a5a33] w-full sm:max-w-xs"
           />
         </div>
         <div className="w-full flex flex-wrap gap-2 border-t pt-4 mt-4">
@@ -201,12 +201,13 @@ export default function VendasLayout() {
         <div className="w-full lg:w-1/3 space-y-4 max-h-[70vh] overflow-y-auto">
           {vendasFiltradas.length > 0 ? (
             vendasFiltradas.map((venda) => (
-              <div key={venda.id} onClick={() => setPedidoSelecionado(venda)}
-                className={`p-4 rounded-xl shadow cursor-pointer border hover:bg-white transition ${
-                  pedidoSelecionado?.id === venda.id
-                    ? 'bg-white ring-2 ring-[#613d20]'
-                    : 'bg-gray-50 border-transparent'
-                }`}
+              <div   key={venda.id}
+    onClick={() => setPedidoSelecionado(venda)}
+    className={`p-4 rounded-xl shadow cursor-pointer border transition ${
+      pedidoSelecionado?.id === venda.id
+        ? 'bg-white border-[#613d20] ring-2 ring-[#613d20]'
+        : 'bg-gray-50 border border-[#e5e5e5] hover:border-[#8a5a33] hover:bg-white'
+    }`}
               >
                 <div className="flex justify-between items-center mb-1">
                   <span className="font-bold text-gray-800">{venda.nome}</span>
@@ -229,7 +230,7 @@ export default function VendasLayout() {
         </div>
 
         {/* Painel da direita */}
-        <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border shadow space-y-4 max-h-[70vh] overflow-y-auto">
+        <div className="w-full lg:w-2/3 bg-white p-6 rounded-xl border-[#8a5a33] shadow space-y-4 max-h-[70vh] overflow-y-auto">
           {pedidoSelecionado ? (
             <>
               <h2 className="text-xl font-bold mb-2 text-[#613d20]">
