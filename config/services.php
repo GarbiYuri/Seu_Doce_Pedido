@@ -39,4 +39,9 @@ return [
     'tokentest' =>env('MP_ACCESS_TOKEN_TEST'),
     ],
 
+    'whatsapp' => [
+        'api_token' => env('WHATSAPP_API_TOKEN'),
+        'phone_number_id' => env('WHATSAPP_PHONE_NUMBER_ID'),
+        'seller_number' => env('WHATSAPP_SELLER_NUMBER'),
+    ],
 ];

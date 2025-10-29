@@ -9,6 +9,8 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Shop;
 use App\Models\Banner;
+use App\Models\CupomUser;
+use App\Models\Cupom;
 
 
 class HandleInertiaRequests extends Middleware
@@ -51,6 +53,19 @@ public function share(Request $request): array
         }
     }
 
+    $cupons = $user
+    ? $user->cupons()->get()->map(function ($cupom) use ($user) {
+
+        $cupomUser = CupomUser::where('user_id', $user->id)
+            ->where('cupom_id', $cupom->id)
+            ->first();
+
+        $cupom->atingiu_limite = $cupomUser && $cupom->limite_usos && $cupomUser->usos >= $cupom->limite_usos;
+        return $cupom;
+    })
+    : collect();
+
+
     return [
         ...parent::share($request),
 
@@ -61,6 +76,7 @@ public function share(Request $request): array
             'cart' => [
                 'totalItems' => $cartCount,
             ],
+            'cupons' => $cupons,
         ],
 
         'csrf_token' => csrf_token(),

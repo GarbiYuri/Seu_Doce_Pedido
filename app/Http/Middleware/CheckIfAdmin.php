@@ -11,6 +11,7 @@ use Inertia\Inertia;
 use App\Models\User;
 use App\Models\Category;
 use App\Models\Shop;
+use App\Models\Cupom;
 
 // Isso é a MiddleWare do Admin, sempre que um Admin estiver em sua tela, passa por aqui
 //Confie em mim... É Seguro (Sem SQL Injection :/ )
@@ -24,6 +25,7 @@ class CheckIfAdmin
             return abort(403, 'Acesso negado.');
         }
         $categories = Category::all(); // Busca Todas as Categorias
+        $cupons = Cupom::all();
         $products = Product::all(); // Busca Todas as Categorias
         $promocoes = Promocao::with('product')->get();
         $usuarios = User::paginate(5); // Busca todos os usuários
@@ -35,6 +37,7 @@ class CheckIfAdmin
             'usuarios' => $usuarios,
             'shops' => $shop,
             'promocoes' => $promocoes,
+            'cupons' => $cupons
         ]);
         
     

@@ -2,9 +2,19 @@ import { Head, usePage } from '@inertiajs/react';
 import { FiArrowLeft } from 'react-icons/fi';
 
 export default function CheckoutRedirect() {
-  const { init_point, cartItems, userAddress, isPickup, frete, venda } = usePage().props;
+  const { init_point, cartItems, userAddress, isPickup, frete, venda, subtotal, totalComDesconto, valorDesconto, tipoCupom} = usePage().props;
   const informacoes = usePage().props.auth.informacoes;
   const user = usePage().props.auth.user;
+
+const subtotalNum = Number(subtotal);
+const valorDescontoNum = Number(valorDesconto);
+
+const desconto = tipoCupom === 'percentual'
+  ? subtotalNum * valorDescontoNum / (100 - valorDescontoNum) 
+  : valorDescontoNum;
+
+const Semdesconto = subtotalNum + desconto;
+const totalFinal = subtotalNum;
 
 
   const total = cartItems.reduce((sum, item) => {
@@ -115,11 +125,18 @@ export default function CheckoutRedirect() {
           )}
         </div>
 
-        <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
-          <span>SubTotal:</span>
-          <span className="text-[#613d20]">R$ {total.toFixed(2).replace('.', ',')}</span>
-
+        <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-2">
+          <span>Subtotal:</span>
+          <span className="text-[#613d20]">R$ {Semdesconto.toFixed(2).replace('.', ',')}</span>
         </div>
+
+        {desconto > 0 && (
+          <div className="flex justify-between items-center text-lg font-bold text-green-600 mb-2">
+            <span>Desconto:</span>
+            <span className="text-[#613d20]">- R$ {desconto.toFixed(2).replace('.', ',')}</span>
+          </div>
+        )}
+
         {isPickup ? (
           <>
             <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
@@ -137,12 +154,9 @@ export default function CheckoutRedirect() {
             </div>
           </>
         )}
-        <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
+         <div className="flex justify-between items-center text-lg font-bold text-gray-800 mb-6">
           <span>Total:</span>
-          <span className="text-[#613d20]">
-            {(frete + total).toFixed(2).replace('.', ',')}
-          </span>
-
+          <span className="text-[#613d20]">R$ {(frete + totalFinal).toFixed(2).replace('.', ',')}</span>
         </div>
         <div className="flex flex-col sm:flex-row justify-center sm:justify-between gap-4">
           <a
@@ -160,14 +174,13 @@ export default function CheckoutRedirect() {
           >
             Pagamento na Entrega
           </a>
-          <a
-            href={init_point}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="bg-[#1F7CC9] hover:bg-[#1F7CC9] text-white px-6 py-2 text-center rounded-full"
-          >
-            Ir para o Mercado Pago
-          </a>
+         <button
+        onClick={() => window.open(init_point, "_blank")}
+        className="bg-[#1F7CC9] hover:bg-[#1F7CC9] text-white px-6 py-2 text-center rounded-full"
+        >
+        Ir para o Mercado Pago
+      </button>
+
         </div>
       </div>
     </>

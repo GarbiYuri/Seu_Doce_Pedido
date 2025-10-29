@@ -139,7 +139,9 @@ export default function MeusPedidos() {
                                             <li key={index} className="bg-gray-50 p-3 rounded-md">
                                                 <div className="flex justify-between items-center">
                                                     <span className="font-medium">{produto.quantity}x {produto.nome}{produto?.id_promocao && "(PROMO)"}</span>
+                                                   {/*
                                                     <span className="font-semibold">R$ {Number(produto.preco * produto.quantity).toFixed(2)}</span>
+                                                    */}
                                                 </div>
 
                                                 {produto.id_promocao && produto.kitquantity > 1 && (
