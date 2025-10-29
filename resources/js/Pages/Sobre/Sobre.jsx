@@ -47,7 +47,7 @@ export default function Sobre() {
         </h1>
 
         {/* Texto principal */}
-        <p className="text-lg text-gray-700 leading-relaxed text-center mb-10 max-w-3xl mx-auto">
+        <p className="text-lg text-gray-700 leading-relaxed text-justify mb-10 max-w-3xl mx-auto">
           A Amor com Recheio nasceu em agosto de 2025, de um sonho cheio de amor.
           Eu sou a Manu e sempre acreditei que doces são mais do que sobremesas, são gestos de carinho. Foi assim, entre receitas caseiras e dedicação, que decidi transformar minha paixão pela confeitaria em um negócio que adoça momentos especiais.
 

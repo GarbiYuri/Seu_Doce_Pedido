@@ -212,6 +212,11 @@ const id = cartItems?.length && cartItems.find(item => !item.isPromo)?.product?.
       ) : (
         <p className="text-center text-xl text-gray-500">Seu carrinho está vazio.</p>
       )}
+        <div className="text-center mt-12">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Amor Com Recheio - Todos os direitos reservados
+          </p>
+        </div>
     </AuthenticatedLayout>
   );
 }

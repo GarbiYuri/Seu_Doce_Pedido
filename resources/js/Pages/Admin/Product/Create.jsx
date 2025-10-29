@@ -206,7 +206,8 @@ export default function ProductCreate({ categories }) {
       </div>
 
       {/* Lista de produtos filtrados */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6max-w-xl mx-auto p-6 bg-white rounded-3xl shadow-lg">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 max-w-xl mx-auto p-6 bg-white rounded-3xl shadow-lg
+      ">
         {filteredProducts.length > 0 ? (
           filteredProducts.map(product => (
             <div

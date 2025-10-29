@@ -128,18 +128,20 @@ export default function MeusPedidos() {
                                     </div>
                                 )}
 
-                                <div className="border-t pt-4 mt-4 text-sm text-gray-700">
+                                <div className="border-t pt-4 mt-4 text-sm text-gray-700 text-[#613d20]">
                                     <p><strong>Total:</strong> R$ {parseFloat(pedidoSelecionado.valor).toFixed(2)}</p>
                                 </div>
 
                                 <div className="border-t pt-4 mt-4">
-                                    <p className="font-semibold text-sm text-gray-700 mb-2">Produtos:</p>
+                                    <p className="font-semibold text-sm text-[#613d20] mb-2">Produtos:</p>
                                     <ul className="space-y-2 text-sm text-gray-800">
                                         {pedidoSelecionado.produtos.map((produto, index) => (
                                             <li key={index} className="bg-gray-50 p-3 rounded-md">
                                                 <div className="flex justify-between items-center">
                                                     <span className="font-medium">{produto.quantity}x {produto.nome}{produto?.id_promocao && "(PROMO)"}</span>
+                                                   {/*
                                                     <span className="font-semibold">R$ {Number(produto.preco * produto.quantity).toFixed(2)}</span>
+                                                    */}
                                                 </div>
 
                                                 {produto.id_promocao && produto.kitquantity > 1 && (
@@ -154,19 +156,19 @@ export default function MeusPedidos() {
 
                                 {pedidoSelecionado.status === 'iniciado' && pedidoSelecionado.payment_url && (
                                     <div className="mt-6 flex flex-col sm:flex-row gap-3">
-                                        <button onClick={() => abrirModalCancelar(pedidoSelecionado.venda_id)} className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-2 rounded-lg shadow transition-colors">
+                                        <button onClick={() => abrirModalCancelar(pedidoSelecionado.venda_id)} className="flex-1 flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white font-Montserrat text-sm px-4 py-2 rounded-lg shadow transition-colors">
                                             Cancelar Pedido <FiX />
                                         </button>
 
                                         <a
                                             href={`/pagardepois/${pedidoSelecionado.id}`}
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center gap-2 bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
+                                            className="inline-flex items-center gap-2 font-Montserrat bg-gray-300 hover:bg-gray-400 text-gray-800 px-5 py-2 rounded-full transition justify-center"
                                         >
                                             Pagamento na Entrega
                                         </a>
 
-                                        <a href={pedidoSelecionado.payment_url} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-2 bg-[#613d20] hover:bg-[#8a5a33] text-white text-sm px-4 py-2 rounded-lg shadow transition-colors font-Montserrat font-extrabold">
+                                        <a href={pedidoSelecionado.payment_url} target="_blank" rel="noopener noreferrer" className="flex-1 flex font-Montserrat items-center justify-center gap-2 bg-[#613d20] hover:bg-[#8a5a33] text-white text-sm px-4 py-2 rounded-lg shadow transition-colors font-Montserrat font-extrabold">
                                             Realizar Pagamento
                                         </a>
                                     </div>
@@ -201,8 +203,15 @@ export default function MeusPedidos() {
                             </button>
                         </div>
                     </div>
+                    
                 </div>
+                
             )}
+              <div className="text-center mt-12">
+          <p className="text-gray-500 text-sm">
+            © {new Date().getFullYear()} Amor Com Recheio - Todos os direitos reservados
+          </p>
+        </div>
         </AuthenticatedLayout>
     );
 }

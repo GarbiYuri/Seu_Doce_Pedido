@@ -15,6 +15,7 @@ use App\Http\Controllers\MercadoPagoController;
 use App\Http\Controllers\InformacoesPessoaisController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\VendaController;
+use App\Http\Controllers\CupomController;
 use App\Http\Controllers\PromocaoController;
 
 
@@ -129,6 +130,18 @@ Route::delete('/informacoes/{id}', [InformacoesPessoaisController::class, 'destr
         })->name('Categorias');
 
 
+
+        
+          // Rota para os cupons
+        Route::get('/Cupom', function () {
+            return Inertia::render('Admin/Cupom/Cupom');
+        })->name('Cupom');
+
+        Route::apiResource('cupons', CupomController::class);
+
+        Route::post('/cupons/aplicar', [CupomController::class, 'aplicarCupom'])->name('cupons.aplicar');
+         Route::get('/carregarCupom', [CupomController::class, 'meusCupons'])->name('carregarCupom');
+
         // Rota para alternar status de admin de usuário
         Route::post('/admin/toggle/{id}', [AdminController::class, 'toggleAdmin'])
             ->name('admin.toggle');
@@ -191,6 +204,10 @@ Route::post('/alterar-telefone', [ShopController::class, 'alterar-telefone']); /
       Route::get('/MeusPedidos', function () {
         return Inertia::render('Pedido/MeusPedidos');
     })->name('MeusPedidos');
+
+    Route::get('/MeusCupons', function () {
+        return Inertia::render('Cupom/MeusCupons');
+    })->name('MeusCupons');
 
     // Rota Pedido PHP
       Route::get('/MeusPedidos', [CheckoutController::class, 'meuspedidos']);

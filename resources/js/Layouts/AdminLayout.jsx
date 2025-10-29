@@ -132,6 +132,10 @@ export default function AdminLayout({ children }) {
                         <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
                         <span className="font-semibold">Produtos</span>
                     </Link>
+                    <Link href="/Cupom" className="flex items-center gap-3 px-4 py-3 rounded-xl text-[#613d20] hover:bg-[rgba(188,132,91,0.3)] transition">
+                        <img src="/imagens/Icon_Produtos.png" alt="Produtos" className="h-5 w-5" />
+                        <span className="font-semibold">Cupom Desconto</span>
+                    </Link>
                 </aside>
 
                 {/* CONTEÚDO PRINCIPAL */}

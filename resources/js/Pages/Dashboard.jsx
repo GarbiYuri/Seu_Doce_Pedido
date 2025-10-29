@@ -434,7 +434,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
 
         return (
           <div key={category.id} className="mb-20 relative" id={`categoria-${category.id}`}>
-            <h2 className="text-2xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6 text-center">
+            <h2 className="text-3xl font-semibold text-[#613d20] mb-6 pb-2 px-4 ml-6 text-center">
               {category.name.toUpperCase()}
             </h2>
 
@@ -450,7 +450,7 @@ export default function Dashboard({ products, categories, bannerss, promocoes })
             <div className="px-8">
               <div
                 ref={carouselsRef.current[category.id]}
-                className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth overflow-x-auto hide-scrollbar cursor-grab active:cursor-grabbing"
+                className="flex gap-6 snap-x snap-mandatory pb-4 scroll-smooth overflow-x-auto hide-scrollbar cursor-grab active:cursor-grabbing px-6"
               >
                 {filteredCategoryProducts.map(product => (
                   <div

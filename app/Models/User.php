@@ -66,4 +66,11 @@ public function informacoesPessoais()
     {
         return $this->hasMany(Endereco::class, 'user_id');
     }
+    public function cupons()
+{
+    return $this->belongsToMany(Cupom::class, 'cupom_user')
+                ->withPivot('usos')
+                ->withTimestamps();
+}
+
 }

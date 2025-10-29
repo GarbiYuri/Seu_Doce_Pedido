@@ -98,6 +98,8 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <Link href="/MeusPedidos" className="hover:text-[#8a5a33] transition-colors duration-300 text-base ">
                                     MEUS PEDIDOS
                                 </Link>
+                                
+                               
                             </>
                         ) : (
                             <>
@@ -164,6 +166,13 @@ export default function AuthenticatedLayout({ header, children }) {
                             >
                                 Perfil
                             </ResponsiveNavLink>
+                              <ResponsiveNavLink
+    href={route('MeusCupons')} // use o name da rota aqui
+    className="w-full text-center px-4 py-2 text-sm text-gray-700 hover:bg-[#8a5a33] hover:text-[#613d20] transition rounded text-base"
+>
+    Meus Cupons
+</ResponsiveNavLink>
+
                             <ResponsiveNavLink
                                 method="post"
                                 href={route('logout')}
@@ -174,6 +183,9 @@ export default function AuthenticatedLayout({ header, children }) {
                             >
                                 Sair
                             </ResponsiveNavLink>
+
+                        
+
                         </div>
                     </div>
                 )}
@@ -196,6 +208,9 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </Link>
                                 <Link href="/MeusPedidos" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     MEUS PEDIDOS
+                                </Link>
+                                 <Link href="/MeusCupons" className="block text-gray-700 hover:text-[#8a5a33] text-base">
+                                    MEUS CUPONS
                                 </Link>
                             </>
                         ) : (

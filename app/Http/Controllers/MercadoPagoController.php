@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use Carbon\Traits\ToStringFormat;
+use App\Jobs\SendNewOrderWhatsAppNotification;
 use Illuminate\Http\Request;
+use App\Services\WhatsAppService;
 use MercadoPago\MercadoPagoConfig;
 use MercadoPago\Client\Preference\PreferenceClient;
 use MercadoPago\Exceptions\MPApiException;
@@ -11,6 +13,7 @@ use Illuminate\Support\Facades\DB;
 use Inertia\Inertia;
 use App\Models\Venda;
 use App\Models\VendaProduct;
+use App\Models\CupomUser;
 use Illuminate\Support\Facades\Log;
 use MercadoPago\Payment;
   use MercadoPago\Client\Payment\PaymentClient;
@@ -85,6 +88,8 @@ class MercadoPagoController extends Controller
     if ($request->method() === "POST") {
         try {
  
+
+
             $user = auth()->user();
 
             if($user->admin){
@@ -118,7 +123,8 @@ class MercadoPagoController extends Controller
                   /*  "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],*/ //usar quando hospedado
                     "description" => $product['description'],
                     "currency_id" => "BRL",
-                    "unit_price" => (float) $product['price'],
+                    "unit_price" => max((float) $product['price'], 0.01),
+
                 ];
                 $total += $product['price'] * $product['quantity'];
             }
@@ -160,12 +166,13 @@ class MercadoPagoController extends Controller
 
             $client = new PreferenceClient();
 
-
+$cupom = $request->input('cupom'); // dados do cupom, se existir
       // 1. Cria a venda no banco
 $venda = Venda::create([
     'id_user' => $user->id,
     'status' => 'iniciado',
     'valor' => $total,
+    'cupom_id' => $cupom['id'] ?? null,
     'tipo' => $request->tipoPedido,
     'nome' => $user->name,
     'email' => $user->email,
@@ -195,31 +202,71 @@ $preference = $client->create([
 $venda->payment_url = $preference->init_point ?? null;
 $venda->save();
 
+ 
+ $tipoCupom = null;
+$subtotal = 0;
+$totalComDesconto = 0;
 
-
-        // 2. Salva os produtos da venda
-    foreach ($products as $product) {
+// 2. Salva os produtos da venda
+foreach ($products as $product) {
+    $unitPrice = (float) $product['price']; 
+    $originalPrice = $unitPrice;
     $categoriaNome = null;
     if (!empty($product['id_category'])) {
         $categoriaNome = DB::table('category')
             ->where('id', $product['id_category'])
             ->value('name'); 
     }
+$cupomId;
+$valorDesconto = 0;
+    // Aplica desconto do cupom
+    if ($cupom && $cupom['ativo']) {
+        $cupomId = $cupom['id'];
+        $valorDesconto = $cupom['valor_desconto'];
+        if ($cupom['tipo_desconto'] === 'valor') {
+            $tipoCupom = 'valor';
+            // Desconto fixo proporcional ao produto
+            $unitPrice -= $cupom['valor_desconto'] / count($products);
+        } elseif ($cupom['tipo_desconto'] === 'percentual') {
+            $tipoCupom = 'percentual';
+            // Desconto percentual
+            $unitPrice -= $unitPrice * ($cupom['valor_desconto'] / 100);
+        }
+        $cupomUser = CupomUser::where('user_id', auth()->id())
+        ->where('cupom_id', $cupom['id'])
+        ->first();
+
+    if ($cupomUser) {
+        $cupomUser->incrementarUso();
+    }
+    }
+
+    // Garante que o preço não fique negativo
+    if ($unitPrice < 0) {
+        $unitPrice = 0;
+    }
+
+    // Calcula subtotal (preço original) e total com desconto
+    $subtotal += $originalPrice * $product['quantity'];
+    $totalComDesconto += $unitPrice * $product['quantity'];
+
+
 
     VendaProduct::create([
         'id_venda' => $venda->id,
-        'id_product' => $product['id_product'] ?? null, // se tiver
+        'id_product' => $product['id_product'] ?? null,
         'nome' => $product['name'] ?? $product['promo_name'],
-        'preco' => $product['price'],
+        'preco' => $unitPrice, // <-- apenas o preço do produto com desconto
         'descricao' => $product['description'] ?? '',
         'imagem' => $product['imagem'] ?? '',
-        'id_category' => $product['id_categoria'] ?? null, // se tiver
-        'id_promocao' => $product['id_promo'] ?? null, // se tiver
+        'id_category' => $product['id_categoria'] ?? null,
+        'id_promocao' => $product['id_promo'] ?? null,
         'categoria' => $categoriaNome ?? 'Sem categoria',
         'quantity' => $product['quantity'],
         'kitquantity' => $product['kitquantity'] ?? null,
     ]);
 }
+
 
         
 
@@ -271,13 +318,17 @@ $venda->save();
                 ->where('Id_Cart', $cart->id)
                 ->delete();
 
-            return Inertia::render('Checkout/CheckoutRedirect', [
-                'init_point' => $preference->init_point,
+            return Inertia::render('Checkout/CheckoutRedirect', [        
                 'cartItems' => $Checkoutproducts,
                 'venda' => $venda,
                 'userAddress' => $tipoPedido === 'entrega' ? true : null,
                 'isPickup' => $tipoPedido === 'retirada',
                 'frete' => $frete,
+                'init_point' => $preference->init_point,
+                'subtotal' => $subtotal,        
+                'totalComDesconto' => $totalComDesconto,
+                'valorDesconto' => $valorDesconto,
+                'tipoCupom' => $tipoCupom,
             ]);
         } catch (MPApiException $e) {
             return response()->json([
@@ -318,7 +369,8 @@ $venda->save();
                      "description" => $product['description'],
                      "quantity" => (int) $product['quantity'],
                     "currency_id" => "BRL",
-                    "unit_price" => (float) $product['price'],
+                    "unit_price" => max((float) $product['price'], 0.01),
+
                     "imagem" => $product['imagem'] ?? null,
                 ];
                 $total += $product['price'] * $product['quantity'];
