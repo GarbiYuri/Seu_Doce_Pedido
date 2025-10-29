@@ -83,7 +83,7 @@ class MercadoPagoController extends Controller
 
 
 
-   public function pagar(Request $request, WhatsAppService $whatsappService)
+   public function pagar(Request $request)
 {
     if ($request->method() === "POST") {
         try {
@@ -123,7 +123,8 @@ class MercadoPagoController extends Controller
                   /*  "picture_url" => 'http://127.0.0.1:8000/imagem/' . $product['imagem'],*/ //usar quando hospedado
                     "description" => $product['description'],
                     "currency_id" => "BRL",
-                    "unit_price" => (float) $product['price'],
+                    "unit_price" => max((float) $product['price'], 0.01),
+
                 ];
                 $total += $product['price'] * $product['quantity'];
             }
@@ -215,7 +216,7 @@ foreach ($products as $product) {
             ->where('id', $product['id_category'])
             ->value('name'); 
     }
-
+$valorDesconto = 0;
     // Aplica desconto do cupom
     if ($cupom && $cupom['ativo']) {
         $valorDesconto = $cupom['valor_desconto'];
@@ -363,7 +364,8 @@ foreach ($products as $product) {
                      "description" => $product['description'],
                      "quantity" => (int) $product['quantity'],
                     "currency_id" => "BRL",
-                    "unit_price" => (float) $product['price'],
+                    "unit_price" => max((float) $product['price'], 0.01),
+
                     "imagem" => $product['imagem'] ?? null,
                 ];
                 $total += $product['price'] * $product['quantity'];

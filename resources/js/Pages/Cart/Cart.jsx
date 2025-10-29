@@ -30,6 +30,10 @@ export default function Cart({ cartProducts }) {
           price = price * (1 - cupomAplicado.valor_desconto / 100);
         } else {
           price = price - (cupomAplicado.valor_desconto / updatedCart.length); // divide desconto fixo entre produtos
+
+          if(price < 0){
+              price = 0;
+            }
         }
       }
       return {
@@ -60,6 +64,7 @@ export default function Cart({ cartProducts }) {
         } else {
           price = price - (cupomAplicado.valor_desconto / updatedCart.length);
         }
+        price = Math.max(price, 0);
       }
       return {
         id_product: p.Id_Product,
@@ -121,10 +126,6 @@ export default function Cart({ cartProducts }) {
   const handleSubmit = (e) => {
     e.preventDefault();
     form.post(route('pagar'), {
-      onSuccess: (page) => {
-        const initPoint = page.props.init_point;
-        if (initPoint) window.location.href = initPoint;
-      },
       onError: () => alert('Erro ao processar o pagamento.')
     });
   };
@@ -173,7 +174,8 @@ export default function Cart({ cartProducts }) {
     }
   }
 
-  const totalComDesconto = subtotal - desconto;
+const totalComDesconto = Math.max(subtotal - desconto, 0);
+
 
   return (
     <AuthenticatedLayout>
