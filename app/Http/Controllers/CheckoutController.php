@@ -137,57 +137,64 @@ public function cancelarPedido(Request $request, $id)
 {
     $userId = Auth::id();
     $retornar = $request->input('retornar', false);
-    
-    
 
     DB::transaction(function () use ($id, $userId, $retornar) {
-        if($retornar){
-        // Busca os produtos da venda
-        $produtosDaVenda = DB::table('venda_products')
-            ->where('id_venda', $id)
-            ->get();
-        
-        // Busca ou cria o carrinho do usuário
-        $cart = Cart::firstOrCreate(['id_user' => $userId]);
 
-        foreach ($produtosDaVenda as $produto) {
-            // Verifica se o produto já está no carrinho
-            $produtoNoCarrinho = DB::table('cart_product')
-                ->where('Id_Cart', $cart->id)
-                ->where('Id_Product', $produto->id_product)
+        // Busca a venda
+        $venda = \App\Models\Venda::findOrFail($id);
+
+        // 1️⃣ Desincrementar uso do cupom, se houver
+        if ($venda->cupom_id) {
+            $cupomUser = \App\Models\CupomUser::where('user_id', $userId)
+                ->where('cupom_id', $venda->cupom_id)
                 ->first();
-        
-        
 
-            if ($produtoNoCarrinho) {
-                // Incrementa quantidade
-                DB::table('cart_product')
-                    ->where('Id_Cart', $cart->id)
-                    ->where('Id_Product', $produto->id_product)
-                    ->update([
-                        'quantity' => $produtoNoCarrinho->quantity + $produto->quantity,
-                    ]);
-            } else {
-                // Insere novo produto no carrinho
-               DB::table('cart_product')->insert([
-                    'Id_Cart' => $cart->id,
-                    'Id_Product' => $produto->id_product,
-                    'quantity' => $produto->quantity,
-                ]);
-
+            if ($cupomUser) {
+                $cupomUser->DesincrementarUso();
             }
         }
-    }
 
-        // Deleta os produtos da venda
+        // 2️⃣ Retornar produtos ao carrinho, se solicitado
+        if ($retornar) {
+            $produtosDaVenda = DB::table('venda_products')
+                ->where('id_venda', $id)
+                ->get();
+
+            $cart = \App\Models\Cart::firstOrCreate(['id_user' => $userId]);
+
+            foreach ($produtosDaVenda as $produto) {
+                $produtoNoCarrinho = DB::table('cart_product')
+                    ->where('Id_Cart', $cart->id)
+                    ->where('Id_Product', $produto->id_product)
+                    ->first();
+
+                if ($produtoNoCarrinho) {
+                    DB::table('cart_product')
+                        ->where('Id_Cart', $cart->id)
+                        ->where('Id_Product', $produto->id_product)
+                        ->update([
+                            'quantity' => $produtoNoCarrinho->quantity + $produto->quantity,
+                        ]);
+                } else {
+                    DB::table('cart_product')->insert([
+                        'Id_Cart' => $cart->id,
+                        'Id_Product' => $produto->id_product,
+                        'quantity' => $produto->quantity,
+                    ]);
+                }
+            }
+        }
+
+        // 3️⃣ Deletar produtos da venda
         DB::table('venda_products')->where('id_venda', $id)->delete();
 
-        // Deleta a venda
-        DB::table('vendas')->where('id', $id)->delete();
+        // 4️⃣ Deletar a venda
+        $venda->delete();
     });
 
     return redirect()->back()->with('success', 'Pedido cancelado e produtos devolvidos ao carrinho.');
 }
+
 
 public function success(Request $request)
 {

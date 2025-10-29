@@ -166,12 +166,13 @@ class MercadoPagoController extends Controller
 
             $client = new PreferenceClient();
 
-
+$cupom = $request->input('cupom'); // dados do cupom, se existir
       // 1. Cria a venda no banco
 $venda = Venda::create([
     'id_user' => $user->id,
     'status' => 'iniciado',
     'valor' => $total,
+    'cupom_id' => $cupom['id'] ?? null,
     'tipo' => $request->tipoPedido,
     'nome' => $user->name,
     'email' => $user->email,
@@ -201,7 +202,7 @@ $preference = $client->create([
 $venda->payment_url = $preference->init_point ?? null;
 $venda->save();
 
- $cupom = $request->input('cupom'); // dados do cupom, se existir
+ 
  $tipoCupom = null;
 $subtotal = 0;
 $totalComDesconto = 0;
@@ -216,9 +217,11 @@ foreach ($products as $product) {
             ->where('id', $product['id_category'])
             ->value('name'); 
     }
+$cupomId;
 $valorDesconto = 0;
     // Aplica desconto do cupom
     if ($cupom && $cupom['ativo']) {
+        $cupomId = $cupom['id'];
         $valorDesconto = $cupom['valor_desconto'];
         if ($cupom['tipo_desconto'] === 'valor') {
             $tipoCupom = 'valor';
@@ -246,6 +249,8 @@ $valorDesconto = 0;
     // Calcula subtotal (preço original) e total com desconto
     $subtotal += $originalPrice * $product['quantity'];
     $totalComDesconto += $unitPrice * $product['quantity'];
+
+
 
     VendaProduct::create([
         'id_venda' => $venda->id,

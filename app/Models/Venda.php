@@ -19,6 +19,7 @@ class Venda extends Model
         'id_mp',
         'payment_url',
         'forma_pagamento',
+        'cupom_id',
         'valor',
         'tipo',
         'nome',
@@ -50,6 +51,11 @@ class Venda extends Model
     public function enderecoVenda()
     {
         return $this->belongsTo(Endereco::class, 'endereco_id');
+    }
+
+     public function cupomId()
+    {
+        return $this->belongsTo(Cupom::class, 'cupom_id');
     }
 
     // ---------------------

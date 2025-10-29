@@ -45,6 +45,11 @@ class CupomUser extends Model
         $this->usos += 1;
         $this->save();
     }
+     public function DesincrementarUso()
+    {
+        $this->usos -= 1;
+        $this->save();
+    }
 
     // Verifica se o usuário já atingiu o limite (1 uso, por exemplo)
     public function atingiuLimite($limite = 1)
