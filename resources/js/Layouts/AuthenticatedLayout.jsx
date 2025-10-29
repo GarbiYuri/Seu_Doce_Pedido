@@ -209,6 +209,9 @@ export default function AuthenticatedLayout({ header, children }) {
                                 <Link href="/MeusPedidos" className="block text-gray-700 hover:text-[#8a5a33] text-base">
                                     MEUS PEDIDOS
                                 </Link>
+                                 <Link href="/MeusCupons" className="block text-gray-700 hover:text-[#8a5a33] text-base">
+                                    MEUS CUPONS
+                                </Link>
                             </>
                         ) : (
                             <>
